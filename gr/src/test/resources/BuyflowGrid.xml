@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="BuyflowTestSuite" verbose="1" parallel="classes" data-provider-thread-count="2">
+
+	<parameter name="environment" value="grid"></parameter>
+	<!-- <parameter name="environment" value="grid"></parameter> -->
+
+	<test name="BuyflowChrome">
+		<parameter name="browser" value="chrome"></parameter>
+		<classes>
+			<class name="com.sns.grautomation.tests.BuyflowValidation" />
+		</classes>
+	</test>
+</suite>

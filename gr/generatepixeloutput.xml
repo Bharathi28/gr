@@ -1,0 +1,7 @@
+<suite name="Pixel suite">
+	<test name="Pixel test">
+		<classes>
+			<class name="com.sns.gr.pixel.GenerateOutput" />
+		</classes>
+	</test>
+</suite>

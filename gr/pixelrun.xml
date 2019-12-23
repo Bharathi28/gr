@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<suite name="Pixel suite" data-provider-thread-count="5">
+	<test name="Pixel test">
+		<classes>
+			<class name="com.sns.gr.pixel.PixelParallel" />
+		</classes>
+	</test>
+</suite>

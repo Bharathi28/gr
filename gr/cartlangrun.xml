@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<suite name="Cart Language suite" data-provider-thread-count="5">
+	<test name="Cart Language test">
+		<classes>
+			<class name="com.sns.gr.cartlang.CartLanguageParallel" />
+		</classes>
+	</test>
+</suite>
