@@ -58,7 +58,6 @@ private static Connection connection = null;
 	        }
 	        rows.add(row);
 	    }
-//	    System.out.println(rows);
 	    return rows;
 	}
  }
