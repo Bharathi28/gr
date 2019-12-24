@@ -72,6 +72,12 @@ public class BuyflowValidation{
 		WebDriver driver = base_obj.setUp(browser, "Local");
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);		
+		
+		if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
+			driver.findElement(By.xpath("//button[@id='details-button']")).click();
+			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
+		}
+		
 			
 		int singleCheck = 0;
 		String str = "";
