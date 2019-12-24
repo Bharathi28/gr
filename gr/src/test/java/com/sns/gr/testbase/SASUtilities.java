@@ -156,7 +156,7 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,700)", 0);
 			driver.findElement(By.xpath("(//button[@class='button primary next-section'])[1]")).click();
 		}
-		if(((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("fb")))){
+		if(((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("newcc"))) || ((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("fb")))){
 			jse.executeScript("window.scrollBy(0,1000)", 0);
 			Thread.sleep(2000);
 			driver.findElement(By.id("valuePack-next-btn")).click();

@@ -19,7 +19,7 @@ public class BuyflowUtilities {
 	CommonUtilities comm_obj = new CommonUtilities();
 	DBUtilities db_obj = new DBUtilities();
 	
-	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
 		String step = "";
 		if(category.equalsIgnoreCase("kit")) {
 			step="Ordernow";
@@ -60,6 +60,7 @@ public class BuyflowUtilities {
 			
 			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
 				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
+				Thread.sleep(2000);
 				element.click();
 			}
 		}		
@@ -77,7 +78,7 @@ public class BuyflowUtilities {
 		}
 	}				
 	
-	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode) throws ClassNotFoundException, SQLException {
+	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode) throws ClassNotFoundException, SQLException, InterruptedException {
 		
 		if(offercode.contains("single")) {
 			click_cta(driver,env,brand,campaign,"Product");
