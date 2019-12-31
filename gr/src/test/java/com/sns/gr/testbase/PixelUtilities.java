@@ -67,7 +67,7 @@ public class PixelUtilities {
 		}
 	}
 	
-	public List<String> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
+	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		String query = "";
 		if((brand.equalsIgnoreCase("smileactives")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' order by RAND() limit " + runs;
@@ -93,29 +93,35 @@ public class PixelUtilities {
 				joinChar = "/?";
 			}
 		}		
+		List<List<String>> overallOutput = new ArrayList<List<String>>();
 		List<String> buyflowOutput = new ArrayList<String>();
 		for(String pixel : pixellist) {
 			if(pixel.equalsIgnoreCase("cake")) {
 				String uci = getUci("Cake");
 				String uciurl = url + joinChar + "UCI=" + uci;
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, uciurl,"Cake", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("harmonyconversiontracking")) {		
 				String appendurl = url + joinChar + "hConversionEventId=AQEAAZQF2gAmdjQwMDAwMDE2OS0zYmI0LTM2ZTMtYTIyNy0yNjZlOTY2Mzk4MTjaACRlM2U1MzMxYi00ZTIxLTQ5YzgtMDAwMC0wMjFlZjNhMGJjYzPaACRmOTkyNWRkZi1lMzA0LTQ0ZjEtOTJmOC1mMTUyM2VlOTVkZjKFXOX1ZlAb6-YsLP1N4nV5ZwzJa4oaNWsQ9iHh0H1Pdg";
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"HarmonyConversionTracking", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("linkshare")) {		
 				String uci = getUci("Linkshare");
 				String uciurl = url + joinChar + "UCI=" + uci;
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, uciurl,"Linkshare", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("starmobile")) {	
 				String appendurl = url + joinChar + "sessionid=hello12345";
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"StarMobile", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("data+math")) {	
 				String appendurl = url + joinChar + "uci=hellohi";
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"Data+Math", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("propelmedia")) {	
 				String appendurl = "";
@@ -126,13 +132,15 @@ public class PixelUtilities {
 					appendurl  = url + joinChar + "variabletoken=saagaintoken" ;
 				}
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"PropelMedia", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
 			}
 			i++;
 		}
 		if(runs > i) {
 			buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, url,"Default", offerdata.get(i));
+			overallOutput.add(buyflowOutput);
 		}
-		return buyflowOutput;
+		return overallOutput;
 	}		
 	
 	public List<String> generateHARFiles(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String url, String pixel, Map<String, Object> offerdata) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
@@ -169,22 +177,7 @@ public class PixelUtilities {
 	    }
 	    else if(url.contains("variabletoken")) {
 	    	pattern = "PropelMedia";
-	    }
-	    
-//	    // Buyflow results
-//	    List<String> header_list = new ArrayList<String>();
-//		header_list.add("Environment");
-//		header_list.add("Brand");
-//		header_list.add("Campaign");
-//		header_list.add("e-mail");
-//		header_list.add("PPID");
-//		header_list.add("Confirmation number");
-//		header_list.add("Email Received");
-//		header_list.add("Checkout Pricing");
-//		header_list.add("Conf Pricing");
-//		
-//	    List<List<String>> output = new ArrayList<List<String>>();
-//		output.add(header_list);	    
+	    }   
 	    	    
 	    ///////////////////////////////////////////////////////////		    
 	    // Home Page
@@ -329,6 +322,7 @@ public class PixelUtilities {
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			
         ImageIO.write(confpage.getImage(),"PNG",new File("F:\\Automation\\Pixel\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
         
+        driver.close();
         return output_row;
 	}
 }
