@@ -105,6 +105,8 @@ public class PixelParallel {
 	    DBUtilities db_obj = new DBUtilities();
 		PixelUtilities pixel_obj = new PixelUtilities();		
 		
+		String realm = DBUtilities.get_realm(brand);
+		
 		HashMap<Integer, HashMap> overallOutput = new LinkedHashMap<Integer, HashMap>();
 								
 		String url = "";
@@ -113,7 +115,22 @@ public class PixelParallel {
 			System.out.println(url);
 		}
 		else {
-			url = "https://storefront:eComweb123@" + brand + "." + env + ".dw2.grdev.com";
+			if(realm.equalsIgnoreCase("R2")) {
+				if(brand.equalsIgnoreCase("Sub-D")) {
+					url = "https://storefront:eComweb123@perricone" + "." + env + ".dw2.grdev.com";
+				}
+				else {
+					url = "https://storefront:eComweb123@" + brand + "." + env + ".dw2.grdev.com";
+				}
+			}
+			else {
+				if(brand.equalsIgnoreCase("Dr.Denese")) {
+					url = "https://storefront:eComweb123@trydrd" + "." + env + ".dw2.grdev.com";
+				}
+				else {
+					url = "https://storefront:eComweb123@" + brand + "." + env + ".dw4.grdev.com";
+				}
+			}
 		}
 		int noOfTestRuns = 0;
 		List<String> pixelslist = new ArrayList<String>();
@@ -154,11 +171,8 @@ public class PixelParallel {
 		if (m.find()) {
 			noOfTestRuns++;
 		}
-		List<String> buyflowOutput = pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, pixelslist, noOfTestRuns, url);	
-		
-		buyflowOverallOutput.add(buyflowOutput);
-		System.out.println("buyflowOutput : " + buyflowOutput);
-		System.out.println("Output : " + buyflowOverallOutput);
+		List<List<String>> buyflowOutput = pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, pixelslist, noOfTestRuns, url);	
+		buyflowOverallOutput.addAll(buyflowOutput);
 			
 		WebDriver driver = new ChromeDriver();
 	    driver.manage().window().maximize();
@@ -281,6 +295,7 @@ public class PixelParallel {
 			overallOutput.put(j++, envMap);
 		} // end of pixels
 		writeToSheet(overallOutput, brand, campaign);
+		driver.close();
 	} // end of main
 	
 	@AfterSuite
