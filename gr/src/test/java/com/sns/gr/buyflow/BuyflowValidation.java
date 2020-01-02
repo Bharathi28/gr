@@ -178,6 +178,7 @@ public class BuyflowValidation{
 		output_row.add(brand);
 		output_row.add(campaign);
 		output_row.add(email);
+		output_row.add(ppid);
 		output_row.add(conf_offercode);
 		output_row.add(conf_num);
 		output_row.add("Yes");

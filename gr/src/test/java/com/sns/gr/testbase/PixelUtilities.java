@@ -149,7 +149,6 @@ public class PixelUtilities {
 	    @SuppressWarnings("deprecation")
 	    
 	    WebDriver driver = new ChromeDriver(capabilities);	    
-//	    WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.22:4444/wd/hub"), capabilities);
 	    driver.manage().window().maximize();
 
 	    JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -293,30 +292,28 @@ public class PixelUtilities {
         String actual_conf_ppid = bf_obj.fetch_confoffercode(driver, brand, false);
 		System.out.println("Actual PPID : " + actual_conf_ppid);
         
-//        String conf_num = bf_obj.fetch_conf_num(driver, brand);
-//        System.out.println("Confirmation Number : " + conf_num);        
-//		
-//		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
-//		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
-//		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
-//		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
-//		
-//		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;
+        String conf_num = bf_obj.fetch_conf_num(driver, brand);
+        System.out.println("Confirmation Number : " + conf_num);        
+		
+		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
+		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
+		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
+		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
+		
+		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;
 		
 		List<String> output_row = new ArrayList<String>();
 		output_row.add(env);
 		output_row.add(brand);
 		output_row.add(campaign);
         output_row.add(email);
+        output_row.add(expected_ppid);
 		output_row.add(actual_conf_ppid);
-//		output_row.add(conf_num);
+		output_row.add(conf_num);
 		output_row.add("Yes");
 		output_row.add(checkout_pricing);
-//		output_row.add(conf_pricing);		
-//		output.add(output_row);
 		
-//		comm_obj.write_output(output, brand, campaign, "Pixel_BuyflowResults", "F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");	
-//		driver.close();
+		driver.close();
 		
         // Save Order Screenshots        
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			

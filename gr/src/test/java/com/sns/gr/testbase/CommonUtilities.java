@@ -191,7 +191,8 @@ public class CommonUtilities {
 			header_list.add("Brand");
 			header_list.add("Campaign");
 			header_list.add("e-mail");
-			header_list.add("PPID");
+			header_list.add("Expected PPID");
+			header_list.add("Actual PPID");
 			header_list.add("Confirmation Number");
 			header_list.add("Email Received");
 			header_list.add("Checkout Pricing");		
