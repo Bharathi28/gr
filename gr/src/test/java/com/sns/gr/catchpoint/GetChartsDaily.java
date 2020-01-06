@@ -7,6 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -38,6 +42,37 @@ public class GetChartsDaily {
 	
 	@Test
 	public void catchpointCharts() throws IOException, InterruptedException {
+		String timeframetext = null;
+        Scanner in = new Scanner(System.in);	
+		System.out.println("Enter the daycount you want to get the details for: 1 or 7? ");
+		int count = in.nextInt();
+		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
+			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
+			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
+			"VP [Chrome]", "Marajo_Brand.com[Desktop]",
+			"Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
+			"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","dermaflash.com[Desktop]","dermaflash.com[Mobile]",
+			"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
+			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
+			"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
+			"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile");
+		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]", "CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop",
+				"SA CXT Desktop","Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","dermaflash.com[Desktop]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
+				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop","VP [Chrome]","Marajo_Brand.com[Desktop]","ITC CXT-Desktop");
+		ArrayList<String> brandarraylist = new ArrayList<String>();
+		
+		if(count==1) {
+			timeframetext = "Last 24 Hours";
+			brandarraylist.addAll(brandlistfor1day);
+		}
+		else if(count==7){
+			timeframetext = "Last 7 Days";
+			brandarraylist.addAll(brandlistfor7days);
+			
+		}
+		else {
+			System.out.println("You have entered an invalid number. We are setting 1 day as default");
+		}
 		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		
@@ -51,7 +86,7 @@ public class GetChartsDaily {
 		JavascriptExecutor je = (JavascriptExecutor) driver;
 		XMLSlideShow ppt = new XMLSlideShow();		
 		
-		WebElement username = driver.findElement(By.id("Email"));
+		WebElement username = driver.findElement(By.id("Email")); 
 		username.sendKeys("vanitha@searchnscore.com");
 		
 		WebElement password = driver.findElement(By.id("Password"));
@@ -59,18 +94,10 @@ public class GetChartsDaily {
 		
 		WebElement login_button = driver.findElement(By.id("LoginButton"));
 		login_button.click();
-						
-		String brand_array[] = {"Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
-				"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
-				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
-				"VP [Chrome]", "ADB Desktop", "Marajo_Brand.com[Desktop]",
-				"Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
-				"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","dermaflash.com[Desktop]","dermaflash.com[Mobile]",
-				"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
-				"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
-				"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
-				"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile"};
-				
+		String[] brand_array = new String[brandarraylist.size()];
+		for(int i=0;i<brandarraylist.size();i++){
+			brand_array[i] = brandarraylist.get(i);
+		}		
 		for (String brand : brand_array) {
 			je.executeScript("window.scrollTo(0, 0);");
 			Thread.sleep(2000);			
@@ -117,7 +144,7 @@ public class GetChartsDaily {
 			driver.findElement(By.id("ctl00_ctl00_ContentPlaceholder1_DetailContentPlaceholder_PerformanceHeaderSection1_TestSearch1_DoneButton")).click();
 			
 			Select timeframe = new Select(driver.findElement(By.id("TimeframeSetOptions")));
-			timeframe.selectByVisibleText("Last 24 Hours");
+			timeframe.selectByVisibleText(timeframetext);
 			
 			WebElement draw_button = driver.findElement(By.id("DrawChartButton"));
 			draw_button.click();
