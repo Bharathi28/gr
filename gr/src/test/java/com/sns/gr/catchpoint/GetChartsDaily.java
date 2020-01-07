@@ -34,7 +34,10 @@ import com.sns.gr.testbase.MailUtilities;
 public class GetChartsDaily {
 
 	MailUtilities mailObj = new MailUtilities();
-	String sendReportTo = "rg@searchnscore.com , indhuja@searchnscore.com , vanitha@searchnscore.com , megavannan@searchnscore.com , sangeetha@searchnscore.com , sangeetha.vellingiri@searchnscore.com , preethi.mani@searchnscore.com , selvakumar@searchnscore.com , banuchitra@searchnscore.com , steephan@searchnscore.com";
+//	String sendReportTo = "rg@searchnscore.com , indhuja@searchnscore.com , vanitha@searchnscore.com , megavannan@searchnscore.com , sangeetha@searchnscore.com , sangeetha.vellingiri@searchnscore.com , preethi.mani@searchnscore.com , selvakumar@searchnscore.com , banuchitra@searchnscore.com , steephan@searchnscore.com";
+	
+	String sendReportTo = "steephan@searchnscore.com";
+	
 	
 	@Test
 	public void catchpointCharts() throws IOException, InterruptedException {
@@ -60,16 +63,18 @@ public class GetChartsDaily {
 		WebElement login_button = driver.findElement(By.id("LoginButton"));
 		login_button.click();
 						
-		String brand_array[] = {"Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
-				"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
-				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
-				"VP [Chrome]", "ADB Desktop", "Marajo_Brand.com[Desktop]",
-				"Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
-				"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","dermaflash.com[Desktop]","dermaflash.com[Mobile]",
-				"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
-				"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
-				"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
-				"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile"};
+//		String brand_array[] = {"Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
+//				"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
+//				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
+//				"VP [Chrome]", "ADB Desktop", "Marajo_Brand.com[Desktop]",
+//				"Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
+//				"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","dermaflash.com[Desktop]","dermaflash.com[Mobile]",
+//				"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
+//				"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
+//				"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
+//				"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile"};
+		
+		String brand_array[] = {"IT CXT Mobile"};
 				
 		for (String brand : brand_array) {
 			je.executeScript("window.scrollTo(0, 0);");
