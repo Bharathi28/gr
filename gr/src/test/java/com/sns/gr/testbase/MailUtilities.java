@@ -28,17 +28,16 @@ public class MailUtilities {
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.port", "587");
 		
-		final String username = "manibharathi@searchnscore.com";
-		final String password = "mani#1234";
-		String from = "manibharathi@searchnscore.com";
+		final String username = "automation@searchnscore.com";
+		final String password = "SNSPassw0rd!";
+		String from = "automation@searchnscore.com";
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("Hi,").append(System.lineSeparator());
+		sb.append("Hi Team,").append(System.lineSeparator());
 		sb.append(System.lineSeparator());
 		sb.append("PFA.").append(System.lineSeparator());
 		sb.append(System.lineSeparator());
-		sb.append("Thanks,").append(System.lineSeparator());
-		sb.append("Bharathi");		
+		sb.append("Thanks");		
 		
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 			  protected PasswordAuthentication getPasswordAuthentication() {
@@ -56,7 +55,7 @@ public class MailUtilities {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.addRecipients(Message.RecipientType.CC, 
-	                InternetAddress.parse("manibharathi@searchnscore.com"));
+	                InternetAddress.parse("manibharathi@searchnscore.com, banuchitra@searchnscore.com"));
 			message.setSubject(subject + " - " + dateStr);
 
 	        BodyPart messageBodyPart = new MimeBodyPart();
