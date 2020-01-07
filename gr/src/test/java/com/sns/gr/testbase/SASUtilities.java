@@ -332,7 +332,7 @@ public class SASUtilities {
 			pay_elmt.click();
 			Thread.sleep(2000);
 			
-			if((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl2-ps"))) {
+			if(((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl2-ps"))) || ((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl3-ps")))) {
 				driver.findElement(By.xpath("//button[@class='show-next']")).click();
 				Thread.sleep(2000);
 				driver.findElement(By.xpath("//button[@data-variant-id='" + ppid.toUpperCase() + "']")).click();

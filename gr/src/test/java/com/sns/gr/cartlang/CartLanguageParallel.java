@@ -34,7 +34,7 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\run_input.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_testdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 

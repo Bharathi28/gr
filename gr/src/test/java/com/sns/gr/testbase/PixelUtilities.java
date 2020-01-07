@@ -313,7 +313,7 @@ public class PixelUtilities {
 		output_row.add("Yes");
 		output_row.add(checkout_pricing);
 		
-		driver.close();
+//		driver.close();
 		
         // Save Order Screenshots        
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			

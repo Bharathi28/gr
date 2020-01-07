@@ -197,6 +197,9 @@ public class CommonUtilities {
 			header_list.add("Email Received");
 			header_list.add("Checkout Pricing");		
 			header_list.add("Confirmation Pricing");
+			header_list.add("Shipping Billing");
+			header_list.add("Card");
+			header_list.add("Browser");
 		}	
 		else if(header.toLowerCase().contains("cartlang")) {
 			header_list.add("Environment");

@@ -78,7 +78,6 @@ public class BuyflowValidation{
 			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 		}
 		
-			
 		int singleCheck = 0;
 		String str = "";
 		String[] offer_array = ppid.split(",");		
@@ -183,7 +182,10 @@ public class BuyflowValidation{
 		output_row.add(conf_num);
 		output_row.add("Yes");
 		output_row.add(checkout_pricing);
-		output_row.add(conf_pricing);			
+		output_row.add(conf_pricing);	
+		output_row.add(shipbill);	
+		output_row.add(cc);	
+		output_row.add(browser);	
 		output.add(output_row);
 		
 		driver.close();
