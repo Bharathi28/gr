@@ -1,0 +1,12 @@
+<suite name="Catchpointsuite">
+	<parameter name="daycount" value="1" />
+	<test name="CatchpointChartGenerationDaily">
+		<classes>
+			<class name="com.sns.gr.catchpoint.GetChartsDaily">
+				<methods>
+                    <include name="catchpointCharts" />
+                </methods>
+            </class>
+		</classes>
+	</test>
+</suite>

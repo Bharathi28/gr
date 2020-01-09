@@ -30,6 +30,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.google.common.io.Files;
@@ -39,13 +40,12 @@ public class GetChartsDaily {
 
 	MailUtilities mailObj = new MailUtilities();
 	String sendReportTo = "rg@searchnscore.com , indhuja@searchnscore.com , vanitha@searchnscore.com , megavannan@searchnscore.com , sangeetha@searchnscore.com , sangeetha.vellingiri@searchnscore.com , preethi.mani@searchnscore.com , selvakumar@searchnscore.com , banuchitra@searchnscore.com , steephan@searchnscore.com , pavithra@searchnscore.com";
-	
+	@Parameters({ "daycount" })
 	@Test
-	public void catchpointCharts() throws IOException, InterruptedException {
+	public void catchpointCharts(int count) throws IOException, InterruptedException {
 		String timeframetext = null;
         Scanner in = new Scanner(System.in);	
-		System.out.println("Enter the daycount you want to get the details for: 1 or 7? ");
-		int count = in.nextInt();
+
 		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
 			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
@@ -56,7 +56,7 @@ public class GetChartsDaily {
 			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
 			"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
 			"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile");		
-				
+		
 		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]", "CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop",
 				"SA CXT Desktop","Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","dermaflash.com[Desktop]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
 				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop","VP [Chrome]","Marajo_Brand.com[Desktop]","ITC CXT-Desktop");
