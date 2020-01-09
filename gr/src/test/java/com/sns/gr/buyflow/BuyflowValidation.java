@@ -83,7 +83,7 @@ public class BuyflowValidation{
 		String[] offer_array = ppid.split(",");		
 			
 		for(int i = 0; i < offer_array.length; i++) {				
-			if(offer_array[i].contains("single")) {
+			if((offer_array[i].contains("single")) || (bf_obj.checkIfProduct(brand, campaign, offer_array[i]))){
 				singleCheck = 1;
 			}
 			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i]);
@@ -125,7 +125,7 @@ public class BuyflowValidation{
 			
 		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;	
 			
-		bf_obj.complete_order(driver, brand);
+		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(1000);
 			
 		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {

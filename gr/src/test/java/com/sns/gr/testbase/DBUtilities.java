@@ -49,6 +49,21 @@ public class DBUtilities {
 		return categories;
 	}
 	
+	public List<String> getCategory(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+		String realm = get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";	
+		
+		String query = "select distinct category from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "';";
+		List<Map<String, Object>> unique_categories = DBLibrary.dbAction("fetch", query);
+		
+		List<String> categories = new ArrayList<String>();
+		for(Map<String, Object> category : unique_categories) {
+			String catg = category.get("category").toString();
+			categories.add(catg);
+		}
+		return categories;
+	}
+	
 	public List<Map<String, Object>> fetch_all_by_category(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
 		List<Map<String, Object>> data = null;
 		if(category.equalsIgnoreCase("subscribe")) {

@@ -76,11 +76,26 @@ public class BuyflowUtilities {
 				break;
 			}
 		}
-	}				
+	}		
+	
+	public boolean checkIfProduct(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+		List<String> categories = db_obj.getCategory(brand, campaign, ppid);
+		boolean product = false;
+		if((categories.contains("kit")) && (categories.contains("product"))){
+			product = false;
+		}
+		else if(categories.contains("kit")){
+			product = false;
+		}
+		else if(categories.contains("product")){
+			product = true;
+		}
+		return product;
+	}
 	
 	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode) throws ClassNotFoundException, SQLException, InterruptedException {
 		
-		if(offercode.contains("single")) {
+		if((offercode.contains("single")) || (checkIfProduct(brand, campaign, offercode))){
 			click_cta(driver,env,brand,campaign,"Product");
 		}
 		else {
@@ -242,14 +257,19 @@ public class BuyflowUtilities {
 		return conf_num;
 	}
 	
-	public void complete_order(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
+	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException {
 		String realm = DBUtilities.get_realm(brand);
 		WebElement comp_order_element;
 		if(realm.equalsIgnoreCase("R2")) {
 			comp_order_element = driver.findElement(By.id("contYourOrder"));
 		}
 		else {
-			comp_order_element = driver.findElement(By.id("trigerPlaceOrder"));
+			if(cc.equalsIgnoreCase("paypal")) {
+				comp_order_element = driver.findElement(By.id("submitButton"));
+			}
+			else {
+				comp_order_element = driver.findElement(By.id("trigerPlaceOrder"));
+			}			
 		}
 		comp_order_element.click();
 	}
@@ -280,62 +300,94 @@ public class BuyflowUtilities {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		
-		String alpha = RandomStringUtils.randomAlphabetic(9);
-		String num = RandomStringUtils.randomNumeric(4);
-		String email = alpha + "-" + num + "@yopmail.com";
-		
-		fill_form_field(driver, realm, "Email", email.toLowerCase());
-		fill_form_field(driver, realm, "PhoneNumber", "8887878787");		
-		fill_form_field(driver, realm, "FirstName", firstName());
-		fill_form_field(driver, realm, "LastName", lastName());
-		fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
-		fill_form_field(driver, realm, "City", "El Segundo");
-		fill_form_field(driver, realm, "State", "CA");		
-		
-		if(supply.equalsIgnoreCase("30")) {			
-			fill_form_field(driver, realm, "Zip", "90245");
-		}
-		else if(supply.equalsIgnoreCase("90")) {
-			fill_form_field(driver, realm, "Zip", "81002");
-		}
-						
-		Thread.sleep(2000);
-		WebElement shipbill_elmt = null;
-		if(driver.findElements(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']")).size() != 0) {
-			shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']"));
-		}
-		else if(driver.findElements(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']")).size() != 0) {
-			shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']"));
-		}
-		jse.executeScript("window.scrollBy(0,200)", 0);
-		if(shipbill.equalsIgnoreCase("same")) {
-			if(!(shipbill_elmt.isSelected())) {
-				shipbill_elmt.click();
+		if(cc.equalsIgnoreCase("paypal")) {
+			driver.findElement(By.xpath("//div[@id='paypalSection']//div//div")).click();
+			Thread.sleep(5000);
+
+			String winHandleBefore = driver.getWindowHandle();
+			for(String winHandle : driver.getWindowHandles()){
+			   driver.switchTo().window(winHandle);
 			}
+
+			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+			Thread.sleep(5000);
+			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
+			Thread.sleep(2000);
+			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
+				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
+				Thread.sleep(2000);
+			}
+			driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();
+			Thread.sleep(4000);
+			driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
+			Thread.sleep(2000);
+			driver.switchTo().defaultContent();		
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//div[@class='legal-checkbox']//div//div//input")).click();						
+			return "testbuyer2@guthy-renker.com";
 		}
 		else {
-			if(shipbill_elmt.isSelected()) {
-				shipbill_elmt.click();
-			}
+			String alpha = RandomStringUtils.randomAlphabetic(9);
+			String num = RandomStringUtils.randomNumeric(4);
+			String email = alpha + "-" + num + "@yopmail.com";
 			
-			fill_form_field(driver, realm, "ShippingFirstName", firstName());
-			fill_form_field(driver, realm, "ShippingLastName", lastName());
-			fill_form_field(driver, realm, "ShippingAddressLine1", "123 Anywhere st");
-			fill_form_field(driver, realm, "ShippingCity", "Huntsville");
-			fill_form_field(driver, realm, "ShippingState", "AL");
-			fill_form_field(driver, realm, "ShippingZip", "35801");
-		}		
-		if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
-			fill_form_field(driver, realm, "CardNumber", "4111111111111122");
+			fill_form_field(driver, realm, "Email", email.toLowerCase());
+			fill_form_field(driver, realm, "PhoneNumber", "8887878787");		
+			fill_form_field(driver, realm, "FirstName", firstName());
+			fill_form_field(driver, realm, "LastName", lastName());
+			fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
+			fill_form_field(driver, realm, "City", "El Segundo");
+			fill_form_field(driver, realm, "State", "CA");		
+			
+			if(supply.equalsIgnoreCase("30")) {			
+				fill_form_field(driver, realm, "Zip", "90245");
+			}
+			else if(supply.equalsIgnoreCase("90")) {
+				fill_form_field(driver, realm, "Zip", "81002");
+			}
+							
+			Thread.sleep(2000);
+			WebElement shipbill_elmt = null;
+			if(driver.findElements(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']")).size() != 0) {
+				shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']"));
+			}
+			else if(driver.findElements(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']")).size() != 0) {
+				shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']"));
+			}
+			jse.executeScript("window.scrollBy(0,200)", 0);
+			if(shipbill.equalsIgnoreCase("same")) {
+				if(!(shipbill_elmt.isSelected())) {
+					shipbill_elmt.click();
+				}
+			}
+			else {
+				if(shipbill_elmt.isSelected()) {
+					shipbill_elmt.click();
+				}
+				
+				fill_form_field(driver, realm, "ShippingFirstName", firstName());
+				fill_form_field(driver, realm, "ShippingLastName", lastName());
+				fill_form_field(driver, realm, "ShippingAddressLine1", "123 Anywhere st");
+				fill_form_field(driver, realm, "ShippingCity", "Huntsville");
+				fill_form_field(driver, realm, "ShippingState", "AL");
+				fill_form_field(driver, realm, "ShippingZip", "35801");
+			}		
+			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
+				fill_form_field(driver, realm, "CardNumber", "4111111111111122");
+			}
+			else {
+				fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
+			}		
+			fill_form_field(driver, realm, "Month", "12");
+			fill_form_field(driver, realm, "Year", "2020");
+			fill_form_field(driver, realm, "Agree", "");	
+			
+			return (email.toLowerCase());
 		}
-		else {
-			fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
-		}		
-		fill_form_field(driver, realm, "Month", "12");
-		fill_form_field(driver, realm, "Year", "2020");
-		fill_form_field(driver, realm, "Agree", "");	
-		
-		return (email.toLowerCase());
 	}	
 	
 	public String getCCNumber(String cc) {

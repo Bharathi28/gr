@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SASUtilities {
 	
+	BuyflowUtilities bf_obj = new BuyflowUtilities();
 	CommonUtilities comm_obj = new CommonUtilities();
 	DBUtilities db_obj = new DBUtilities();	
 		
@@ -54,7 +55,12 @@ public class SASUtilities {
 		}
 		else {
 			ppid_str = ppid;
-			offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, "Kit");
+			if(bf_obj.checkIfProduct(brand, campaign, ppid)) {
+				offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, "Product");
+			}
+			else {
+				offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, "Kit");
+			}			
 			select_offer(driver,env,brand,campaign,offerdata);
 		}
 		String last_char = ppid_str.substring(ppid_str.length() - 1);
@@ -121,7 +127,7 @@ public class SASUtilities {
 	}
 	
 	public void add_product_to_cart(WebDriver driver, String brand, String campaign) {
-		if((brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives"))) {
+		if((brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("DermaFlash")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives"))) {
 			if(driver.findElements(By.id("add-to-cart")).size() != 0) {
 				driver.findElement(By.id("add-to-cart")).click();
 			}
@@ -224,11 +230,20 @@ public class SASUtilities {
 	
 	public void select_shade(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		
+		String name = offerdata.get("description").toString().toLowerCase();
 		String shade = offerdata.get("shade").toString().toLowerCase();
+		String category = offerdata.get("category").toString().toLowerCase();
 		
 		if(!(shade.equalsIgnoreCase("n/a"))) {
-			List<Map<String, Object>> shade_loc = null;			
-			shade_loc = comm_obj.get_element_locator(brand, campaign, "Shade", shade);			
+			
+			List<Map<String, Object>> shade_loc = null;		
+			if(category.equalsIgnoreCase("Kit")) {
+				shade_loc = comm_obj.get_element_locator(brand, campaign, "Shade", shade);
+			}
+			else if(category.equalsIgnoreCase("Product")) {
+				shade_loc = comm_obj.get_element_locator(brand, campaign, "Shade", shade + " " + name);
+			} 
+						
 			WebElement shade_elmt = comm_obj.find_webelement(driver, shade_loc.get(0).get("elementlocator").toString(), shade_loc.get(0).get("elementvalue").toString());
 			Thread.sleep(1000);
 			shade_elmt.click();
@@ -332,7 +347,7 @@ public class SASUtilities {
 			pay_elmt.click();
 			Thread.sleep(2000);
 			
-			if(((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl2-ps"))) || ((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl3-ps")))) {
+			if((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl2-ps"))) {
 				driver.findElement(By.xpath("//button[@class='show-next']")).click();
 				Thread.sleep(2000);
 				driver.findElement(By.xpath("//button[@data-variant-id='" + ppid.toUpperCase() + "']")).click();
@@ -408,7 +423,6 @@ public class SASUtilities {
 		
 		String product_name = offerdata.get("description").toString().toLowerCase();
 		String frequency = offerdata.get("frequency").toString();
-		
 		if(!(frequency.equalsIgnoreCase("n/a"))) {
 			List<Map<String, Object>> freq_loc = comm_obj.get_element_locator(brand, campaign, "Frequency", product_name);
 			WebElement freq_elmt = comm_obj.find_webelement(driver, freq_loc.get(0).get("elementlocator").toString(), freq_loc.get(0).get("elementvalue").toString());
@@ -429,7 +443,7 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,1000)", 0);
 		}
 		WebElement prod_elmt = comm_obj.find_webelement(driver, prod_loc.get(0).get("elementlocator").toString(), prod_loc.get(0).get("elementvalue").toString());
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		
 		if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")))) {
 			Actions act = new Actions(driver);
@@ -440,11 +454,10 @@ public class SASUtilities {
 			prod_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
 			Thread.sleep(2000);
 		}		
-		
 		prod_elmt.click();					
 		Thread.sleep(1000);
 		
-		if((brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("DermaFlash")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("WestmoreBeauty"))){
+		if((brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("WestmoreBeauty"))){
 			if(driver.findElements(By.id("add-to-cart")).size() != 0){
 				driver.findElement(By.id("add-to-cart")).click();
 			}

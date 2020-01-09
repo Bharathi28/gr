@@ -260,7 +260,7 @@ public class PixelUtilities {
 		if(ppu.equalsIgnoreCase("No")) {
 			defineNewHar(proxy, brand + "ConfirmationPage");
         	// Navigate to Confirmation Page	        
-        	bf_obj.complete_order(driver, brand);          
+        	bf_obj.complete_order(driver, brand, "VISA");          
             Thread.sleep(10000);
             getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");	
 		}
@@ -268,7 +268,7 @@ public class PixelUtilities {
 			// Upsell Page
             defineNewHar(proxy, brand + "UpsellPage");
             // Navigate to Upsell Page	        
-            bf_obj.complete_order(driver, brand);
+            bf_obj.complete_order(driver, brand, "VISA");
             Thread.sleep(20000);
             getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage" + pattern + ".har");
             

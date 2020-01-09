@@ -150,7 +150,7 @@ public class CartLanguageParallel {
 				if(upsell) {
 					// 90 - Day						
 					bf_obj.fill_out_form(driver, brand, "VISA", "same", "90");
-					bf_obj.complete_order(driver, brand);
+					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
 					cart_lang = lang_obj.get_cart_language(driver);		
