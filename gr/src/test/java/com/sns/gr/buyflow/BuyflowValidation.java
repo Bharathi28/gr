@@ -69,10 +69,10 @@ public class BuyflowValidation{
 		
 		switch (day) {
 	    case Calendar.FRIDAY:
-	    	arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
 	        break;
 	    case Calendar.SATURDAY:
-	    	arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 	        break;
 		}
 		
