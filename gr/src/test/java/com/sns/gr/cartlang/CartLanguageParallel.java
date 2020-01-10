@@ -34,7 +34,7 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_testdata.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 
@@ -194,6 +194,6 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\");
+		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
 	}
 }

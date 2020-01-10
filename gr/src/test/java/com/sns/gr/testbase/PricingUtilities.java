@@ -105,13 +105,19 @@ public class PricingUtilities {
 			jse.executeScript("window.scrollBy(0,1000)", 0);
 		}
 		
-		List<Map<String, Object>> pricing_locator = get_pricing_locator(realm, brand, campaign, "Shop Price",kit_name);		
-		WebElement elmt = comm_obj.find_webelement(driver, pricing_locator.get(0).get("elementlocator").toString(), pricing_locator.get(0).get("elementvalue").toString());
-		String shop_price = elmt.getText();	
-		return shop_price;
-
-//		String shop_price = driver.findElement(By.xpath(locator.get(0).get("elementvalue").toString() + "//span[@class='current-price oneshotPrice out-btn-price']")).getText();
+//		List<Map<String, Object>> pricing_locator = get_pricing_locator(realm, brand, campaign, "Shop Price",kit_name);		
+//		WebElement elmt = comm_obj.find_webelement(driver, pricing_locator.get(0).get("elementlocator").toString(), pricing_locator.get(0).get("elementvalue").toString());
+//		String shop_price = elmt.getText();	
 //		return shop_price;
+		String shop_price = null;
+		
+		if(brand.equalsIgnoreCase("Mally")) {
+			shop_price = driver.findElement(By.xpath(locator.get(0).get("elementvalue").toString() + "//span[@class='current-price oneshotPrice out-btn-price']")).getText();
+		}
+		else if(brand.equalsIgnoreCase("WestmoreBeauty")){
+			shop_price = driver.findElement(By.xpath(locator.get(0).get("elementvalue").toString() + "/..//span")).getText();
+		}		
+		return shop_price;
 	}
 	
 	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {

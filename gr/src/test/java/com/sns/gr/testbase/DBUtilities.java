@@ -71,7 +71,7 @@ public class DBUtilities {
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		else {
-			String query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='" + category + "';";	
+			String query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='" + category + "' and status='Active';";	
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		return data;

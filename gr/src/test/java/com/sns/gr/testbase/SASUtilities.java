@@ -370,6 +370,13 @@ public class SASUtilities {
 			else if(category.equalsIgnoreCase("Product")) {
 				frag_loc = comm_obj.get_element_locator(brand, campaign, "Product-Fragrance", fragrance + " " + kitname);
 			}
+			if((category.equalsIgnoreCase("Product")) && (brand.equalsIgnoreCase("Mally"))){
+				while(comm_obj.find_mulwebelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString()).size() == 0){
+					if(driver.findElements(By.xpath("//button[@class='slick-next slick-arrow valid']")).size() != 0) {
+						driver.findElement(By.xpath("//button[@class='slick-next slick-arrow valid']")).click();
+					}
+				}
+			}
 			
 			WebElement frag_elmt = comm_obj.find_webelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString());
 			Thread.sleep(2000);
