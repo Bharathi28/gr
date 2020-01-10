@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.sns.gr.setup.BaseTest;
@@ -50,18 +52,30 @@ public class BuyflowValidation{
 	MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo;
+	String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
 	
-	@BeforeSuite
-	public void getEmailId() {
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter Email id : ");
-		sendReportTo = in.next();
-	}
+//	@BeforeSuite
+//	public void getEmailId() {
+//		Scanner in = new Scanner(System.in);
+//		System.out.println("Enter Email id : ");
+//		sendReportTo = in.next();
+//	}
 
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+		Object[][] arrayObject = null;
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK); 
+		
+		switch (day) {
+	    case Calendar.FRIDAY:
+	    	arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+	        break;
+	    case Calendar.SATURDAY:
+	    	arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+	        break;
+		}
+		
 		return arrayObject;
 	}
 	
