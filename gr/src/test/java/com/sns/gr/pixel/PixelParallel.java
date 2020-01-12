@@ -58,24 +58,24 @@ public class PixelParallel {
 	static MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
-	static String sendReportTo;
+	static String sendReportTo = "manibharathi@searchnscore.com";
 	
-	@BeforeSuite
-	public void getEmailId() {
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter Email id : ");
-		sendReportTo = in.next();		
-	}
+// 	@BeforeSuite
+// 	public void getEmailId() {
+// 		Scanner in = new Scanner(System.in);
+// 		System.out.println("Enter Email id : ");
+// 		sendReportTo = in.next();		
+// 	}
 	
 	@DataProvider(name="pixelInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Pixel\\pixel_testdata.xlsx", "Run Data");
+		Object[][] arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Pixel\\pixel_testdata.xlsx", "Run Data");
 		return arrayObject;
 	}
 	
 	@Test(dataProvider="pixelInput")
 	public void pixel(String env, String brand, String campaign, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Bharathi\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -229,7 +229,7 @@ public class PixelParallel {
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-						driver.findElement(By.name("har")).sendKeys("F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
+						driver.findElement(By.name("har")).sendKeys("D:\\Bharathi\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
 				        Thread.sleep(2000);
 				        driver.findElement(By.id("search")).clear();
 				        driver.findElement(By.id("search")).sendKeys(pattern);
@@ -300,7 +300,7 @@ public class PixelParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", "F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", "D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
 		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, file);
 	}
 	
@@ -313,7 +313,7 @@ public class PixelParallel {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File("D:\\Bharathi\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
@@ -499,7 +499,7 @@ public class PixelParallel {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File("D:\\Bharathi\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
