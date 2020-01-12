@@ -64,7 +64,7 @@ public class BuyflowValidation{
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
 		Object[][] arrayObject = null;
-		arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+		arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_nput.xlsx", "rundata");
 // 		Calendar calendar = Calendar.getInstance();
 // 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
