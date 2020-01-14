@@ -52,7 +52,7 @@ public class BuyflowValidation{
 	MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "manibharathi@searchnscore.com";
+	String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
 	
 //	@BeforeSuite
 //	public void getEmailId() {
@@ -64,18 +64,18 @@ public class BuyflowValidation{
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
 		Object[][] arrayObject = null;
-		arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-// 		Calendar calendar = Calendar.getInstance();
-// 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
+
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-// 		switch (day) {
-// 	    case Calendar.FRIDAY:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-// 	        break;
-// 	    case Calendar.SATURDAY:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
-// 	        break;
-// 		}
+		switch (day) {
+	    case Calendar.FRIDAY:
+	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+	        break;
+	    case Calendar.SATURDAY:
+	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+	        break;
+		}
 		
 		return arrayObject;
 	}
@@ -170,7 +170,7 @@ public class BuyflowValidation{
 		Thread.sleep(2000);
 			
 		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-		ImageIO.write(confpage.getImage(),"PNG",new File("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
 			
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
@@ -208,7 +208,7 @@ public class BuyflowValidation{
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
 		mailObj.sendEmail("Buyflow Results", sendReportTo, file);
 	}
 }
