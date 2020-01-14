@@ -69,7 +69,7 @@ public class BuyflowValidation{
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
 		switch (day) {
-	    case Calendar.FRIDAY:
+	    case Calendar.TUESDAY:
 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
 	        break;
 	    case Calendar.SATURDAY:
