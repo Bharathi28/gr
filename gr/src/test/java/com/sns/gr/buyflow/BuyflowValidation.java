@@ -75,6 +75,9 @@ public class BuyflowValidation{
 	    case Calendar.SATURDAY:
 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 	        break;
+	    case Calendar.WEDNESDAY:
+	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+	        break;
 	    default:
 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
 	        break;
