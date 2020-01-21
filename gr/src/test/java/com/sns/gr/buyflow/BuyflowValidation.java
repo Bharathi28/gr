@@ -67,15 +67,15 @@ public class BuyflowValidation{
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-		switch (day) {
-	    case Calendar.FRIDAY:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-	        break;
-	    case Calendar.SATURDAY:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
-	        break;
+		if(day==7){
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 		}
-		
+		else if(day==1){
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+		}
+		else{
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+		}		
 		return arrayObject;
 	}
 	
@@ -148,19 +148,15 @@ public class BuyflowValidation{
 				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
 			}
 		}
-		
-		List<String> campaignPages = db_obj.getPages(brand, campaign);
-		boolean ppuPresent = campaignPages.contains("upsellpage");
-		System.out.println("Upsell : " + ppuPresent);
 					
 		Thread.sleep(2000);
-		if((brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("ReclaimBotanical")) || (brand.equalsIgnoreCase("SheerCover")) || (brand.equalsIgnoreCase("DermaFlash")) || (brand.equalsIgnoreCase("TryDermaFlash"))) {
-			// No Upsell
-		}			
-		else {
+		
+		String ppu = db_obj.checkPPUPresent(brand, campaign);
+		if(ppu.equalsIgnoreCase("Yes")) {
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-		}		
+		}
 		Thread.sleep(2000);
+		
 		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));
 			
 		System.out.println("Expected Offercode : " + ppid);
@@ -169,7 +165,7 @@ public class BuyflowValidation{
 		Thread.sleep(2000);
 			
 		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-		ImageIO.write(confpage.getImage(),"PNG",new File("F:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
 			
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
@@ -207,7 +203,7 @@ public class BuyflowValidation{
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
 		mailObj.sendEmail("Buyflow Results", sendReportTo, file);
 	}
 }
