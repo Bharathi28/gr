@@ -68,10 +68,10 @@ public class BuyflowValidation{
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-		if(day.equalsIgnoreCase("saturday")){
+		if(day==7){
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 		}
-		else if(day.equalsIgnoreCase("sunday")){
+		else if(day==1){
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
 		}
 		else{
