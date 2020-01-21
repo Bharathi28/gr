@@ -44,8 +44,7 @@ public class GetChartsDaily {
 	@Test
 	public void catchpointCharts(int count) throws IOException, InterruptedException {
 		String timeframetext = null;
-        Scanner in = new Scanner(System.in);	
-
+       
 		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
 			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
@@ -75,7 +74,7 @@ public class GetChartsDaily {
 		else {
 			System.out.println("You have entered an invalid number. We are setting 1 day as default");
 		}
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		
 		driver.manage().window().maximize();
@@ -168,12 +167,12 @@ public class GetChartsDaily {
 			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
 			ImageIO.write(eleScreenshot, "png", screenshot);
 				
-			File screenshotLocation = new File("F:\\Automation\\Catchpoint\\" + brand +".png");
+			File screenshotLocation = new File("C:\\Automation\\Catchpoint\\" + brand +".png");
 			Files.copy(screenshot, screenshotLocation);
 			
 			XSLFSlide slide = ppt.createSlide();
 			
-			File image = new File("F:\\Automation\\Catchpoint\\" + brand +".png");
+			File image = new File("C:\\Automation\\Catchpoint\\" + brand +".png");
 		    byte[] picture = IOUtils.toByteArray(new FileInputStream(image));
 		    
 		    XSLFPictureData idx = ppt.addPicture(picture, PictureType.PNG);
@@ -184,7 +183,7 @@ public class GetChartsDaily {
 		SimpleDateFormat date_form = new SimpleDateFormat("ddMMyyyy");
 		String date_pptname = date_form.format(date);
 	    
-	    File file = new File("F:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+	    File file = new File("C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
         FileOutputStream out = new FileOutputStream(file);
       
         //saving the changes to a file
@@ -192,8 +191,16 @@ public class GetChartsDaily {
         System.out.println("image added successfully");
         out.close();
 	    driver.close();
+	    
+	    String subject = "";
+	    if(count==1) {
+			subject = "Catchpoint Charts - Today";
+		}
+		else if(count==7){
+			subject = "Catchpoint Charts - Last 7 days";
+		}
 	
-	    mailObj.sendEmail("Catchpoint Charts", sendReportTo, "F:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+	    mailObj.sendEmail(subject, sendReportTo, "C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
 	    ppt.close();
     }
 }

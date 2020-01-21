@@ -21,8 +21,8 @@ import com.sns.gr.testbase.DBUtilities;
 import com.sns.gr.testbase.PricingUtilities;
 import com.sns.gr.testbase.SASUtilities;
 
-public class CartLanguageParallel {
-	
+public class CartLanguageCompleteParallel {
+
 	BuyflowUtilities bf_obj = new BuyflowUtilities();
 	CartLangUtilities lang_obj = new CartLangUtilities();
 	PricingUtilities pr_obj = new PricingUtilities();
@@ -34,7 +34,7 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_testdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 
@@ -45,8 +45,14 @@ public class CartLanguageParallel {
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
 			System.out.println(category);
+			List<Map<String, Object>> all_offers = null;
+			if(category.equalsIgnoreCase("kit")) {
+				all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
+			}
+			else if(category.equalsIgnoreCase("product")) {
+				all_offers = db_obj.fetch_all_by_category(brand, campaign, category);
+			}
 			
-			List<Map<String, Object>> all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
 			System.out.println(all_offers.size());
 			
 			for(Map<String, Object> offer : all_offers) {				
@@ -78,21 +84,43 @@ public class CartLanguageParallel {
 				}
 					
 				bf_obj.click_cta(driver, env, brand, campaign, category);
+				String shop_price = "";
+				String sas_price = "";
+				String product_price = "";
+				String inst_price = "";
 					
-				if(category.equalsIgnoreCase("Kit")) {			
+				if(category.equalsIgnoreCase("Kit")) {
+					// SAS Page price - only for Kits
+					if(category.equalsIgnoreCase("Kit")) {
+						sas_price = pr_obj.fetch_sas_current_price(driver, env, brand, campaign, offer.get("ppid").toString());
+						System.out.println("SAS Price : " + sas_price);
+					}				
 					sas_obj.select_offer(driver, env, brand, campaign, offer);
 				}
 				else if(category.equalsIgnoreCase("Product")) {
-													
+					
+					// Shop Page price - fetching from 'Shop Now' button					
+					shop_price = pr_obj.fetch_shop_pricing(driver, env, brand, campaign, offer.get("ppid").toString());
+					System.out.println("Shop Page Price : " + shop_price);
+						
 					Thread.sleep(3000);
 					sas_obj.select_offer(driver, env, brand, campaign, offer);
+					
+					// PDP Page price - only for Products		
+					if(brand.equalsIgnoreCase("WestmoreBeauty")) {
+						product_price = driver.findElement(By.xpath("//strong[@class='single-price current-price ']")).getText();
+					}
+					else {
+						product_price = driver.findElement(By.xpath("//div[contains(@class,'one-time active')]//strong")).getText();
+					}
+					System.out.println("PDP Price : " + product_price);
 				}
 				else if(category.equalsIgnoreCase("Subscribe")) {
 					// Subscribe
 					sas_obj.select_product(driver, offer, brand, campaign);
 					sas_obj.select_fragrance(driver, offer, brand, campaign);
 					sas_obj.select_subscribe(driver, offer, brand, campaign);
-				}			
+				}		
 				
 				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("ppid").toString(), 0);
 				
@@ -114,7 +142,11 @@ public class CartLanguageParallel {
 				}						
 				System.out.println(offer.get("description").toString());
 					
-				String cart_lang = lang_obj.get_cart_language(driver);						
+				String cart_lang = lang_obj.get_cart_language(driver);	
+				
+				String total_price = driver.findElement(By.xpath("(//div[@class='cart-product-items clearfix'])[1]//div[2]//ul//li[contains(@class,'item-total')]//span[2]")).getText();
+				System.out.println("Total Price : " + total_price);				
+				
 				if(cart_lang.equalsIgnoreCase("No Cart Language")) {
 					cart_lang_price = " ";
 					cart_lang_shipping = " ";
@@ -137,6 +169,10 @@ public class CartLanguageParallel {
 				output_row_30.add(brand);
 				output_row_30.add(campaign);
 				output_row_30.add(ppid);
+				output_row_30.add(shop_price);	
+				output_row_30.add(sas_price);
+				output_row_30.add(product_price);
+				output_row_30.add(total_price);
 				output_row_30.add(cart_lang_price);
 				output_row_30.add(cart_lang_shipping);
 				output_row_30.add(checkout_subtotal);	
@@ -147,13 +183,18 @@ public class CartLanguageParallel {
 				System.out.println(output_row_30);
 				System.out.println(output);
 										
+				upsell = false;
 				if(upsell) {
+					String[] inst_arr;
+					
 					// 90 - Day						
 					bf_obj.fill_out_form(driver, brand, "VISA", "same", "90");
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
 					cart_lang = lang_obj.get_cart_language(driver);		
+					total_price = driver.findElement(By.xpath("(//div[@class='cart-product-items clearfix'])[1]//div[2]//ul//li[contains(@class,'item-total')]//span[2]")).getText();
+					
 					if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("eyeoffer"))){
 						ppid = offer.get("ppid").toString();
 					}
@@ -161,6 +202,10 @@ public class CartLanguageParallel {
 						ppid = driver.findElement(By.xpath("(//span[@class='PPID disclaimer-ppid'])[1]")).getText();	
 					}												
 					lang_price_arr = lang_obj.parse_cart_language(cart_lang);
+					
+					String installments = lang_obj.get_installments_text(driver);		
+					inst_arr = lang_obj.parse_installments_language(installments);
+					inst_price = String.join(",", inst_arr);
 							
 					cart_lang_price = lang_price_arr[1];
 					cart_lang_shipping = lang_price_arr[2];					
@@ -177,8 +222,10 @@ public class CartLanguageParallel {
 					output_row_90.add(brand);
 					output_row_90.add(campaign);
 					output_row_90.add(ppid);
+					output_row_90.add(total_price);	
 					output_row_90.add(cart_lang_price);
 					output_row_90.add(cart_lang_shipping);
+					output_row_90.add(inst_price);
 					output_row_90.add(checkout_subtotal);	
 					output_row_90.add(checkout_shipping);	
 					output_row_90.add(result);
@@ -194,6 +241,6 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "C:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "C:\\Automation\\Buyflow\\Cart Language Validation\\");
 	}
 }
