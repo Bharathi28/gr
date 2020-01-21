@@ -53,7 +53,7 @@ public class PixelValidation {
 	@Test
 	public void pixel() throws IOException, ClassNotFoundException, SQLException, InterruptedException {
 //	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -83,7 +83,7 @@ public class PixelValidation {
 		header_list.add("Data URL");
 		output.add(header_list);
 		
-		File input_file = new File("F:\\Automation\\Pixel\\pixel_testdata.xlsx");
+		File input_file = new File("C:\\Automation\\Pixel\\pixel_testdata.xlsx");
 		FileInputStream inputstream = new FileInputStream(input_file);
 		Workbook testData = new XSSFWorkbook(inputstream);
 		Sheet dataSheet = testData.getSheet("Run Data");
@@ -208,7 +208,7 @@ public class PixelValidation {
 						for(String page : pages) {													
 							HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        	System.out.println(page);
-							driver.findElement(By.name("har")).sendKeys("F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
+							driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
 				            Thread.sleep(2000);
 				            driver.findElement(By.id("search")).clear();
 				            driver.findElement(By.id("search")).sendKeys(pattern);
@@ -280,7 +280,7 @@ public class PixelValidation {
 	} // end of main
 	
 	public static void writeToSheet(HashMap map, String fileName, String sheetName) throws IOException {	
-		File file = new File("F:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx");
+		File file = new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx");
 		XSSFWorkbook workbook = null;
 		// Check file existence 
 	    if (file.exists() == false) {
@@ -288,7 +288,7 @@ public class PixelValidation {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
@@ -474,7 +474,7 @@ public class PixelValidation {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
