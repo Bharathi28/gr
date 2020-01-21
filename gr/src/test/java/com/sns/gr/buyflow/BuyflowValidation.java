@@ -75,8 +75,7 @@ public class BuyflowValidation{
 		}
 		else{
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-		}
-		
+		}		
 		return arrayObject;
 	}
 	
@@ -151,13 +150,13 @@ public class BuyflowValidation{
 		}
 					
 		Thread.sleep(2000);		
-		
+
 		String ppu = db_obj.checkPPUPresent(brand, campaign);
 		if(ppu.equalsIgnoreCase("Yes")) {
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 		}
-		
 		Thread.sleep(2000);
+		
 		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));
 			
 		System.out.println("Expected Offercode : " + ppid);

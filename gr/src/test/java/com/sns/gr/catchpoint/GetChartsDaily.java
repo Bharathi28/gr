@@ -44,7 +44,7 @@ public class GetChartsDaily {
 	@Test
 	public void catchpointCharts(int count) throws IOException, InterruptedException {
 		String timeframetext = null;
-       
+
 		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
 			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
@@ -69,7 +69,6 @@ public class GetChartsDaily {
 		else if(count==7){
 			timeframetext = "Last 7 Days";
 			brandarraylist.addAll(brandlistfor7days);
-			
 		}
 		else {
 			System.out.println("You have entered an invalid number. We are setting 1 day as default");
@@ -194,7 +193,7 @@ public class GetChartsDaily {
 	    
 	    String subject = "";
 	    if(count==1) {
-			subject = "Catchpoint Charts - Today";
+	    	subject = "Catchpoint Charts - Today";
 		}
 		else if(count==7){
 			subject = "Catchpoint Charts - Last 7 days";
