@@ -149,18 +149,14 @@ public class BuyflowValidation{
 				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
 			}
 		}
-		
-		List<String> campaignPages = db_obj.getPages(brand, campaign);
-		boolean ppuPresent = campaignPages.contains("upsellpage");
-		System.out.println("Upsell : " + ppuPresent);
 					
-		Thread.sleep(2000);
-		if((brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("ReclaimBotanical")) || (brand.equalsIgnoreCase("SheerCover")) || (brand.equalsIgnoreCase("DermaFlash")) || (brand.equalsIgnoreCase("TryDermaFlash"))) {
-			// No Upsell
-		}			
-		else {
+		Thread.sleep(2000);		
+		
+		String ppu = db_obj.checkPPUPresent(brand, campaign);
+		if(ppu.equalsIgnoreCase("Yes")) {
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-		}		
+		}
+		
 		Thread.sleep(2000);
 		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));
 			
