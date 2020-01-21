@@ -187,7 +187,7 @@ public class PixelUtilities {
 				driver.navigate().refresh();
 			}
 		    Thread.sleep(10000);
-		    getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage" + pattern + ".har");
+		    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage" + pattern + ".har");
 		}	    
 	    
 	    //////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ public class PixelUtilities {
 	        
 	    Thread.sleep(10000);
 //	    wait.until(pageLoadCondition);
-	    getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage" + pattern + ".har");
+	    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage" + pattern + ".har");
 	    ////////////////////////////////////////////////////////////  
         // Checkout Page	        
         defineNewHar(proxy, brand + "CheckoutPage");
@@ -242,7 +242,7 @@ public class PixelUtilities {
         String email = bf_obj.fill_out_form(driver, brand, "VISA", "Same", "30");
         System.out.println("Email : " + email);
         Thread.sleep(2000);
-        getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
+        getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
         
 		jse.executeScript("window.scrollBy(0,-200)", 0);
 		
@@ -262,7 +262,7 @@ public class PixelUtilities {
         	// Navigate to Confirmation Page	        
         	bf_obj.complete_order(driver, brand, "VISA");          
             Thread.sleep(10000);
-            getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");	
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");	
 		}
 		else {
 			// Upsell Page
@@ -270,7 +270,7 @@ public class PixelUtilities {
             // Navigate to Upsell Page	        
             bf_obj.complete_order(driver, brand, "VISA");
             Thread.sleep(20000);
-            getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage" + pattern + ".har");
             
             //////////////////////////////////////////////////////////
             // Confirmation Page	        
@@ -282,7 +282,7 @@ public class PixelUtilities {
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
             Thread.sleep(20000);
-            getHarData(proxy, "F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");
             Thread.sleep(3000);
 		}        
 	
@@ -317,7 +317,7 @@ public class PixelUtilities {
 		
         // Save Order Screenshots        
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			
-        ImageIO.write(confpage.getImage(),"PNG",new File("F:\\Automation\\Pixel\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
+        ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Pixel\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
         
         driver.close();
         return output_row;
