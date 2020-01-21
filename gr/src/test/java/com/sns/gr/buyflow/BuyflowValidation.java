@@ -68,20 +68,30 @@ public class BuyflowValidation{
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-		switch (day) {
-	    case Calendar.SUNDAY:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-	        break;
-	    case Calendar.SATURDAY:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
-	        break;
-	    case Calendar.WEDNESDAY:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-	        break;
-	    default:
-	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-	        break;
+		if(day.equalsIgnoreCase("saturday")){
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 		}
+		else if(day.equalsIgnoreCase("sunday")){
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+		}
+		else{
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+		}
+		
+// 		switch (day) {
+// 	    case Calendar.SUNDAY:
+// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+// 	        break;
+// 	    case Calendar.SATURDAY:
+// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+// 	        break;
+// 	    case Calendar.WEDNESDAY:
+// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+// 	        break;
+// 	    default:
+// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+// 	        break;
+// 		}
 		
 		return arrayObject;
 	}
