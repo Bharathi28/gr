@@ -149,10 +149,6 @@ public class BuyflowValidation{
 				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
 			}
 		}
-		
-		List<String> campaignPages = db_obj.getPages(brand, campaign);
-		boolean ppuPresent = campaignPages.contains("upsellpage");
-		System.out.println("Upsell : " + ppuPresent);
 					
 		Thread.sleep(2000);		
 		
