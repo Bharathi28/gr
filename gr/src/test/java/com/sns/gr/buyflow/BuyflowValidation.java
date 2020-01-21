@@ -76,23 +76,7 @@ public class BuyflowValidation{
 		}
 		else{
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-		}
-		
-// 		switch (day) {
-// 	    case Calendar.SUNDAY:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-// 	        break;
-// 	    case Calendar.SATURDAY:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
-// 	        break;
-// 	    case Calendar.WEDNESDAY:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-// 	        break;
-// 	    default:
-// 	    	arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-// 	        break;
-// 		}
-		
+		}		
 		return arrayObject;
 	}
 	
