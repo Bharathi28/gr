@@ -64,6 +64,7 @@ public class BuyflowValidation{
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
 		Object[][] arrayObject = null;
+
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
@@ -150,11 +151,11 @@ public class BuyflowValidation{
 		}
 					
 		Thread.sleep(2000);		
-
 		String ppu = db_obj.checkPPUPresent(brand, campaign);
 		if(ppu.equalsIgnoreCase("Yes")) {
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 		}
+
 		Thread.sleep(2000);
 		
 		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));

@@ -58,8 +58,9 @@ public class PixelParallel {
 	static MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
+
 	static String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
-	
+
 //	@BeforeSuite
 //	public void getEmailId() {
 //		Scanner in = new Scanner(System.in);
