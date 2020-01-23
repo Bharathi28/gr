@@ -320,14 +320,16 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
 			Thread.sleep(2000);
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();
-			Thread.sleep(4000);
-			driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
+			Thread.sleep(6000);
+			driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button")).click();
 			Thread.sleep(2000);
 			driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
-			Thread.sleep(2000);
-			driver.switchTo().defaultContent();		
-			Thread.sleep(2000);
-			driver.findElement(By.xpath("//div[@class='legal-checkbox']//div//div//input")).click();						
+			Thread.sleep(7000);
+
+			driver.switchTo().window(winHandleBefore);
+			Thread.sleep(7000);
+			driver.findElement(By.xpath("//input[@id='dwfrm_cart_agree']")).click();
+			Thread.sleep(2000);						
 			return "testbuyer2@guthy-renker.com";
 		}
 		else {
