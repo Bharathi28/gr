@@ -68,15 +68,15 @@ public class BuyflowValidation{
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-		if(day==7){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+		/*if(day==7){
+			arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
 		}
 		else if(day==1){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+			arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
 		}
-		else{
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-		}		
+		else{*/
+			arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+		//}		
 		return arrayObject;
 	}
 	
@@ -166,7 +166,7 @@ public class BuyflowValidation{
 		Thread.sleep(2000);
 			
 		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-		ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		ImageIO.write(confpage.getImage(),"PNG",new File("F:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
 			
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
@@ -204,7 +204,7 @@ public class BuyflowValidation{
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
 		mailObj.sendEmail("Buyflow Results", sendReportTo, file);
 	}
 }
