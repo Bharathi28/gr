@@ -261,7 +261,7 @@ public class SASUtilities {
 		Thread.sleep(2000);
 		elmt.click();
 		Thread.sleep(2000);
-		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
+		if((brand.equalsIgnoreCase("Mally")) && ((campaign.equalsIgnoreCase("Core"))||(campaign.equalsIgnoreCase("save10")))) {
 			if(kitname.contains("Fresh")) {
 				if(driver.findElements(By.xpath("(//button[@class='button primary next-section'])[1]")).size() != 0) {
 					driver.findElement(By.xpath("(//button[@class='button primary next-section'])[1]")).click();
