@@ -143,7 +143,7 @@ public class SASUtilities {
 		List<Map<String, Object>> kit_loc = comm_obj.get_element_locator(brand, campaign, "Kit", kit);
 		Thread.sleep(2000);
 		WebElement kit_elmt = comm_obj.find_webelement(driver, kit_loc.get(0).get("elementlocator").toString(), kit_loc.get(0).get("elementvalue").toString());
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 //		wait.until(ExpectedConditions.elementToBeClickable(kit_elmt));
 		
 		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
@@ -153,6 +153,10 @@ public class SASUtilities {
 			
 			String shop_loc = kit_loc.get(0).get("elementvalue").toString() + "//div//div[@class='product-wrap']//div[3]//div//a";
 			kit_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
+			Thread.sleep(2000);
+		}
+		if((brand.equalsIgnoreCase("FixMDSkin")) && (campaign.equalsIgnoreCase("fb"))){
+			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}
 		
@@ -346,7 +350,7 @@ public class SASUtilities {
 			Thread.sleep(1000);
 			pay_elmt.click();
 			Thread.sleep(2000);
-			
+
 			if((brand.equalsIgnoreCase("DermaFlash")) && (campaign.equalsIgnoreCase("oneluxepnl2-ps"))) {
 				driver.findElement(By.xpath("//button[@class='show-next']")).click();
 				Thread.sleep(2000);

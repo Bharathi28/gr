@@ -47,6 +47,30 @@ public class BuyflowUtilities {
 				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
 				element.click();
 			}
+//			if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
+//				driver.findElement(By.xpath("(//a[@href='https://www.meaningfulbeauty.dev28.dw4.grdev.com/ordernow'])[3]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("CrepeErase")) {
+//				driver.findElement(By.xpath("(//a[@href='https://www.crepeerase.dev28.dw4.grdev.com/ordernow'])[2]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
+//				driver.findElement(By.xpath("(//a[@href='/shop/'])[1]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("Smileactives")) {
+//				driver.findElement(By.xpath("(//a[@href='https://www.smileactives.dev28.dw4.grdev.com/ordernow'])[3]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("WestmoreBeauty")) {
+//				driver.findElement(By.xpath("//div[@class='home-section']//div//a//img")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("Mally")) {
+//				driver.findElement(By.xpath("(//a[@href='/shop'])[1]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("Dr.Denese")) {
+//				driver.findElement(By.xpath("(//a[@href='/ordernow'])[1]")).click();
+//			}
+//			else if(brand.equalsIgnoreCase("Volaire")) {
+//				driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
+//			}
 		}
 		else {
 			String elementlocator = locator.get(0).get(env.toLowerCase() + "locator").toString();
@@ -296,7 +320,7 @@ public class BuyflowUtilities {
 		}
 	}
 	
-	public String fill_out_form(WebDriver driver, String brand, String cc, String shipbill, String supply) throws InterruptedException, ClassNotFoundException, SQLException {
+	public String fill_out_form(WebDriver driver, String brand, String campaign, String cc, String shipbill, String supply) throws InterruptedException, ClassNotFoundException, SQLException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		
@@ -342,15 +366,23 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "FirstName", firstName());
 			fill_form_field(driver, realm, "LastName", lastName());
 			fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
-			fill_form_field(driver, realm, "City", "El Segundo");
-			fill_form_field(driver, realm, "State", "CA");		
 			
-			if(supply.equalsIgnoreCase("30")) {			
-				fill_form_field(driver, realm, "Zip", "90245");
+			if(campaign.equalsIgnoreCase("ca")) {
+				fill_form_field(driver, realm, "City", "Anywhere");
+				fill_form_field(driver, realm, "State", "NB");		
+				fill_form_field(driver, realm, "Zip", "E3B7K6");
 			}
-			else if(supply.equalsIgnoreCase("90")) {
-				fill_form_field(driver, realm, "Zip", "81002");
-			}
+			else {
+				fill_form_field(driver, realm, "City", "El Segundo");
+				fill_form_field(driver, realm, "State", "CA");		
+				
+				if(supply.equalsIgnoreCase("30")) {			
+					fill_form_field(driver, realm, "Zip", "90245");
+				}
+				else if(supply.equalsIgnoreCase("90")) {
+					fill_form_field(driver, realm, "Zip", "81002");
+				}
+			}			
 							
 			Thread.sleep(2000);
 			WebElement shipbill_elmt = null;
@@ -385,8 +417,10 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
 			}		
 			fill_form_field(driver, realm, "Month", "12");
-			fill_form_field(driver, realm, "Year", "2020");
-			fill_form_field(driver, realm, "Agree", "");	
+			fill_form_field(driver, realm, "Year", "2020");	
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			Thread.sleep(2000);
+			fill_form_field(driver, realm, "Agree", "");
 			
 			return (email.toLowerCase());
 		}

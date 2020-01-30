@@ -132,7 +132,7 @@ public class BuyflowValidation{
 			conf_offercode = bf_obj.fetch_offercode(driver, brand);
 		}
 						
-		String email = bf_obj.fill_out_form(driver, brand, cc, shipbill, "30");
+		String email = bf_obj.fill_out_form(driver, brand, campaign, cc, shipbill, "30");
 		System.out.println("Email : " + email);							
 
 		JavascriptExecutor jse = (JavascriptExecutor) driver;

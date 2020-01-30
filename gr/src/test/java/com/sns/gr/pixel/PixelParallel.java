@@ -126,7 +126,7 @@ public class PixelParallel {
 			}
 			else {
 				if(brand.equalsIgnoreCase("Dr.Denese")) {
-					url = "https://storefront:eComweb123@trydrd" + "." + env + ".dw2.grdev.com";
+					url = "https://storefront:eComweb123@trydrd" + "." + env + ".dw4.grdev.com";
 				}
 				else {
 					url = "https://storefront:eComweb123@" + brand + "." + env + ".dw4.grdev.com";

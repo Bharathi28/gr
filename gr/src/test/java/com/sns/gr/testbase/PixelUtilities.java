@@ -69,10 +69,10 @@ public class PixelUtilities {
 	
 	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		String query = "";
-		if((brand.equalsIgnoreCase("smileactives")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' order by RAND() limit " + runs;
 		}
-		else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
+		else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("core"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' order by RAND() limit " + runs;
 		}
 		else {
@@ -204,7 +204,7 @@ public class PixelUtilities {
 	        bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	        sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
-	    else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
+	    else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))){
 	        driver.findElement(By.xpath("//a[@href='/shop']")).click();
 	        sas_obj.select_offer(driver, env, brand, campaign, offerdata);
 	        driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
@@ -219,7 +219,7 @@ public class PixelUtilities {
 	    ////////////////////////////////////////////////////////////  
         // Checkout Page	        
         defineNewHar(proxy, brand + "CheckoutPage");
-        if(brand.equalsIgnoreCase("SeaCalmSkin")) {
+        if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))) {
         	Thread.sleep(2000);
         	driver.findElement(By.xpath("(//a[@href='https://seacalmskin.grdev.com/checkout'])[1]")).click();
         }
@@ -239,7 +239,7 @@ public class PixelUtilities {
         		driver.findElement(By.xpath("//a[@id='creditCardPath']")).click();
         	}
 		}	
-        String email = bf_obj.fill_out_form(driver, brand, "VISA", "Same", "30");
+        String email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
         System.out.println("Email : " + email);
         Thread.sleep(2000);
         getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
