@@ -34,13 +34,13 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 
 	@Test(dataProvider="cartLangInput")
 	public void CompleteValidation(String env, String brand, String campaign, String categories, String browser) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
-		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
@@ -149,7 +149,7 @@ public class CartLanguageParallel {
 										
 				if(upsell) {
 					// 90 - Day						
-					bf_obj.fill_out_form(driver, brand, "VISA", "same", "90");
+					bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", "90");
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
@@ -194,6 +194,6 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "C:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
 	}
 }

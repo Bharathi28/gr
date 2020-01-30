@@ -188,7 +188,7 @@ public class CartLanguageCompleteParallel {
 					String[] inst_arr;
 					
 					// 90 - Day						
-					bf_obj.fill_out_form(driver, brand, "VISA", "same", "90");
+					bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", "90");
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
