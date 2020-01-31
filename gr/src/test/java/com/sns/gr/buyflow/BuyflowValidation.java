@@ -75,9 +75,6 @@ public class BuyflowValidation{
 		else if(day==1){
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
 		}
-		else if(day==6){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
-		}
 		else{
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
 		}		
@@ -138,12 +135,26 @@ public class BuyflowValidation{
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.scrollBy(0,-200)", 0);
 			
-		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
-		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
-		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
-		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
-			
-		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;	
+		String checkout_subtotal = "";
+		String checkout_shipping = "";
+		String checkout_salestax = "";
+		String checkout_total = "";
+		
+		String realm = DBUtilities.get_realm(brand);
+		
+		if((cc.equalsIgnoreCase("Paypal")) && (realm.equalsIgnoreCase("R2"))) {
+			checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Subtotal");
+			checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Shipping");
+			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Salestax");
+			checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Total");
+		}
+		else {
+			checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
+			checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
+			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
+			checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
+		}			
+		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
 			
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(1000);
