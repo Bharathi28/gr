@@ -58,6 +58,7 @@ public class PixelParallel {
 	static MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
+	static List<String> attachmentList = new ArrayList<String>();
 
 	static String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
 
@@ -302,7 +303,8 @@ public class PixelParallel {
 	@AfterSuite
 	public void populateExcel() throws IOException {
 		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
-		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, file);
+		attachmentList.add(file);
+		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, attachmentList);
 	}
 	
 	public static void writeToSheet(HashMap map, String fileName, String sheetName) throws IOException {	
@@ -504,6 +506,7 @@ public class PixelParallel {
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
+	    attachmentList.add("C:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx");
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	

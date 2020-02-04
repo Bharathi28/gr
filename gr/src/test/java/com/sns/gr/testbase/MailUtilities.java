@@ -2,6 +2,7 @@ package com.sns.gr.testbase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -20,8 +21,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 public class MailUtilities {
-
-	public void sendEmail(String subject, String to, String filename) {
+	
+	public void sendEmail(String subject, String to, List<String> attachmentList) {
     	Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.starttls.enable", "true");
@@ -45,8 +46,7 @@ public class MailUtilities {
 			  }
 	    });
 		
-		try {
-			
+		try {			
 			Date date = new Date();
 	 		SimpleDateFormat date_form = new SimpleDateFormat("MMddyyyy");
 	 		String dateStr = date_form.format(date);
@@ -58,18 +58,21 @@ public class MailUtilities {
 	                InternetAddress.parse("manibharathi@searchnscore.com, banuchitra@searchnscore.com"));
 			message.setSubject(subject + " - " + dateStr);
 
-	        BodyPart messageBodyPart = new MimeBodyPart();
-	        messageBodyPart.setText(sb.toString());
+			BodyPart messageBodyPart = new MimeBodyPart(); 
+			messageBodyPart.setText(sb.toString());
 	        
 	        Multipart multipart = new MimeMultipart();
 	        multipart.addBodyPart(messageBodyPart);
 	        messageBodyPart = new MimeBodyPart();	        
 	 		
-	        DataSource source = new FileDataSource(filename);
-	        messageBodyPart.setDataHandler(new DataHandler(source));
-	        messageBodyPart.setFileName(filename);
-	        multipart.addBodyPart(messageBodyPart);
-
+	        // Add Attachments
+	        for(String filename : attachmentList) {
+	        	messageBodyPart = new MimeBodyPart();
+	            DataSource source = new FileDataSource(filename);
+	            messageBodyPart.setDataHandler(new DataHandler(source));
+	            messageBodyPart.setFileName(filename);
+	            multipart.addBodyPart(messageBodyPart);
+	        }	        
 	        message.setContent(multipart);
 	         
 			Transport.send(message);

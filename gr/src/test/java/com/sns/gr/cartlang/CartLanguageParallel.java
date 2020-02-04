@@ -18,6 +18,7 @@ import com.sns.gr.testbase.BuyflowUtilities;
 import com.sns.gr.testbase.CartLangUtilities;
 import com.sns.gr.testbase.CommonUtilities;
 import com.sns.gr.testbase.DBUtilities;
+import com.sns.gr.testbase.MailUtilities;
 import com.sns.gr.testbase.PricingUtilities;
 import com.sns.gr.testbase.SASUtilities;
 
@@ -29,8 +30,10 @@ public class CartLanguageParallel {
 	CommonUtilities comm_obj = new CommonUtilities();
 	DBUtilities db_obj = new DBUtilities();
 	SASUtilities sas_obj = new SASUtilities();
+	MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
+	String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
@@ -194,6 +197,9 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		List<String> attachmentList = new ArrayList<String>();
+		attachmentList.add(file);
+		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);
 	}
 }

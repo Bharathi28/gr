@@ -199,7 +199,10 @@ public class GetChartsDaily {
 			subject = "Catchpoint Charts - Last 7 days";
 		}
 	
-	    mailObj.sendEmail(subject, sendReportTo, "C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+	    List<String> attachmentList = new ArrayList<String>();
+		attachmentList.add("C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+		
+	    mailObj.sendEmail(subject, sendReportTo, attachmentList);
 	    ppt.close();
     }
 }

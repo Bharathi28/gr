@@ -123,8 +123,8 @@ public class PricingUtilities {
 	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {
 		String realm = DBUtilities.get_realm(brand);	
 		List<Map<String, Object>> locator = null;
-		if(pricing.contains("Checkout")) {
-			locator = get_pricing_locator(realm, null, null, pricing, null);
+		if((pricing.contains("Checkout")) || (pricing.contains("Paypal"))){
+			locator = get_pricing_locator(realm, null, null, pricing, null);		
 		}
 		else if(pricing.contains("Confirmation")) {
 			if(realm.equalsIgnoreCase("R4")) {

@@ -83,7 +83,7 @@ public class BuyflowValidation{
 	}
 	
 	@Test(dataProvider="buyflowInput")
-	public void buyflow(String env, String brand, String campaign,String supply, String ppid, String url, String shipbill, String cc, String upsell, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
+	public void buyflow(String env, String brand, String campaign, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
 									
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
@@ -169,7 +169,7 @@ public class BuyflowValidation{
 		Thread.sleep(2000);		
 		String ppu = db_obj.checkPPUPresent(brand, campaign);
 		if(ppu.equalsIgnoreCase("Yes")) {
-			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
+			bf_obj.upsell_confirmation(driver, brand, campaign, ppu);
 		}
 
 		Thread.sleep(2000);
@@ -221,6 +221,8 @@ public class BuyflowValidation{
 	@AfterSuite
 	public void populateExcel() throws IOException {
 		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
-		mailObj.sendEmail("Buyflow Results", sendReportTo, file);
+		List<String> attachmentList = new ArrayList<String>();
+		attachmentList.add(file);
+		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);
 	}
 }
