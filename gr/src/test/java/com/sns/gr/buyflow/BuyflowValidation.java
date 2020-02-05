@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -98,6 +99,7 @@ public class BuyflowValidation{
 		int singleCheck = 0;
 		String str = "";
 		String[] offer_array = ppid.split(",");		
+		String kit_offercode = offer_array[0];
 			
 		for(int i = 0; i < offer_array.length; i++) {				
 			if((offer_array[i].contains("single")) || (bf_obj.checkIfProduct(brand, campaign, offer_array[i]))){
@@ -168,8 +170,10 @@ public class BuyflowValidation{
 					
 		Thread.sleep(2000);		
 		String ppu = db_obj.checkPPUPresent(brand, campaign);
+		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, "Kit");
+		String upsell = offerdata.get("upgrade").toString().toLowerCase();
 		if(ppu.equalsIgnoreCase("Yes")) {
-			bf_obj.upsell_confirmation(driver, brand, campaign, ppu);
+			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 		}
 
 		Thread.sleep(2000);
