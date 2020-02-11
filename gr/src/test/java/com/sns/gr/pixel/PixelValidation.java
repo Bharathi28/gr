@@ -35,6 +35,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
@@ -62,10 +63,13 @@ public class PixelValidation {
 
 	    // get the Selenium proxy object
 	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+	    
+	    DesiredCapabilities options = new DesiredCapabilities();
+	    options.setCapability(CapabilityType.PROXY, seleniumProxy);
 
 	    // configure it as a desired capability
-	    DesiredCapabilities capabilities = new DesiredCapabilities();
-	    capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+//	    DesiredCapabilities capabilities = new DesiredCapabilities();
+//	    capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
 	    
 	    DBUtilities db_obj = new DBUtilities();
 		PixelUtilities pixel_obj = new PixelUtilities();		
@@ -100,7 +104,8 @@ public class PixelValidation {
 			String env = row.getCell(0).getStringCellValue();					
 			String brand = row.getCell(1).getStringCellValue();
 			String campaign = row.getCell(2).getStringCellValue();
-			String pixelStr = row.getCell(3).getStringCellValue();	
+			String flow = row.getCell(3).getStringCellValue();
+			String pixelStr = row.getCell(4).getStringCellValue();	
 			
 			///////////// starts with //////////////////////////////////////////////////////////////////////////
 						
@@ -151,7 +156,7 @@ public class PixelValidation {
 			if (m.find()) {
 				noOfTestRuns++;
 			}
-			pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, pixelslist, noOfTestRuns, url);				
+			pixel_obj.generateTestRuns(options, proxy, env, brand, campaign, flow, pixelslist, noOfTestRuns, url);				
 			
 			WebDriver driver = new ChromeDriver();
 	        driver.manage().window().maximize();
@@ -197,7 +202,7 @@ public class PixelValidation {
 									
 					int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
 					if(compatible == 1) {
-						List<String> pages = db_obj.getFiringPages(brand, campaign, pixel, event);
+						List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 						
 						String pattern = db_obj.getSearchPattern(brand, event);
 						String pixelbrandid = db_obj.getPixelBrandId(brand, event);

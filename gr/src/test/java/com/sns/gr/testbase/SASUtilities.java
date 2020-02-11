@@ -155,7 +155,7 @@ public class SASUtilities {
 			kit_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
 			Thread.sleep(2000);
 		}
-		if((brand.equalsIgnoreCase("FixMDSkin")) && (campaign.equalsIgnoreCase("fb"))){
+		if((brand.equalsIgnoreCase("FixMDSkin")) && (campaign.equalsIgnoreCase("Core"))){
 			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}

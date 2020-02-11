@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -67,14 +68,14 @@ public class PixelUtilities {
 		}
 	}
 	
-	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
+	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		String query = "";
-		if((brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' order by RAND() limit " + runs;
 		}
-		else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("core"))) {
-			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' order by RAND() limit " + runs;
-		}
+//		else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("core"))) {
+//			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' order by RAND() limit " + runs;
+//		}
 		else {
 			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' order by RAND() limit " + runs;
 		}				
@@ -99,28 +100,28 @@ public class PixelUtilities {
 			if(pixel.equalsIgnoreCase("cake")) {
 				String uci = getUci("Cake");
 				String uciurl = url + joinChar + "UCI=" + uci;
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, uciurl,"Cake", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, uciurl,"Cake", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("harmonyconversiontracking")) {		
 				String appendurl = url + joinChar + "hConversionEventId=AQEAAZQF2gAmdjQwMDAwMDE2OS0zYmI0LTM2ZTMtYTIyNy0yNjZlOTY2Mzk4MTjaACRlM2U1MzMxYi00ZTIxLTQ5YzgtMDAwMC0wMjFlZjNhMGJjYzPaACRmOTkyNWRkZi1lMzA0LTQ0ZjEtOTJmOC1mMTUyM2VlOTVkZjKFXOX1ZlAb6-YsLP1N4nV5ZwzJa4oaNWsQ9iHh0H1Pdg";
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"HarmonyConversionTracking", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"HarmonyConversionTracking", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("linkshare")) {		
 				String uci = getUci("Linkshare");
 				String uciurl = url + joinChar + "UCI=" + uci;
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, uciurl,"Linkshare", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, uciurl,"Linkshare", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("starmobile")) {	
 				String appendurl = url + joinChar + "sessionid=hello12345";
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"StarMobile", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"StarMobile", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("data+math")) {	
 				String appendurl = url + joinChar + "uci=hellohi";
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"Data+Math", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"Data+Math", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			if(pixel.equalsIgnoreCase("propelmedia")) {	
@@ -131,25 +132,26 @@ public class PixelUtilities {
 				if(brand.equalsIgnoreCase("Smileactives")) {
 					appendurl  = url + joinChar + "variabletoken=saagaintoken" ;
 				}
-				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, appendurl,"PropelMedia", offerdata.get(i));
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"PropelMedia", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
 			i++;
 		}
 		if(runs > i) {
-			buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, url,"Default", offerdata.get(i));
+			buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, url,"Default", offerdata.get(i));
 			overallOutput.add(buyflowOutput);
 		}
 		return overallOutput;
 	}		
 	
-	public List<String> generateHARFiles(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String url, String pixel, Map<String, Object> offerdata) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
+	public List<String> generateHARFiles(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, String url, String pixel, Map<String, Object> offerdata) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 
 		// start the browser up
 	    @SuppressWarnings("deprecation")
 	    
+//	    WebDriver driver = new FirefoxDriver(capabilities);
 	    WebDriver driver = new ChromeDriver(capabilities);	    
-	    driver.manage().window().maximize();
+	    driver.manage().window().maximize();	    
 
 	    JavascriptExecutor jse = (JavascriptExecutor) driver;
 	    
@@ -182,7 +184,17 @@ public class PixelUtilities {
 	    // Home Page
 		if((!((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19")))) && (!((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b"))))){
 			defineNewHar(proxy, brand + "HomePage");		 
-		    driver.get(url);	    
+		    driver.get(url);	   
+		    
+		    if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
+				driver.findElement(By.xpath("//button[@id='details-button']")).click();
+				driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
+			}
+		    else if(driver.findElements(By.xpath("//button[@id='advancedButton']")).size() != 0) {
+		    	driver.findElement(By.xpath("//button[@id='advancedButton']")).click();
+		    	driver.findElement(By.xpath("//button[@id='exceptionDialogButton']")).click();
+		    }
+		    
 		    if(driver.findElements(By.xpath("//div[@id='holiday-popup-content']")).size() != 0) {
 				driver.navigate().refresh();
 			}
@@ -197,6 +209,12 @@ public class PixelUtilities {
 	    // Navigate to SAS Page
 	    if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19"))) || ((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b")))){
 	    	driver.get(url);	    
+	    	
+	    	if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
+				driver.findElement(By.xpath("//button[@id='details-button']")).click();
+				driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
+			} 
+	    	
 		    Thread.sleep(10000);
 	    }
 	    	
@@ -204,11 +222,11 @@ public class PixelUtilities {
 	        bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	        sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
-	    else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))){
-	        driver.findElement(By.xpath("//a[@href='/shop']")).click();
-	        sas_obj.select_offer(driver, env, brand, campaign, offerdata);
-	        driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
-	    }
+//	    else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))){
+//	        driver.findElement(By.xpath("//a[@href='/shop']")).click();
+//	        sas_obj.select_offer(driver, env, brand, campaign, offerdata);
+//	        driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+//	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	    }
@@ -231,27 +249,41 @@ public class PixelUtilities {
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata);
         }
         bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("ppid").toString(), 0);
-                        
-        Thread.sleep(4000);
-        if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
-        	if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
-        		jse.executeScript("window.scrollBy(0,-150)", 0);
-        		driver.findElement(By.xpath("//a[@id='creditCardPath']")).click();
-        	}
-		}	
-        String email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
-        System.out.println("Email : " + email);
-        Thread.sleep(2000);
-        getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
+                     
+        String email = "";
+        String checkout_pricing = "";
         
-		jse.executeScript("window.scrollBy(0,-200)", 0);
-		
-		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
-		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
-		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
-		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
-		
-		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
+        if(flow.equalsIgnoreCase("CCFlow")) {
+        	Thread.sleep(4000);
+            if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
+            	if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
+            		jse.executeScript("window.scrollBy(0,-150)", 0);
+            		driver.findElement(By.xpath("//a[@id='creditCardPath']")).click();
+            	}
+    		}	
+            email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
+            System.out.println("Email : " + email);
+            Thread.sleep(2000);
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
+            
+    		jse.executeScript("window.scrollBy(0,-200)", 0);
+    		
+    		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
+    		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
+    		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
+    		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
+    		
+    		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
+        }
+        else if(flow.equalsIgnoreCase("PaypalFlow")) {
+        	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
+            System.out.println("Email : " + email);
+            Thread.sleep(2000);
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage" + pattern + ".har");
+            
+    		jse.executeScript("window.scrollBy(0,-200)", 0);
+        }
+        
         
         //////////////////////////////////////////////////////////     
        

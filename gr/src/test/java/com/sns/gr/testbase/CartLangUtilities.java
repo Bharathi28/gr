@@ -88,23 +88,42 @@ public class CartLangUtilities {
 				double int_result2 = lang_price_value/100;
 				double roundOff2 = Math.round(int_result2 * 10000.0) / 10000.0;
 				
-				double percent = roundOff1/roundOff2;
-				int percentvalue = (int)percent;
-				String actualPercent = String.valueOf(percentvalue);
-				System.out.println(expPercent);
-				System.out.println(actualPercent);
-				System.out.println("Percent : " + percentvalue);
-				if(expPercent.equalsIgnoreCase(actualPercent)) {
-					if(percentvalue <= 30) {
+				if(expPercent.contains("dollars")) {
+					String dollar = expPercent.replace(" dollars", "");
+					Double dollar_value = Double.valueOf(dollar);
+					double dollar_roundOff = Math.round(dollar_value * 100.0) / 100.0;
+										
+					System.out.println(roundOff1);					
+					System.out.println(dollar_roundOff);
+					
+					String actualvalue = String.valueOf(roundOff1);
+					String expectedvalue = String.valueOf(dollar_roundOff);
+					if(expectedvalue.equalsIgnoreCase(actualvalue)) {
 						result = "PASS";
 					}
 					else {
-						System.out.println("Expected percentage and Actual Percentage crossed margin value of 30%");
-						result = "Expected percentage and Actual Percentage crossed margin value of 30%";
+						result = "FAIL";
 					}
 				}
-				else {
-					result = "FAIL";
+				else {					
+					double percent = roundOff1/roundOff2;
+					int percentvalue = (int)percent;
+					String actualPercent = String.valueOf(percentvalue);
+					System.out.println(expPercent);
+					System.out.println(actualPercent);
+					System.out.println("Percent : " + percentvalue);
+					if(expPercent.equalsIgnoreCase(actualPercent)) {
+						if(percentvalue <= 30) {
+							result = "PASS";
+						}
+						else {
+							System.out.println("Expected percentage and Actual Percentage crossed margin value of 30%");
+							result = "Expected percentage and Actual Percentage crossed margin value of 30%";
+						}
+					}
+					else {
+						result = "FAIL";
+					}
 				}
 			}
 			else if(subtotal_value > lang_price_value) {

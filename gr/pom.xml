@@ -37,13 +37,19 @@
       </plugins>
    </build>
   
-  <dependencies>
-  	<dependency>
-  		<groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-        <version>3.13.0</version>
-  	</dependency>
+  	<dependencies>
+  		<dependency>
+    	<groupId>org.seleniumhq.selenium</groupId>
+    	<artifactId>selenium-java</artifactId>
+    	<version>3.13.0</version>
+	</dependency>
   	
+  	<dependency>
+        <groupId>net.lightbody.bmp</groupId>
+        <artifactId>browsermob-core</artifactId>
+        <version>2.1.5</version>
+    </dependency>
+  	  	
   	<dependency>
     	<groupId>ru.yandex.qatools.ashot</groupId>
     	<artifactId>ashot</artifactId>
@@ -56,11 +62,7 @@
     	<version>5.1.18</version>
 	</dependency>
 	
-	<dependency>
-        <groupId>net.lightbody.bmp</groupId>
-        <artifactId>browsermob-core</artifactId>
-        <version>2.1.5</version>
-    </dependency>
+	
 	
 	<dependency>
         <groupId>org.testng</groupId>

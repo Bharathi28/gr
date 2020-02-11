@@ -36,6 +36,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterSuite;
@@ -76,8 +77,9 @@ public class PixelParallel {
 	}
 	
 	@Test(dataProvider="pixelInput")
-	public void pixel(String env, String brand, String campaign, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
+	public void pixel(String env, String brand, String campaign, String flow, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -87,6 +89,9 @@ public class PixelParallel {
 	    // get the Selenium proxy object
 	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
 
+//	    ChromeOptions options = new ChromeOptions();
+//	    options.setCapability(CapabilityType.PROXY, seleniumProxy);
+	    
 	    // configure it as a desired capability
 	    DesiredCapabilities capabilities = new DesiredCapabilities();
 	    capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
@@ -173,13 +178,18 @@ public class PixelParallel {
 		if (m.find()) {
 			noOfTestRuns++;
 		}
-		List<List<String>> buyflowOutput = pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, pixelslist, noOfTestRuns, url);	
+		List<List<String>> buyflowOutput = pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, flow, pixelslist, noOfTestRuns, url);	
 		buyflowOverallOutput.addAll(buyflowOutput);
 			
 		WebDriver driver = new ChromeDriver();
 	    driver.manage().window().maximize();
 	    driver.get("https://ericduran.github.io/chromeHAR/");
 	    driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	    
+	    if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
+			driver.findElement(By.xpath("//button[@id='details-button']")).click();
+			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
+		}
 	        
 	    String[] pixelArr = pixelStr.split(",");		
 			
@@ -220,7 +230,7 @@ public class PixelParallel {
 									
 				int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
 				if(compatible == 1) {
-					List<String> pages = db_obj.getFiringPages(brand, campaign, pixel, event);
+					List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 						
 					String pattern = db_obj.getSearchPattern(brand, event);
 					String pixelbrandid = db_obj.getPixelBrandId(brand, event);

@@ -146,7 +146,7 @@ public class DBUtilities {
 		return campaignPageList;
 	}
 	
-	public List<String> getFiringPages(String brand, String campaign, String pixel, String event) throws ClassNotFoundException, SQLException {
+	public List<String> getFiringPages(String brand, String campaign, String flow, String pixel, String event) throws ClassNotFoundException, SQLException {
 
 		List<String> campaignPageList = getPages(brand, campaign);
 						
@@ -160,6 +160,9 @@ public class DBUtilities {
 		for(String value : pageArr) {
 			if(value.equalsIgnoreCase("All")) {
 				pageList.addAll(campaignPageList);
+				if(flow.equalsIgnoreCase("ccflow")) {
+					pageList.remove("paypalreviewpage");
+				}
 			}
 			if(value.equalsIgnoreCase("Home")) {
 				if(campaignPageList.contains("homepage")) {
@@ -176,6 +179,11 @@ public class DBUtilities {
 					pageList.add("checkoutpage");
 				}
 			}		
+			if(value.equalsIgnoreCase("PaypalReview")) {
+				if(campaignPageList.contains("paypalreviewpage")) {
+					pageList.add("paypalreviewpage");
+				}
+			}	
 			if(value.equalsIgnoreCase("Confirmation")) {
 				if(campaignPageList.contains("confirmationpage")) {
 					pageList.add("confirmationpage");

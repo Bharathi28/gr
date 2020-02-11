@@ -97,7 +97,8 @@ public class GenerateOutput {
 			String env = row.getCell(0).getStringCellValue();					
 			String brand = row.getCell(1).getStringCellValue();
 			String campaign = row.getCell(2).getStringCellValue();
-			String pixelStr = row.getCell(3).getStringCellValue();	
+			String flow = row.getCell(3).getStringCellValue();
+			String pixelStr = row.getCell(4).getStringCellValue();	
 			
 			WebDriver driver = new ChromeDriver();
 	        driver.manage().window().maximize();
@@ -143,7 +144,7 @@ public class GenerateOutput {
 									
 					int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
 					if(compatible == 1) {
-						List<String> pages = db_obj.getFiringPages(brand, campaign, pixel, event);
+						List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 						
 						String pattern = db_obj.getSearchPattern(brand, event);
 						String pixelbrandid = db_obj.getPixelBrandId(brand, event);

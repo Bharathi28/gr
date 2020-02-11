@@ -34,7 +34,7 @@ public class BrowserDriverFactory {
 		// Creating driver
 		switch (browser) {
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			break;

@@ -353,7 +353,7 @@ public class BuyflowUtilities {
 			
 			Thread.sleep(5000);
 //			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
-			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
+			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
 			
 			Thread.sleep(2000);
 			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
@@ -381,7 +381,7 @@ public class BuyflowUtilities {
 			Thread.sleep(7000);
 			fill_form_field(driver, realm, "Agree", "");
 			Thread.sleep(2000);						
-			return "testbuyer2@guthy-renker.com";
+			return "testbuyer1@guthy-renker.com";
 		}
 		else {
 			String alpha = RandomStringUtils.randomAlphabetic(9);
@@ -437,6 +437,10 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "ShippingState", "AL");
 				fill_form_field(driver, realm, "ShippingZip", "35801");
 			}		
+			
+			if(brand.equalsIgnoreCase("Mally")) {
+				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123");
+			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
 				fill_form_field(driver, realm, "CardNumber", "4111111111111122");
 			}
