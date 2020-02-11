@@ -206,13 +206,8 @@ public class CommonUtilities {
 			header_list.add("Brand");
 			header_list.add("Campaign");
 			header_list.add("PPID");
-			header_list.add("Shop Price");
-			header_list.add("SAS Price");
-			header_list.add("PDP Price");
-			header_list.add("Cart Price");
 			header_list.add("Cart Language Price");
 			header_list.add("Cart Language Shipping");
-			header_list.add("Installments");
 			header_list.add("Checkout Subtotal");
 			header_list.add("Checkout Shipping");
 			header_list.add("Result");
