@@ -368,7 +368,9 @@ public class BuyflowUtilities {
 //			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));			
+//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));	
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));
 			driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button")).click();
 			
 			Thread.sleep(2000);
