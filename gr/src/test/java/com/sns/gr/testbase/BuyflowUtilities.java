@@ -328,7 +328,7 @@ public class BuyflowUtilities {
 	}
 	
 	public String fill_out_form(WebDriver driver, String brand, String campaign, String cc, String shipbill, String supply) throws InterruptedException, ClassNotFoundException, SQLException {
-		WebDriverWait wait = new WebDriverWait(driver,30);
+		WebDriverWait wait = new WebDriverWait(driver,50);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		
@@ -345,9 +345,9 @@ public class BuyflowUtilities {
 			String winHandleBefore = driver.getWindowHandle();
 			for(String winHandle : driver.getWindowHandles()){
 			   driver.switchTo().window(winHandle);
-			}
-			
+			}			
 
+//			wait.until(ExpectedConditions.textToBePresentInElement(By.xpath("//div[@id='loginSection']//div//div//b"), "Have a PayPal account?"));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
 			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			
@@ -361,15 +361,16 @@ public class BuyflowUtilities {
 				Thread.sleep(2000);
 			}
 			
-//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_passworddiv']//div//input")));	
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_passworddiv']//div//input")));	
 			driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
 			
 			Thread.sleep(2000);
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));	
-			jse.executeScript("window.scrollBy(0,300)", 0);
+//			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h4[@class='noBottom paymentsHeader alpha']"), "Choose a way to pay"));
+			jse.executeScript("window.scrollBy(0,400)", 0);	
+			
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));
 			driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button")).click();
 			
@@ -378,7 +379,7 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
 			
 			Thread.sleep(7000);
-
+//			wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(winHandleBefore));
 			driver.switchTo().window(winHandleBefore);
 			Thread.sleep(7000);
 			fill_form_field(driver, realm, "Agree", "");
@@ -440,7 +441,7 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "ShippingZip", "35801");
 			}		
 			
-			if(brand.equalsIgnoreCase("Mally")) {
+			if((brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("CrepeErase"))){
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123");
 			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
