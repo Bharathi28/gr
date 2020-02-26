@@ -53,11 +53,14 @@ public class GetChartsDaily {
 			"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
 			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
 			"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
-			"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile", "SeaCalm- Desktop", "SeaCalm-Mobile", "FixMDSkin - Desktop", "FixMDSkin - Mobile");		
+			"Dr. Denese ACQ Desktop", "Dr. Denese ACQ Mobile",
+			"SeaCalm- Desktop", "SeaCalm-Mobile", "SeaCalm Transactional Test - Desktop", "SeaCalm Transactional Test - Mobile",
+			"FixMDSkin - Desktop", "FixMDSkin - Mobile");		
 		
 		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]", "CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop",
 				"Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","dermaflash.com[Desktop]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
-				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop","VP [Chrome]","Marajo_Brand.com[Desktop]","ITC CXT-Desktop","FixMDSkin - Desktop");
+				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop", "SeaCalm Transactional Test - Desktop","VP [Chrome]","Marajo_Brand.com[Desktop]",
+				"ITC CXT-Desktop","FixMDSkin - Desktop");
 
 		ArrayList<String> brandarraylist = new ArrayList<String>();
 		
