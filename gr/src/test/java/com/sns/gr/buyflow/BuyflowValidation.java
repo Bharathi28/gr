@@ -168,10 +168,24 @@ public class BuyflowValidation{
 			}
 		}
 					
-		Thread.sleep(2000);		
-		String ppu = db_obj.checkPPUPresent(brand, campaign);
-		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, "Kit");
+		Thread.sleep(2000);	
+		String ppu = bf_obj.ppupresent(driver, brand, campaign, ppid, supply,realm);
+		String category = null;
+		for(int i = 0; i < offer_array.length; i++) {
+			if(bf_obj.checkIfProduct(brand, campaign, kit_offercode)) {
+				category = "Product";
+				}
+			else {
+				category = "Kit";
+			}
+			
+		}
+		
+		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category);
 		String upsell = offerdata.get("upgrade").toString().toLowerCase();
+		
+		
+		
 		if(ppu.equalsIgnoreCase("Yes")) {
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 		}

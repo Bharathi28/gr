@@ -163,6 +163,29 @@ public class BuyflowUtilities {
 			Thread.sleep(2000);
 		}	
 	}
+	public String ppupresent(WebDriver driver, String brand, String campaign, String ppid, String supply,String realm) throws ClassNotFoundException, SQLException {
+		List<String> category = db_obj.getCategory(brand, campaign, ppid);
+		String desc = db_obj.getdescription(brand, campaign, ppid, realm);
+		String category1 = null;
+		for (String s : category)
+		{
+		    category1 = s;
+		}
+		String ppu = null;
+		if(brand.equalsIgnoreCase("DermaFlash") && campaign.equalsIgnoreCase("Core") && category1.equalsIgnoreCase("Product")) {
+			if(desc.equalsIgnoreCase("DermaFlash Luxe")) {
+				ppu = "Yes";
+			}
+			else {
+				ppu = "No";
+			}
+				
+		}
+		else {
+			ppu = db_obj.checkPPUPresent(brand, campaign);
+		}
+		return ppu;
+	}
 	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
 		Thread.sleep(1000);

@@ -342,8 +342,10 @@ public class SASUtilities {
 		String easypay = offerdata.get("easypay").toString().toLowerCase();
 		String ppid = offerdata.get("ppid").toString().toLowerCase();
 		String kit = offerdata.get("description").toString().toLowerCase();
+		String description = offerdata.get("description").toString().toLowerCase();
+		String category = offerdata.get("category").toString().toLowerCase();
 		
-		if(!(easypay.equalsIgnoreCase("n/a"))) {
+		if(!(easypay.equalsIgnoreCase("n/a"))&& !((campaign.equalsIgnoreCase("newcc"))|| (category.equalsIgnoreCase("Product"))) ) {
 			List<Map<String, Object>> pay_loc = comm_obj.get_element_locator(brand, campaign, "EasyPay", easypay + " " + kit);
 			Thread.sleep(1000);
 			WebElement pay_elmt = comm_obj.find_webelement(driver, pay_loc.get(0).get("elementlocator").toString(), pay_loc.get(0).get("elementvalue").toString());
@@ -357,6 +359,18 @@ public class SASUtilities {
 				driver.findElement(By.xpath("//button[@data-variant-id='" + ppid.toUpperCase() + "']")).click();
 			}
 		}	
+		if((brand.equalsIgnoreCase("DermaFlash")) && (((campaign.equalsIgnoreCase("newcc")) && (easypay.equalsIgnoreCase("3pay"))) || ((campaign.equalsIgnoreCase("core")) && (easypay.equalsIgnoreCase("3pay")) && (category.equalsIgnoreCase("Product")))) ) {
+			if(description.equalsIgnoreCase("DermaFlash"))
+			{
+				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[1]")).click();
+				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[1]/option[2]")).click();
+			}
+			else {
+				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[last()]")).click();
+				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[last()]/option[2]")).click();
+			}
+			
+		}
 	}
 	
 	public void select_fragrance(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
