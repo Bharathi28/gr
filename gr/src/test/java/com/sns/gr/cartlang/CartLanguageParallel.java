@@ -49,7 +49,14 @@ public class CartLanguageParallel {
 		for(String category : categoryArr) {				
 			System.out.println(category);
 			
-			List<Map<String, Object>> all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
+			List<Map<String, Object>> all_offers;
+			if((brand.equalsIgnoreCase("ReclaimBotanical")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SheerCover"))){
+				all_offers = db_obj.fetch_all_by_category(brand, campaign, "kit");
+			}
+			else {
+				all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
+			}
+			
 			System.out.println(all_offers.size());
 			
 			for(Map<String, Object> offer : all_offers) {				
@@ -108,16 +115,11 @@ public class CartLanguageParallel {
 				String cart_lang_shipping = " ";	
 					
 				// 30-Day
-				String ppid;
-				if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("eyeoffer"))){
-					ppid = offer.get("ppid").toString();
-				}
-				else {
-					ppid = driver.findElement(By.xpath("(//span[@class='PPID disclaimer-ppid'])[1]")).getText();	
-				}						
+				String ppid = lang_obj.get_ppid(driver, brand, campaign, offer);
+									
 				System.out.println(offer.get("description").toString());
 					
-				String cart_lang = lang_obj.get_cart_language(driver);						
+				String cart_lang = lang_obj.get_cart_language(driver, brand);						
 				if(cart_lang.equalsIgnoreCase("No Cart Language")) {
 					cart_lang_price = " ";
 					cart_lang_shipping = " ";
@@ -131,9 +133,16 @@ public class CartLanguageParallel {
 				String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
 				String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");									
 					
-				String expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());									
-				// Assertions
-				String result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
+				String expectedPercentage;
+				String result = null;
+				if(realm.equalsIgnoreCase("R4")) {
+					expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());									
+					// Assertions
+					result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
+				}
+				else {
+					result = lang_obj.validate_r2_price(ppid, cart_lang_price, cart_lang_shipping, checkout_subtotal, checkout_shipping);
+				}				
 				
 				List<String> output_row_30 = new ArrayList<String>();
 				output_row_30.add(env);
@@ -156,13 +165,8 @@ public class CartLanguageParallel {
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
-					cart_lang = lang_obj.get_cart_language(driver);		
-					if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("eyeoffer"))){
-						ppid = offer.get("ppid").toString();
-					}
-					else {
-						ppid = driver.findElement(By.xpath("(//span[@class='PPID disclaimer-ppid'])[1]")).getText();	
-					}												
+					ppid = lang_obj.get_ppid(driver, brand, campaign, offer);		
+					cart_lang = lang_obj.get_cart_language(driver, brand);												
 					lang_price_arr = lang_obj.parse_cart_language(cart_lang);
 							
 					cart_lang_price = lang_price_arr[1];
@@ -171,9 +175,18 @@ public class CartLanguageParallel {
 					checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
 					checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");					
 						
-					expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());					
-					// Assertions
-					result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
+					if(realm.equalsIgnoreCase("R4")) {
+						expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());					
+						// Assertions
+						result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
+					}
+					else {
+						System.out.println("Checkout subtotal " + checkout_subtotal);
+						System.out.println("Checkout shipping " + checkout_shipping);
+						System.out.println("Cart lang subtotal " + cart_lang_price);
+						System.out.println("Cart lang shipping " + cart_lang_shipping);
+						result = lang_obj.validate_r2_price(ppid, cart_lang_price, cart_lang_shipping, checkout_subtotal, checkout_shipping);
+					}						
 					
 					List<String> output_row_90 = new ArrayList<String>();
 					output_row_90.add(env);
@@ -200,6 +213,6 @@ public class CartLanguageParallel {
 		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
-		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);
+		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);
 	}
 }

@@ -66,22 +66,47 @@ public class DBUtilities {
 	}
 	
 	public List<Map<String, Object>> fetch_all_by_category(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String realm = DBUtilities.get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";
 		List<Map<String, Object>> data = null;
 		if(category.equalsIgnoreCase("subscribe")) {
-			String query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes';";	
+			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes';";	
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		else {
-			String query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='" + category + "' and status='Active';";	
+			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='" + category + "' and status='Active';";	
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		return data;
 	}
 	
 	public List<Map<String, Object>> fetch_all_30day_kits(String brand, String campaign) throws ClassNotFoundException, SQLException {	
-		String query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and supply='30';";	
+		String realm = DBUtilities.get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";
+		String supply;
+		if(realm.equalsIgnoreCase("R4")) {
+			supply = "supply";
+		}
+		else {
+			supply = "supplysize";
+		}
+		
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30';";	
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
 		return data;
+	}
+	
+	public static List<String> fetch_r2_pricing(String ppid) throws ClassNotFoundException, SQLException{
+		List<String> priceArr = new ArrayList<String>();
+		String query = "select * from r2offers where ppid='" + ppid + "';";
+		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
+		System.out.println(query);
+		priceArr.add(data.get(0).get("contipricing").toString());
+		priceArr.add(data.get(0).get("contishipping").toString());
+		priceArr.add(data.get(0).get("entrypricing").toString());
+		priceArr.add(data.get(0).get("entryshipping").toString());
+		
+		return priceArr;
 	}
 	
 	public String checkPPUPresent(String brand, String campaign) throws ClassNotFoundException, SQLException {

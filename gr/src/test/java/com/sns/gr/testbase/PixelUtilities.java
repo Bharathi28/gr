@@ -73,9 +73,6 @@ public class PixelUtilities {
 		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' order by RAND() limit " + runs;
 		}
-//		else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("core"))) {
-//			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' order by RAND() limit " + runs;
-//		}
 		else {
 			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' order by RAND() limit " + runs;
 		}				
@@ -199,7 +196,7 @@ public class PixelUtilities {
 				driver.navigate().refresh();
 			}
 		    Thread.sleep(10000);
-		    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage" + pattern + ".har");
+		    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage_" + pattern + "_" + flow +".har");
 		}	    
 	    
 	    //////////////////////////////////////////////////////////
@@ -216,32 +213,22 @@ public class PixelUtilities {
 			} 
 	    	
 		    Thread.sleep(10000);
-	    }
-	    	
+	    }	    	
 	    else if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
 	        bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	        sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
-//	    else if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))){
-//	        driver.findElement(By.xpath("//a[@href='/shop']")).click();
-//	        sas_obj.select_offer(driver, env, brand, campaign, offerdata);
-//	        driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
-//	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	    }
 	        
 	    Thread.sleep(10000);
 //	    wait.until(pageLoadCondition);
-	    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage" + pattern + ".har");
+	    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage_" + pattern + "_" + flow +".har");
 	    ////////////////////////////////////////////////////////////  
         // Checkout Page	        
         defineNewHar(proxy, brand + "CheckoutPage");
-        if((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("Core"))) {
-        	Thread.sleep(2000);
-        	driver.findElement(By.xpath("(//a[@href='https://seacalmskin.grdev.com/checkout'])[1]")).click();
-        }
-        else if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
+        if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
         	sas_obj.select_kitshade(driver, offerdata, brand, campaign);
         	sas_obj.select_duo(driver, offerdata, brand, campaign);
         }
@@ -264,9 +251,9 @@ public class PixelUtilities {
             email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
             
-    		jse.executeScript("window.scrollBy(0,-200)", 0);
+//    		jse.executeScript("window.scrollBy(0,-200)", 0);
     		
     		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
     		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
@@ -279,9 +266,9 @@ public class PixelUtilities {
         	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
             
-    		jse.executeScript("window.scrollBy(0,-200)", 0);
+//    		jse.executeScript("window.scrollBy(0,-200)", 0);
         }
         
         
@@ -294,7 +281,7 @@ public class PixelUtilities {
         	// Navigate to Confirmation Page	        
         	bf_obj.complete_order(driver, brand, "VISA");          
             Thread.sleep(10000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");	
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
 		}
 		else {
 			// Upsell Page
@@ -302,7 +289,7 @@ public class PixelUtilities {
             // Navigate to Upsell Page	        
             bf_obj.complete_order(driver, brand, "VISA");
             Thread.sleep(20000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage_" + pattern + "_" + flow +".har");
             
             //////////////////////////////////////////////////////////
             // Confirmation Page	        
@@ -314,7 +301,7 @@ public class PixelUtilities {
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
             Thread.sleep(20000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage" + pattern + ".har");
+            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
             Thread.sleep(3000);
 		}        
 	
