@@ -284,10 +284,11 @@ public class BuyflowUtilities {
 	}
 	
 	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException {
+		WebDriverWait wait = new WebDriverWait(driver,50);
 		String realm = DBUtilities.get_realm(brand);
 		WebElement comp_order_element;
 		if(realm.equalsIgnoreCase("R2")) {
-			if(cc.equalsIgnoreCase("paypal")) {
+			if(cc.toLowerCase().contains("paypal")) {
 				comp_order_element = driver.findElement(By.xpath("//button[@class='cta-submit btn-primary']"));
 			}
 			else {
@@ -295,13 +296,16 @@ public class BuyflowUtilities {
 			}
 		}
 		else {
-			if(cc.equalsIgnoreCase("paypal")) {
+			if(cc.toLowerCase().contains("paypal")) {
 				comp_order_element = driver.findElement(By.id("submitButton"));
 			}
 			else {
 				comp_order_element = driver.findElement(By.id("trigerPlaceOrder"));
 			}			
 		}
+		wait.until(ExpectedConditions.visibilityOf(comp_order_element));
+		wait.until(ExpectedConditions.elementToBeClickable(comp_order_element));
+		
 		comp_order_element.click();
 	}
 	
@@ -368,8 +372,12 @@ public class BuyflowUtilities {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
-//			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h4[@class='noBottom paymentsHeader alpha']"), "Choose a way to pay"));
-			jse.executeScript("window.scrollBy(0,400)", 0);	
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//h4[contains(text(),'Choose a way to pay')]"))));
+//			//wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h4[@class='noBottom paymentsHeader alpha']"), "Choose a way to pay"));
+			jse.executeScript("window.scrollBy(0,400)", 0);				
+			
+//			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
+//			jse.executeScript("arguments[0].scrollIntoView(true);", select_cc_continue);
 			
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));
 			driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button")).click();
@@ -455,7 +463,7 @@ public class BuyflowUtilities {
 			jse.executeScript("window.scrollBy(0,300)", 0);
 			Thread.sleep(2000);
 			fill_form_field(driver, realm, "Agree", "");
-			
+			Thread.sleep(2000);
 			return (email.toLowerCase());
 		}
 	}	

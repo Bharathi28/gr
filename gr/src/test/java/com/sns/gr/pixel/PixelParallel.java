@@ -80,6 +80,8 @@ public class PixelParallel {
 	public void pixel(String env, String brand, String campaign, String flow, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
+		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
+		System.setProperty("webdriver.chrome.verboseLogging", "true");
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -241,7 +243,7 @@ public class PixelParallel {
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
+						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
 				        Thread.sleep(2000);
 				        driver.findElement(By.id("search")).clear();
 				        driver.findElement(By.id("search")).sendKeys(pattern);
@@ -306,7 +308,7 @@ public class PixelParallel {
 			envMap.put(env, brandMap);		
 			overallOutput.put(j++, envMap);
 		} // end of pixels
-		writeToSheet(overallOutput, brand, campaign);
+		writeToSheet(overallOutput, brand, campaign, flow);
 		driver.close();
 	} // end of main
 	
@@ -317,8 +319,8 @@ public class PixelParallel {
 		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, attachmentList);
 	}
 	
-	public static void writeToSheet(HashMap map, String fileName, String sheetName) throws IOException {	
-		File file = new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx");
+	public static void writeToSheet(HashMap map, String fileName, String sheetName, String flow) throws IOException {	
+		File file = new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx");
 		XSSFWorkbook workbook = null;
 		// Check file existence 
 	    if (file.exists() == false) {
@@ -326,7 +328,7 @@ public class PixelParallel {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
@@ -512,11 +514,11 @@ public class PixelParallel {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + brand + "_" + flow +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
-	    attachmentList.add("C:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx");
+	    attachmentList.add("C:\\Automation\\Pixel\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	
