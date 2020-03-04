@@ -122,7 +122,7 @@ public class CartLanguageValidation30day {
 					String ppid = driver.findElement(By.xpath("(//span[@class='PPID disclaimer-ppid'])[1]")).getText();
 					output_row_30.add(ppid);
 					
-					String cart_lang = lang_obj.get_cart_language(driver);						
+					String cart_lang = lang_obj.get_cart_language(driver, brand);						
 					if(cart_lang.equalsIgnoreCase("No Cart Language")) {
 						output_row_30.add("");
 						output_row_30.add("");
@@ -163,7 +163,7 @@ public class CartLanguageValidation30day {
 						bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", "90");
 						bf_obj.complete_order(driver, brand, "VISA");
 						bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
-						cart_lang = lang_obj.get_cart_language(driver);
+						cart_lang = lang_obj.get_cart_language(driver, brand);
 							
 						ppid = driver.findElement(By.xpath("(//span[@class='PPID disclaimer-ppid'])[1]")).getText();
 						output_row_90.add(ppid);

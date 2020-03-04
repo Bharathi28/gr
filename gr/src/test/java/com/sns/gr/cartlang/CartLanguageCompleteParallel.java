@@ -142,7 +142,7 @@ public class CartLanguageCompleteParallel {
 				}						
 				System.out.println(offer.get("description").toString());
 					
-				String cart_lang = lang_obj.get_cart_language(driver);	
+				String cart_lang = lang_obj.get_cart_language(driver, brand);	
 				
 				String total_price = driver.findElement(By.xpath("(//div[@class='cart-product-items clearfix'])[1]//div[2]//ul//li[contains(@class,'item-total')]//span[2]")).getText();
 				System.out.println("Total Price : " + total_price);				
@@ -192,7 +192,7 @@ public class CartLanguageCompleteParallel {
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
-					cart_lang = lang_obj.get_cart_language(driver);		
+					cart_lang = lang_obj.get_cart_language(driver, brand);		
 					total_price = driver.findElement(By.xpath("(//div[@class='cart-product-items clearfix'])[1]//div[2]//ul//li[contains(@class,'item-total')]//span[2]")).getText();
 					
 					if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("eyeoffer"))){

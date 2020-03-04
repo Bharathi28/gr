@@ -124,7 +124,7 @@ public class CartLanguageValidation {
 					String cart_lang_price = " ";
 					String cart_lang_shipping = " ";	
 					if(supply.equalsIgnoreCase("30")) {
-						String cart_lang = lang_obj.get_cart_language(driver);
+						String cart_lang = lang_obj.get_cart_language(driver, brand);
 						
 						if(cart_lang.equalsIgnoreCase("No Cart Language")) {
 							output_row.add("");
@@ -144,7 +144,7 @@ public class CartLanguageValidation {
 						bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", supply);
 						bf_obj.complete_order(driver, brand, "VISA");
 						bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
-						String cart_lang = lang_obj.get_cart_language(driver);
+						String cart_lang = lang_obj.get_cart_language(driver, brand);
 						
 						lang_price_arr = lang_obj.parse_cart_language(cart_lang);
 						

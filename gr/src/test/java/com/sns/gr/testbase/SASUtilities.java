@@ -369,7 +369,6 @@ public class SASUtilities {
 				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[last()]")).click();
 				driver.findElement(By.xpath("(//select[@class = 'easyPay'])[last()]/option[2]")).click();
 			}
-			
 		}
 	}
 	
