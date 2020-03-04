@@ -263,6 +263,8 @@ public class PixelUtilities {
     		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
         }
         else if(flow.equalsIgnoreCase("PaypalFlow")) {
+        	getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+        	defineNewHar(proxy, brand + "PaypalReviewPage");
         	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
@@ -276,10 +278,17 @@ public class PixelUtilities {
        
 		// Upsell and Confirmation Page Navigation
 		String ppu = db_obj.checkPPUPresent(brand, campaign);
+		String cc = "";
+		if(flow.equalsIgnoreCase("CCFlow")) {
+			cc = "VISA";
+		}
+		else {
+			cc = "Paypal";
+		}
 		if(ppu.equalsIgnoreCase("No")) {
 			defineNewHar(proxy, brand + "ConfirmationPage");
         	// Navigate to Confirmation Page	        
-        	bf_obj.complete_order(driver, brand, "VISA");          
+        	bf_obj.complete_order(driver, brand, cc);          
             Thread.sleep(10000);
             getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
 		}
@@ -287,7 +296,7 @@ public class PixelUtilities {
 			// Upsell Page
             defineNewHar(proxy, brand + "UpsellPage");
             // Navigate to Upsell Page	        
-            bf_obj.complete_order(driver, brand, "VISA");
+            bf_obj.complete_order(driver, brand, cc);
             Thread.sleep(20000);
             getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage_" + pattern + "_" + flow +".har");
             

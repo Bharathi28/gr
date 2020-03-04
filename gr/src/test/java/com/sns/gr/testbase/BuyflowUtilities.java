@@ -165,7 +165,6 @@ public class BuyflowUtilities {
 	}
 	public String ppupresent(WebDriver driver, String brand, String campaign, String ppid, String supply,String realm) throws ClassNotFoundException, SQLException {
 		List<String> category = db_obj.getCategory(brand, campaign, ppid);
-		String desc = db_obj.getdescription(brand, campaign, ppid, realm);
 		String category1 = null;
 		for (String s : category)
 		{
@@ -173,6 +172,7 @@ public class BuyflowUtilities {
 		}
 		String ppu = null;
 		if(brand.equalsIgnoreCase("DermaFlash") && campaign.equalsIgnoreCase("Core") && category1.equalsIgnoreCase("Product")) {
+			String desc = db_obj.getdescription(brand, campaign, ppid, realm);
 			if(desc.equalsIgnoreCase("DermaFlash Luxe")) {
 				ppu = "Yes";
 			}
@@ -367,54 +367,40 @@ public class BuyflowUtilities {
 				driver.findElement(By.xpath("//button[@class='PayPalExpressButton']")).click();
 			}
 			
-			Thread.sleep(5000);
-
 			String winHandleBefore = driver.getWindowHandle();
 			for(String winHandle : driver.getWindowHandles()){
 			   driver.switchTo().window(winHandle);
+			   driver.manage().window().maximize();
 			}			
 
-//			wait.until(ExpectedConditions.textToBePresentInElement(By.xpath("//div[@id='loginSection']//div//div//b"), "Have a PayPal account?"));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
 			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			
-			Thread.sleep(5000);
-//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
 			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
 			
-			Thread.sleep(2000);
 			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
-				Thread.sleep(2000);
 			}
 			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_passworddiv']//div//input")));	
 			driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
 			
-			Thread.sleep(2000);
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
-			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//h4[contains(text(),'Choose a way to pay')]"))));
-//			//wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h4[@class='noBottom paymentsHeader alpha']"), "Choose a way to pay"));
-			jse.executeScript("window.scrollBy(0,400)", 0);				
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
 			
-//			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
-//			jse.executeScript("arguments[0].scrollIntoView(true);", select_cc_continue);
+			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
+			wait.until(ExpectedConditions.elementToBeClickable(select_cc_continue));
+			jse.executeScript("arguments[0].click();", select_cc_continue);		
 			
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='buttons reviewButton']//button")));
-			driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button")).click();
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='confirmButtonTop']")));	
+			jse.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@id='confirmButtonTop']")));
 			
-			Thread.sleep(2000);
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='confirmButtonTop']")));	
-			driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
-			
-			Thread.sleep(7000);
-//			wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(winHandleBefore));
+			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 			driver.switchTo().window(winHandleBefore);
-			Thread.sleep(7000);
 			fill_form_field(driver, realm, "Agree", "");
-			Thread.sleep(2000);						
 			return "testbuyer1@guthy-renker.com";
 		}
 		else {

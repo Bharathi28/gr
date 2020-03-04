@@ -163,6 +163,9 @@ public class DBUtilities {
 		if(map.get("checkoutpage").toString().equalsIgnoreCase("Yes")) {
 			campaignPageList.add("checkoutpage");
 		}
+		if(map.get("paypalreviewpage").toString().equalsIgnoreCase("Yes")) {
+			campaignPageList.add("paypalreviewpage");
+		}
 		if(map.get("upsellpage").toString().equalsIgnoreCase("Yes")) {
 			campaignPageList.add("upsellpage");
 		}
@@ -175,7 +178,7 @@ public class DBUtilities {
 	public List<String> getFiringPages(String brand, String campaign, String flow, String pixel, String event) throws ClassNotFoundException, SQLException {
 
 		List<String> campaignPageList = getPages(brand, campaign);
-						
+								
 		String pixelQuery = "select * from pixels where pixelname='" + pixel + "' and eventname='" + event + "';";
 		List<Map<String, Object>> pixellist = DBLibrary.dbAction("fetch", pixelQuery);
 		String pages = pixellist.get(0).get("firingpages").toString();
@@ -205,11 +208,18 @@ public class DBUtilities {
 					pageList.add("checkoutpage");
 				}
 			}		
-			if(value.equalsIgnoreCase("PaypalReview")) {
-				if(campaignPageList.contains("paypalreviewpage")) {
-					pageList.add("paypalreviewpage");
+			if(value.equalsIgnoreCase("Checkout/PaypalReview")) {
+				if(flow.equalsIgnoreCase("paypalflow")) {
+					if(campaignPageList.contains("paypalreviewpage")) {
+						pageList.add("paypalreviewpage");
+					}
+				}	
+				else {
+					if(campaignPageList.contains("checkoutpage")) {
+						pageList.add("checkoutpage");
+					}
 				}
-			}	
+			}					
 			if(value.equalsIgnoreCase("Confirmation")) {
 				if(campaignPageList.contains("confirmationpage")) {
 					pageList.add("confirmationpage");
@@ -240,12 +250,17 @@ public class DBUtilities {
 		String id = joinlist.get(0).get("pixelbrandid").toString();
 		return id;
 	}
+	
 	public String getdescription(String brand, String campaign, String ppid, String realm) throws ClassNotFoundException, SQLException {
+		if(ppid.contains("single")) {
+		String[] arr = ppid.split(",");
+		ppid = arr[0];
+		}
 		String query = "select * from "+realm+"offers where brand = '"+brand+"' and campaign = '"+campaign+"' and ppid = '"+ppid+"';";
 		System.out.println(query);
 		List<Map<String, Object>> joinlist = DBLibrary.dbAction("fetch",query);
 		String description = joinlist.get(0).get("description").toString();
 		System.out.println(description);
-		return description;	
+		return description;
 	}
 }

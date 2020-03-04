@@ -35,10 +35,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
@@ -186,7 +189,8 @@ public class PixelParallel {
 		WebDriver driver = new ChromeDriver();
 	    driver.manage().window().maximize();
 	    driver.get("https://ericduran.github.io/chromeHAR/");
-	    driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	    WebDriverWait wait = new WebDriverWait(driver,50);
+//	    driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 	    
 	    if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
 			driver.findElement(By.xpath("//button[@id='details-button']")).click();
@@ -244,7 +248,10 @@ public class PixelParallel {
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
 						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
-				        Thread.sleep(2000);
+						
+						WebElement searchElmt = driver.findElement(By.id("search"));
+						wait.until(ExpectedConditions.visibilityOf(searchElmt));
+//						Thread.sleep(2000);
 				        driver.findElement(By.id("search")).clear();
 				        driver.findElement(By.id("search")).sendKeys(pattern);
 				        Thread.sleep(2000);
