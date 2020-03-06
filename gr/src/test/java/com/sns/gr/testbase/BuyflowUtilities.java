@@ -260,35 +260,15 @@ public class BuyflowUtilities {
 		else {
 			String products = (String) jse.executeScript("return app.variableMap.products");
 			String[] arr = products.split(";");
-			if(single) {
-				int arrSize = arr.length;
-				System.out.println("length : " + arrSize);
-				if((brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("Smileactives"))) {
-					offercode = arr[1] + "," + arr[4];
-				}
-				else if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally"))) {
-					offercode = arr[1] + "," + arr[7];
-				}
-				else if(brand.equalsIgnoreCase("Dr.Denese")) {
-					if(arrSize>9) {
-						offercode = arr[1] + "," + arr[10];
-					}
-					else {
-						offercode = arr[1] + "," + arr[7];
-					}
-					
-				}
-				else {
-					offercode = arr[1];
-				}
-			}
-			else {
-				offercode = arr[1];
-			}			
 			
-			for(String a : arr) {
-				System.out.println(a);
+			int arrSize = arr.length;
+			System.out.println("arrSize:" + arrSize);
+			for(int i=1; i<arrSize; i=i+3) {
+				System.out.println(i);
+				offercode = offercode + arr[i] + ",";
+				System.out.println(offercode);
 			}
+			offercode = offercode.substring(0, offercode.length() - 1);
 		}		
 		return offercode;
 	}

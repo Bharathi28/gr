@@ -201,7 +201,8 @@ public class SASUtilities {
 			Thread.sleep(1000);								
 		}
 		if((brand.equalsIgnoreCase("CrepeErase"))  && (campaign.equalsIgnoreCase("Core"))) {
-			jse.executeScript("window.scrollBy(0,200)", 0);
+			jse.executeScript("window.scrollBy(0,600)", 0);
+			Thread.sleep(2000);
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
