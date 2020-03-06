@@ -308,8 +308,8 @@ public class BuyflowUtilities {
 		}
 		wait.until(ExpectedConditions.visibilityOf(comp_order_element));
 		wait.until(ExpectedConditions.elementToBeClickable(comp_order_element));
-		
-		comp_order_element.click();
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("arguments[0].click();", comp_order_element);	
 	}
 	
 	public void fill_form_field(WebDriver driver, String realm, String field, String value) throws ClassNotFoundException, SQLException {
