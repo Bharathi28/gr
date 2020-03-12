@@ -48,7 +48,7 @@ public class GetChartsDaily {
 		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
 			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
-			"VP [Chrome]", "Marajo_Brand.com[Desktop]", "Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile",
+			"VP [Chrome]", "Marajo_Brand.com[Desktop]", "Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
 			"SB Desktop", "SB CXT-Chrome", "dermaflash.com[Desktop]","dermaflash.com[Mobile]",
 			"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
 			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
@@ -58,7 +58,7 @@ public class GetChartsDaily {
 			"FixMDSkin - Desktop", "FixMDSkin - Mobile");		
 		
 		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]",
-				"CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop",
+				"CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop", "SA CXT Desktop",
 				"Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","dermaflash.com[Desktop]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
 				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop", "SeaCalm Transactional Test - Desktop","VP [Chrome]","Marajo_Brand.com[Desktop]",
 				"FixMDSkin - Desktop","ITC CXT-Desktop");
