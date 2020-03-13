@@ -22,6 +22,7 @@ public class BuyflowUtilities {
 	DBUtilities db_obj = new DBUtilities();
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String step = "";
 		if(category.equalsIgnoreCase("kit")) {
 			step="Ordernow";
@@ -86,8 +87,8 @@ public class BuyflowUtilities {
 			
 			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
 				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-				Thread.sleep(2000);
-				element.click();
+//				Thread.sleep(2000);
+				jse.executeScript("arguments[0].click();", element);		
 			}
 		}		
 	}
@@ -107,13 +108,13 @@ public class BuyflowUtilities {
 	public boolean checkIfProduct(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
 		List<String> categories = db_obj.getCategory(brand, campaign, ppid);
 		boolean product = false;
-		if((categories.contains("kit")) && (categories.contains("product"))){
+		if((categories.contains("kit")) && (categories.contains("Product"))){
 			product = false;
 		}
 		else if(categories.contains("kit")){
 			product = false;
 		}
-		else if(categories.contains("product")){
+		else if(categories.contains("Product")){
 			product = true;
 		}
 		return product;
@@ -439,7 +440,7 @@ public class BuyflowUtilities {
 			}		
 			
 			if(brand.equalsIgnoreCase("Mally")){
-				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123");
+				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
 				fill_form_field(driver, realm, "CardNumber", "4111111111111122");
