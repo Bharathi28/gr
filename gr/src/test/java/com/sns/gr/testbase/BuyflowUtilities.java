@@ -439,7 +439,7 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "ShippingZip", "35801");
 			}		
 			
-			if(brand.equalsIgnoreCase("Mally")){
+			if((brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("CrepeErase"))){
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	

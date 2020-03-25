@@ -200,7 +200,7 @@ public class SASUtilities {
 			gift_elmt.click();
 			Thread.sleep(1000);								
 		}
-		if((brand.equalsIgnoreCase("CrepeErase"))  && (campaign.equalsIgnoreCase("Core"))) {
+		if(((brand.equalsIgnoreCase("CrepeErase"))  && (campaign.equalsIgnoreCase("crepeerase"))) || ((brand.equalsIgnoreCase("CrepeErase"))  && (campaign.equalsIgnoreCase("Core")))) {
 			jse.executeScript("window.scrollBy(0,600)", 0);
 			Thread.sleep(2000);
 			driver.findElement(By.id("valuePack-next-btn")).click();
@@ -386,16 +386,17 @@ public class SASUtilities {
 				frag_loc = comm_obj.get_element_locator(brand, campaign, "Fragrance", fragrance + " " + kitname);
 			}
 			else if(category.equalsIgnoreCase("Product")) {
+				
 				frag_loc = comm_obj.get_element_locator(brand, campaign, "Product-Fragrance", fragrance + " " + kitname);
-			}
-			if((category.equalsIgnoreCase("Product")) && (brand.equalsIgnoreCase("Mally"))){
-				while(comm_obj.find_mulwebelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString()).size() == 0){
-					if(driver.findElements(By.xpath("//button[@class='slick-next slick-arrow valid']")).size() != 0) {
-						driver.findElement(By.xpath("//button[@class='slick-next slick-arrow valid']")).click();
+				if(brand.equalsIgnoreCase("Mally")) {
+					if(!(comm_obj.find_webelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString()).isDisplayed())) {
+						if(driver.findElements(By.xpath("//div[@class='product-variations large-12 small-12 clearfix']//ul//li//div[2]//ul//button[2]")).size() != 0) {
+							driver.findElement(By.xpath("//div[@class='product-variations large-12 small-12 clearfix']//ul//li//div[2]//ul//button[2]")).click();
+						}
 					}
 				}
 			}
-			
+						
 			WebElement frag_elmt = comm_obj.find_webelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString());
 			Thread.sleep(2000);
 			if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("eyeoffer"))) {
