@@ -37,19 +37,21 @@ public class BuyflowUtilities {
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		
 		if(env.toLowerCase().contains("dev")){
-			String realm = DBUtilities.get_realm(brand);
-			String elementlocator = locator.get(0).get("qalocator").toString();
-			String elementvalue = locator.get(0).get("qavalue").toString();	
-			if(realm.equalsIgnoreCase("R2")) {
-				elementvalue = elementvalue.replace("qa", env.toLowerCase());
-			}
-			else {
-				elementvalue = elementvalue.replace("grdev", env.toLowerCase()+".dw4.grdev");
-			}
-			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
-				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-				element.click();
-			}
+//			String realm = DBUtilities.get_realm(brand);
+//			String elementlocator = locator.get(0).get("qalocator").toString();
+//			String elementvalue = locator.get(0).get("qavalue").toString();	
+//			if(realm.equalsIgnoreCase("R2")) {
+//				elementvalue = elementvalue.replace("qa", env.toLowerCase());
+//			}
+//			else {
+//				elementvalue = elementvalue.replace("https://", env.toLowerCase()+"https://www.");
+//				elementvalue = elementvalue.replace("grdev", env.toLowerCase()+"dev33.dw4.grdev");
+//				System.out.println(elementvalue);
+//			}
+//			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
+//				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
+//				element.click();
+//			}
 //			if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
 //				driver.findElement(By.xpath("(//a[@href='https://www.meaningfulbeauty.dev28.dw4.grdev.com/ordernow'])[3]")).click();
 //			}
@@ -74,6 +76,68 @@ public class BuyflowUtilities {
 //			else if(brand.equalsIgnoreCase("Volaire")) {
 //				driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
 //			}
+			
+			if(brand.equalsIgnoreCase("CrepeErase")) {
+				if(campaign.equalsIgnoreCase("deluxe20offpanelb")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.crepeerase.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("specialoffer")) {
+					driver.findElement(By.xpath("(//a[@class='cta-button button'])[1]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("fixmdskin")) {
+				if(campaign.equalsIgnoreCase("core")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.fixmd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("fb")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.fixmd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("dr.denese")) {
+				if(campaign.equalsIgnoreCase("core")) {
+					driver.findElement(By.xpath("(//a[@href='/ordernow'])[1]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("fb")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.trydrd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("volaire")) {
+				if(campaign.equalsIgnoreCase("newcc")) {
+					driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("fb")) {
+					driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("seacalmskin")) {
+				if(campaign.equalsIgnoreCase("newcc")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[1]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("specialoffer")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("specialoffer2")) {
+					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[3]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("mally")) {
+				if(campaign.equalsIgnoreCase("core")) {
+					driver.findElement(By.xpath("(//a[@href='/shop'])[1]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("glow")) {
+					driver.findElement(By.xpath("(//a[@class='button glow-cta'])[1]")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("smileactives")) {
+				if(campaign.equalsIgnoreCase("core")) {
+					driver.findElement(By.xpath("")).click();
+				}
+				else if(campaign.equalsIgnoreCase("specialoffer")) {
+					driver.findElement(By.xpath("(//a[@class='banner-cta show-for-medium'])[1]")).click();
+				}
+				else if(campaign.equalsIgnoreCase("sacbjan19")) {
+				}
+			}
 		}
 		else {
 			String elementlocator = locator.get(0).get(env.toLowerCase() + "locator").toString();
@@ -196,10 +260,10 @@ public class BuyflowUtilities {
 		String elementlocator = locator.get(0).get("elementlocator").toString();
 		String elementvalue = locator.get(0).get("elementvalue").toString();
 		
-		List<WebElement> elements = comm_obj.find_mulwebelement(driver, elementlocator, elementvalue);
-		if(elements.size() != 0) {
+//		List<WebElement> elements = comm_obj.find_mulwebelement(driver, elementlocator, elementvalue);
+//		if(elements.size() != 0) {
 			comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
-		}
+//		}
 	}
 	
 	public String fetch_offercode(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
