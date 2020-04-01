@@ -20,6 +20,7 @@ public class BuyflowUtilities {
 	
 	CommonUtilities comm_obj = new CommonUtilities();
 	DBUtilities db_obj = new DBUtilities();
+
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -27,7 +28,7 @@ public class BuyflowUtilities {
 		if(category.equalsIgnoreCase("kit")) {
 			step="Ordernow";
 		}
-		else if(category.equalsIgnoreCase("product")) {
+		else if(category.equalsIgnoreCase("product")||category.equalsIgnoreCase("shopkit")) {
 			step="Shop";
 		}
 		else if(category.equalsIgnoreCase("subscribe")) {
@@ -37,6 +38,7 @@ public class BuyflowUtilities {
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		
 		if(env.toLowerCase().contains("dev")){
+
 //			String realm = DBUtilities.get_realm(brand);
 //			String elementlocator = locator.get(0).get("qalocator").toString();
 //			String elementvalue = locator.get(0).get("qavalue").toString();	
@@ -52,6 +54,8 @@ public class BuyflowUtilities {
 //				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
 //				element.click();
 //			}
+
+
 //			if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
 //				driver.findElement(By.xpath("(//a[@href='https://www.meaningfulbeauty.dev28.dw4.grdev.com/ordernow'])[3]")).click();
 //			}
@@ -147,12 +151,21 @@ public class BuyflowUtilities {
 				if(driver.findElement(By.xpath("//div[@class='header-promo-slider']")).getAttribute("style").toString().equalsIgnoreCase("display: none;")) {
 					driver.findElement(By.xpath("//div[@class='header-promo']")).click();
 				}
+				else {
+					System.out.println("Hi");
+				}
 			}
 			
 			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
+				
 				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-//				Thread.sleep(2000);
-				jse.executeScript("arguments[0].click();", element);		
+	
+
+				Thread.sleep(2000);
+				//element.click();
+				
+				jse.executeScript("arguments[0].click();", element); 
+
 			}
 		}		
 	}
@@ -178,16 +191,35 @@ public class BuyflowUtilities {
 		else if(categories.contains("kit")){
 			product = false;
 		}
-		else if(categories.contains("Product")){
+
+		else if(categories.contains("Product")||categories.contains("ShopKit")){
+
 			product = true;
 		}
 		return product;
+	}
+	public boolean checkIfShopKit(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+		List<String> categories = db_obj.getCategory(brand, campaign, ppid);
+		boolean shopkit = false;
+		if(categories.contains("Product")){
+			shopkit = false;
+		}
+		else if(categories.contains("ShopKit")){
+			shopkit = true;
+		}
+		return shopkit;
 	}
 	
 	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode) throws ClassNotFoundException, SQLException, InterruptedException {
 		
 		if((offercode.contains("single")) || (checkIfProduct(brand, campaign, offercode))){
-			click_cta(driver,env,brand,campaign,"Product");
+			if(checkIfShopKit(brand, campaign, offercode)) {
+				click_cta(driver,env,brand,campaign,"ShopKit");
+			}
+			else {
+				click_cta(driver,env,brand,campaign,"Product");
+			}
+			
 		}
 		else {
 			click_cta(driver,env,brand,campaign,"Kit");
@@ -254,16 +286,18 @@ public class BuyflowUtilities {
 	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
 		Thread.sleep(1000);
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "Upsell", upsell);
 			
 		String elementlocator = locator.get(0).get("elementlocator").toString();
 		String elementvalue = locator.get(0).get("elementvalue").toString();
 		
-//		List<WebElement> elements = comm_obj.find_mulwebelement(driver, elementlocator, elementvalue);
-//		if(elements.size() != 0) {
+
+		
+
 			comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
-//		}
+
 	}
 	
 	public String fetch_offercode(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
@@ -351,9 +385,10 @@ public class BuyflowUtilities {
 		return conf_num;
 	}
 	
-	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException {
+	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException, InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver,50);
 		String realm = DBUtilities.get_realm(brand);
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		WebElement comp_order_element;
 		if(realm.equalsIgnoreCase("R2")) {
 			if(cc.toLowerCase().contains("paypal")) {
@@ -368,12 +403,15 @@ public class BuyflowUtilities {
 				comp_order_element = driver.findElement(By.id("submitButton"));
 			}
 			else {
+				if(brand.equalsIgnoreCase("FixMDSkin")) {
+					jse.executeScript("window.scrollBy(0,250)", 0);
+					Thread.sleep(2000);
+				}
 				comp_order_element = driver.findElement(By.id("trigerPlaceOrder"));
 			}			
 		}
 		wait.until(ExpectedConditions.visibilityOf(comp_order_element));
 		wait.until(ExpectedConditions.elementToBeClickable(comp_order_element));
-		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("arguments[0].click();", comp_order_element);	
 	}
 	
@@ -503,7 +541,9 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "ShippingZip", "35801");
 			}		
 			
-			if((brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("CrepeErase"))){
+
+			if((brand.equalsIgnoreCase("Mally"))||(brand.equalsIgnoreCase("CrepeErase"))){
+
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
