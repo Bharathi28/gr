@@ -22,8 +22,8 @@ import com.sns.gr.testbase.CommonUtilities;
 public class CheckEmail {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
-		System.setProperty("webdriver.gecko.driver", "F:\\Automation\\Drivers\\geckodriver-v0.22.0-win64\\geckodriver.exe");		
+		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.gecko.driver", "C:\\Automation\\Drivers\\geckodriver-v0.22.0-win64\\geckodriver.exe");		
 		
 		Scanner in = new Scanner(System.in);
 		
@@ -51,8 +51,8 @@ public class CheckEmail {
 		driver.manage().window().maximize();
 				
 		for(String brand : brands) {
-			File input_file = new File("F:\\Automation\\Buyflow\\DailyOrders\\Result.xlsx");
-//			File input_file = new File("F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\BuyflowResults_10232019.xlsx");
+			//File input_file = new File("C:\\Automation\\Buyflow\\DailyOrders\\Result.xlsx");
+		    File input_file = new File("C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\BuyflowResults_412020-Core.xlsx");
 			FileInputStream inputstream = new FileInputStream(input_file);
 			Workbook testData = new XSSFWorkbook(inputstream);
 			Sheet dataSheet = testData.getSheet(brand);
@@ -66,8 +66,8 @@ public class CheckEmail {
 				row = dataSheet.getRow(itr);
 				String env = row.getCell(0).getStringCellValue();
 				String campaign = row.getCell(2).getStringCellValue();
-//				String email = row.getCell(3).getStringCellValue();
-				String email = row.getCell(2).getStringCellValue();
+			    String email = row.getCell(3).getStringCellValue();
+				//String email = row.getCell(2).getStringCellValue();
 				String offercode = row.getCell(4).getStringCellValue();				
 				
 				WebElement emailBox = driver.findElement(By.xpath("//input[@id='login']"));

@@ -173,7 +173,13 @@ public class BuyflowValidation{
 		String category = null;
 		for(int i = 0; i < offer_array.length; i++) {
 			if(bf_obj.checkIfProduct(brand, campaign, kit_offercode)) {
-				category = "Product";
+				if(bf_obj.checkIfShopKit(brand, campaign, ppid)) {
+					category = "ShopKit";
+				}
+				else {
+					category = "Product";
+				}
+				
 				}
 			else {
 				category = "Kit";

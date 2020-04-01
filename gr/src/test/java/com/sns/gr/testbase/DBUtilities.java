@@ -20,7 +20,6 @@ public class DBUtilities {
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "';";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-		//System.out.println(query);
 		return offerdata.get(0);		
 	}
 	
@@ -91,7 +90,8 @@ public class DBUtilities {
 			supply = "supplysize";
 		}
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30';";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='inactive' and " + supply + "='30';";
+		System.out.println(query);
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
 		return data;
 	}
@@ -100,7 +100,6 @@ public class DBUtilities {
 		List<String> priceArr = new ArrayList<String>();
 		String query = "select * from r2offers where ppid='" + ppid + "';";
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
-		System.out.println(query);
 		priceArr.add(data.get(0).get("contipricing").toString());
 		priceArr.add(data.get(0).get("contishipping").toString());
 		priceArr.add(data.get(0).get("entrypricing").toString());
@@ -149,7 +148,7 @@ public class DBUtilities {
 		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "';";
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
 		Map<String, Object> map = camplist.get(0);
-		
+		System.out.println(camplist);
 		List<String> campaignPageList = new ArrayList<String>();
 		if(map.get("homepage").toString().equalsIgnoreCase("Yes")) {
 			campaignPageList.add("homepage");
