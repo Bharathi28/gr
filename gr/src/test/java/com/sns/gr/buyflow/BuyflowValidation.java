@@ -71,15 +71,16 @@ public class BuyflowValidation{
 		
 
 		if(day==7){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SaturdayInput.xlsx", "rundata");
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Saturday_rundata");
 		}
 		else if(day==1){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\SundayInput.xlsx", "rundata");
+			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Sunday_rundata");
 		}
 		else{
 			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+//			System.out.println(System.getProperty("user.dir"));
+//			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/run_input.xlsx", "rundata");
 		}		
-
 		return arrayObject;
 	}
 	
@@ -182,13 +183,13 @@ public class BuyflowValidation{
 		}
 		
 		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category);
-		String upsell = offerdata.get("upgrade").toString().toLowerCase();
+		String upsell = offerdata.get("upgrade").toString().toLowerCase();		
 		
-		
-		
-		if(ppu.equalsIgnoreCase("Yes")) {
-			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-		}
+		if(category.equalsIgnoreCase("Kit")) {
+			if(ppu.equalsIgnoreCase("Yes")) {
+				bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
+			}
+		}		
 
 		Thread.sleep(2000);
 		
@@ -201,6 +202,7 @@ public class BuyflowValidation{
 			
 		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
 		ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+//		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Screenshots\\" + brand + "_" + ppid +".png"));
 			
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
@@ -239,6 +241,8 @@ public class BuyflowValidation{
 	@AfterSuite
 	public void populateExcel() throws IOException {
 		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+//		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", System.getProperty("user.dir") + "\\Output\\");
+		
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
 		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);

@@ -71,10 +71,10 @@ public class PixelUtilities {
 	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		String query = "";
 		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
-			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' order by RAND() limit " + runs;
+			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active' order by RAND() limit " + runs;
 		}
 		else {
-			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' order by RAND() limit " + runs;
+			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
 		}				
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);		
 		int i=0;
@@ -134,7 +134,7 @@ public class PixelUtilities {
 			}
 			i++;
 		}
-		if(runs > i) {
+		if(runs > i) {			
 			buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, url,"Default", offerdata.get(i));
 			overallOutput.add(buyflowOutput);
 		}
@@ -220,6 +220,12 @@ public class PixelUtilities {
 	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, campaign, "Kit");
+//	    	 if((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("pnlg"))){
+//	    		 driver.findElement(By.xpath("//a[@class='banner-cta button']")).click();
+//	    	 }
+//	    	 else if((campaign.equalsIgnoreCase("deluxe20off")) || (campaign.equalsIgnoreCase("mb7deluxe20off")) || (campaign.equalsIgnoreCase("pnlsys"))) {
+//	    		 driver.findElement(By.xpath("//a[@class='button cta-button']")).click();
+//	    	 }
 	    }
 	        
 	    Thread.sleep(10000);

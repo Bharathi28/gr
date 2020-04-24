@@ -92,14 +92,17 @@ public class PixelParallel {
 	    proxy.start(0);
 
 	    // get the Selenium proxy object
-	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
-
-//	    ChromeOptions options = new ChromeOptions();
-//	    options.setCapability(CapabilityType.PROXY, seleniumProxy);
+	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);	    
 	    
+	    ChromeOptions options = new ChromeOptions();
+	    options.addArguments("--ignore-certificate-errors");
+
 	    // configure it as a desired capability
 	    DesiredCapabilities capabilities = new DesiredCapabilities();
+	    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 	    capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+	    capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+	    capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 	    
 	    List<List<String>> output = new ArrayList<List<String>>();
 	    
@@ -122,28 +125,14 @@ public class PixelParallel {
 		HashMap<Integer, HashMap> overallOutput = new LinkedHashMap<Integer, HashMap>();
 								
 		String url = "";
-		if((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg"))) {
-			url = db_obj.getUrl(brand, campaign, env);
-			System.out.println(url);
+		url = db_obj.getUrl(brand, campaign, env);
+		System.out.println(url);
+		
+		if(!((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg")))) {
+			url = db_obj.getUrl(brand, campaign, "stg");
+			url = url.replace("stg", env.toLowerCase());
 		}
-		else {
-			if(realm.equalsIgnoreCase("R2")) {
-				if(brand.equalsIgnoreCase("Sub-D")) {
-					url = "https://storefront:eComweb123@perricone" + "." + env + ".dw2.grdev.com";
-				}
-				else {
-					url = "https://storefront:eComweb123@" + brand + "." + env + ".dw2.grdev.com";
-				}
-			}
-			else {
-				if(brand.equalsIgnoreCase("Dr.Denese")) {
-					url = "https://storefront:eComweb123@trydrd" + "." + env + ".dw4.grdev.com";
-				}
-				else {
-					url = "https://storefront:eComweb123@" + brand + "." + env + ".dw4.grdev.com";
-				}
-			}
-		}
+		
 		int noOfTestRuns = 0;
 		List<String> pixelslist = new ArrayList<String>();
 			

@@ -134,8 +134,18 @@ public class PricingUtilities {
 				locator = get_pricing_locator(realm, brand, null, pricing, null);
 			}
 		}
-		WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString());
-		String text = elmt.getText();							
+//		WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString());
+//		String text = elmt.getText();							
+//		return text;
+String text = "";
+		for(Map<String,Object> loc : locator) {
+			
+			String elementvalue = loc.get("elementvalue").toString();
+			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
+				text = driver.findElement(By.xpath(elementvalue)).getText();
+				break;
+			}
+		}
 		return text;
 	}
 	

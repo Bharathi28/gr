@@ -224,17 +224,18 @@ public class SASUtilities {
 			Thread.sleep(1000);								
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("Core"))||(campaign.equalsIgnoreCase("corehrt"))||(campaign.equalsIgnoreCase("pnlbb"))||(campaign.equalsIgnoreCase("corehrt2"))||(campaign.equalsIgnoreCase("crepeerase")))) {
+		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("corehrt"))||(campaign.equalsIgnoreCase("pnlbb"))||(campaign.equalsIgnoreCase("corehrt2"))||(campaign.equalsIgnoreCase("crepeerase")))) {
 			jse.executeScript("window.scrollBy(0,500)", 0);
 
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv"))||(campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+		
+		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv"))|| (campaign.equalsIgnoreCase("Core")) ||(campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
-			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
+			driver.findElement(By.xpath("//button[@class='button checkout']")).click();
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("20offdeluxe"))) {
 			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
@@ -425,14 +426,12 @@ public class SASUtilities {
 						if(driver.findElements(By.xpath("//div[@class='product-variations large-12 small-12 clearfix']//ul//li//div[2]//ul//button[2]")).size() != 0) {
 							driver.findElement(By.xpath("//div[@class='product-variations large-12 small-12 clearfix']//ul//li//div[2]//ul//button[2]")).click();
 						}
-
-			}
+					}
 				}
 			}
 			else if(category.equalsIgnoreCase("ShopKit")) {
 				frag_loc = comm_obj.get_element_locator(brand, campaign, "ShopKit-Fragrance", fragrance + " " + kitname);
 			}
-
 		
 			WebElement frag_elmt = comm_obj.find_webelement(driver, frag_loc.get(0).get("elementlocator").toString(), frag_loc.get(0).get("elementvalue").toString());
 			Thread.sleep(2000);
@@ -508,9 +507,9 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,1000)", 0);
 		}
 		WebElement prod_elmt = comm_obj.find_webelement(driver, prod_loc.get(0).get("elementlocator").toString(), prod_loc.get(0).get("elementvalue").toString());
-		Thread.sleep(2000);
+		Thread.sleep(2000);		
 		
-		if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")))) {
+		if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core")))) {
 			Actions act = new Actions(driver);
 			act.moveToElement(prod_elmt).perform();
 			Thread.sleep(1000);
@@ -519,6 +518,15 @@ public class SASUtilities {
 			prod_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
 			Thread.sleep(2000);
 		}		
+		else if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) {
+			Actions act = new Actions(driver);
+			act.moveToElement(prod_elmt).perform();
+			Thread.sleep(1000);
+			
+			String shop_loc = prod_loc.get(0).get("elementvalue").toString() + "//div//div//h4//a";
+			prod_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
+			Thread.sleep(2000);
+		}
 		prod_elmt.click();					
 		Thread.sleep(1000);
 		

@@ -36,138 +36,28 @@ public class BuyflowUtilities {
 		}
 		String query = "select * from cta_locators where brand='" + brand + "' and campaign='" + campaign + "' and step='" + step + "';";
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
-		
+		String elementlocator = "";
+		String elementvalue = "";
 		if(env.toLowerCase().contains("dev")){
-
-//			String realm = DBUtilities.get_realm(brand);
-//			String elementlocator = locator.get(0).get("qalocator").toString();
-//			String elementvalue = locator.get(0).get("qavalue").toString();	
-//			if(realm.equalsIgnoreCase("R2")) {
-//				elementvalue = elementvalue.replace("qa", env.toLowerCase());
-//			}
-//			else {
-//				elementvalue = elementvalue.replace("https://", env.toLowerCase()+"https://www.");
-//				elementvalue = elementvalue.replace("grdev", env.toLowerCase()+"dev33.dw4.grdev");
-//				System.out.println(elementvalue);
-//			}
-//			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
-//				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-//				element.click();
-//			}
-
-
-//			if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
-//				driver.findElement(By.xpath("(//a[@href='https://www.meaningfulbeauty.dev28.dw4.grdev.com/ordernow'])[3]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("CrepeErase")) {
-//				driver.findElement(By.xpath("(//a[@href='https://www.crepeerase.dev28.dw4.grdev.com/ordernow'])[2]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
-//				driver.findElement(By.xpath("(//a[@href='/shop/'])[1]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("Smileactives")) {
-//				driver.findElement(By.xpath("(//a[@href='https://www.smileactives.dev28.dw4.grdev.com/ordernow'])[3]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("WestmoreBeauty")) {
-//				driver.findElement(By.xpath("//div[@class='home-section']//div//a//img")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("Mally")) {
-//				driver.findElement(By.xpath("(//a[@href='/shop'])[1]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("Dr.Denese")) {
-//				driver.findElement(By.xpath("(//a[@href='/ordernow'])[1]")).click();
-//			}
-//			else if(brand.equalsIgnoreCase("Volaire")) {
-//				driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
-//			}
-			
-			if(brand.equalsIgnoreCase("CrepeErase")) {
-				if(campaign.equalsIgnoreCase("deluxe20offpanelb")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.crepeerase.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("specialoffer")) {
-					driver.findElement(By.xpath("(//a[@class='cta-button button'])[1]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("fixmdskin")) {
-				if(campaign.equalsIgnoreCase("core")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.fixmd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("fb")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.fixmd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("dr.denese")) {
-				if(campaign.equalsIgnoreCase("core")) {
-					driver.findElement(By.xpath("(//a[@href='/ordernow'])[1]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("fb")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.trydrd.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("volaire")) {
-				if(campaign.equalsIgnoreCase("newcc")) {
-					driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("fb")) {
-					driver.findElement(By.xpath("(//a[@class='fb-cta-btn-orange'])[1]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("seacalmskin")) {
-				if(campaign.equalsIgnoreCase("newcc")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[1]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("specialoffer")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("specialoffer2")) {
-					driver.findElement(By.xpath("(//a[@href='https://www.seacalmskin.dev33.dw4.grdev.com/ordernow'])[3]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("mally")) {
-				if(campaign.equalsIgnoreCase("core")) {
-					driver.findElement(By.xpath("(//a[@href='/shop'])[1]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("glow")) {
-					driver.findElement(By.xpath("(//a[@class='button glow-cta'])[1]")).click();
-				}
-			}
-			else if(brand.equalsIgnoreCase("smileactives")) {
-				if(campaign.equalsIgnoreCase("core")) {
-					driver.findElement(By.xpath("")).click();
-				}
-				else if(campaign.equalsIgnoreCase("specialoffer")) {
-					driver.findElement(By.xpath("(//a[@class='banner-cta show-for-medium'])[1]")).click();
-				}
-				else if(campaign.equalsIgnoreCase("sacbjan19")) {
-				}
-			}
+			elementlocator = locator.get(0).get("stglocator").toString();
+			elementvalue = locator.get(0).get("stgvalue").toString();	
 		}
 		else {
-			String elementlocator = locator.get(0).get(env.toLowerCase() + "locator").toString();
-			String elementvalue = locator.get(0).get(env.toLowerCase() + "value").toString();
+			elementlocator = locator.get(0).get(env.toLowerCase() + "locator").toString();
+			elementvalue = locator.get(0).get(env.toLowerCase() + "value").toString();
+		}
 			
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
-				if(driver.findElement(By.xpath("//div[@class='header-promo-slider']")).getAttribute("style").toString().equalsIgnoreCase("display: none;")) {
-					driver.findElement(By.xpath("//div[@class='header-promo']")).click();
-				}
-				else {
-					System.out.println("Hi");
-				}
+		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
+			if(driver.findElement(By.xpath("//div[@class='header-promo-slider']")).getAttribute("style").toString().equalsIgnoreCase("display: none;")) {
+				driver.findElement(By.xpath("//div[@class='header-promo']")).click();
 			}
-			
-			if(!(elementvalue.equalsIgnoreCase("n/a"))) {
-				
-				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-	
-
-				Thread.sleep(2000);
-				//element.click();
-				
-				jse.executeScript("arguments[0].click();", element); 
-
-			}
-		}		
+		}			
+		if(!(elementvalue.equalsIgnoreCase("n/a"))) {
+			WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);	
+			Thread.sleep(2000);
+			//element.click();
+			jse.executeScript("arguments[0].click();", element); 
+		}	
 	}
 	
 	public void click_logo(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException {
@@ -256,6 +146,9 @@ public class BuyflowUtilities {
 			String elementvalue = locator.get(0).get("elementvalue").toString();
 			
 			WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
+//			WebDriverWait wait = new WebDriverWait(driver,50);
+//			wait.until(ExpectedConditions.elementToBeClickable(element));	
+			Thread.sleep(2000);
 			element.click();
 			Thread.sleep(2000);
 		}	
@@ -293,10 +186,7 @@ public class BuyflowUtilities {
 		String elementlocator = locator.get(0).get("elementlocator").toString();
 		String elementvalue = locator.get(0).get("elementvalue").toString();
 		
-
-		
-
-			comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
+		comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
 
 	}
 	
@@ -454,6 +344,7 @@ public class BuyflowUtilities {
 			for(String winHandle : driver.getWindowHandles()){
 			   driver.switchTo().window(winHandle);
 			   driver.manage().window().maximize();
+			   Thread.sleep(2000);
 			}			
 
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
@@ -542,7 +433,7 @@ public class BuyflowUtilities {
 			}		
 			
 
-			if((brand.equalsIgnoreCase("Mally"))||(brand.equalsIgnoreCase("CrepeErase"))){
+			if((brand.equalsIgnoreCase("Mally"))||(brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
 
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}

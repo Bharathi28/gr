@@ -37,13 +37,13 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("F:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 
 	@Test(dataProvider="cartLangInput")
 	public void CompleteValidation(String env, String brand, String campaign, String categories, String browser) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
@@ -159,6 +159,9 @@ public class CartLanguageParallel {
 				System.out.println(output_row_30);
 				System.out.println(output);
 										
+				if(!(ppid.equalsIgnoreCase("BL6R36"))) {
+					
+				
 				if(upsell) {
 					// 90 - Day						
 					bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", "90");
@@ -202,7 +205,7 @@ public class CartLanguageParallel {
 						
 					System.out.println(output_row_90);
 					System.out.println(output);			
-				}
+				}}
 				driver.close();
 			}
 		}
@@ -210,7 +213,7 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "F:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "C:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
 		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);
