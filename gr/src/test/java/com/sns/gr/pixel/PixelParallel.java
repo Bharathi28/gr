@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -65,26 +67,19 @@ public class PixelParallel {
 	static List<String> attachmentList = new ArrayList<String>();
 
 	static String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
-
-//	@BeforeSuite
-//	public void getEmailId() {
-//		Scanner in = new Scanner(System.in);
-//		System.out.println("Enter Email id : ");
-//		sendReportTo = in.next();		
-//	}
 	
 	@DataProvider(name="pixelInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Pixel\\pixel_testdata.xlsx", "Run Data");
+		Object[][] arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "Run Data");
 		return arrayObject;
 	}
 	
 	@Test(dataProvider="pixelInput")
 	public void pixel(String env, String brand, String campaign, String flow, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
-		System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver.exe");
-		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
-		System.setProperty("webdriver.chrome.verboseLogging", "true");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver-v0.26.0-win64/geckodriver.exe");
+//		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
+//		System.setProperty("webdriver.chrome.verboseLogging", "true");
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -236,7 +231,8 @@ public class PixelParallel {
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+//						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
 						
 						WebElement searchElmt = driver.findElement(By.id("search"));
 						wait.until(ExpectedConditions.visibilityOf(searchElmt));
@@ -310,13 +306,13 @@ public class PixelParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel Orders\\");
 		attachmentList.add(file);
 		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, attachmentList);
 	}
 	
 	public static void writeToSheet(HashMap map, String fileName, String sheetName, String flow) throws IOException {	
-		File file = new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx");
+		File file = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx");
 		XSSFWorkbook workbook = null;
 		// Check file existence 
 	    if (file.exists() == false) {
@@ -324,7 +320,7 @@ public class PixelParallel {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
@@ -510,11 +506,11 @@ public class PixelParallel {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File("C:\\Automation\\Pixel\\Pixel_Output\\" + brand + "_" + flow +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
-	    attachmentList.add("C:\\Automation\\Pixel\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
+	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	

@@ -196,7 +196,7 @@ public class PixelUtilities {
 				driver.navigate().refresh();
 			}
 		    Thread.sleep(10000);
-		    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage_" + pattern + "_" + flow +".har");
+		    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage_" + pattern + "_" + flow +".har");
 		}	    
 	    
 	    //////////////////////////////////////////////////////////
@@ -230,7 +230,7 @@ public class PixelUtilities {
 	        
 	    Thread.sleep(10000);
 //	    wait.until(pageLoadCondition);
-	    getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage_" + pattern + "_" + flow +".har");
+	    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage_" + pattern + "_" + flow +".har");
 	    ////////////////////////////////////////////////////////////  
         // Checkout Page	        
         defineNewHar(proxy, brand + "CheckoutPage");
@@ -257,7 +257,7 @@ public class PixelUtilities {
             email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
             
 //    		jse.executeScript("window.scrollBy(0,-200)", 0);
     		
@@ -269,12 +269,12 @@ public class PixelUtilities {
     		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
         }
         else if(flow.equalsIgnoreCase("PaypalFlow")) {
-        	getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+        	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
         	defineNewHar(proxy, brand + "PaypalReviewPage");
         	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
             
 //    		jse.executeScript("window.scrollBy(0,-200)", 0);
         }
@@ -296,7 +296,7 @@ public class PixelUtilities {
         	// Navigate to Confirmation Page	        
         	bf_obj.complete_order(driver, brand, cc);          
             Thread.sleep(10000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
 		}
 		else {
 			// Upsell Page
@@ -304,7 +304,7 @@ public class PixelUtilities {
             // Navigate to Upsell Page	        
             bf_obj.complete_order(driver, brand, cc);
             Thread.sleep(20000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage_" + pattern + "_" + flow +".har");
             
             //////////////////////////////////////////////////////////
             // Confirmation Page	        
@@ -316,7 +316,7 @@ public class PixelUtilities {
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
             Thread.sleep(20000);
-            getHarData(proxy, "C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
             Thread.sleep(3000);
 		}        
 	
@@ -349,7 +349,7 @@ public class PixelUtilities {
 		
         // Save Order Screenshots        
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			
-        ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Pixel\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
+        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
         
         driver.close();
         return output_row;

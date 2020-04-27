@@ -39,7 +39,8 @@ import com.sns.gr.testbase.MailUtilities;
 public class GetChartsDaily {
 
 	MailUtilities mailObj = new MailUtilities();
-	String sendReportTo = "rg@searchnscore.com , indhuja@searchnscore.com , vanitha@searchnscore.com , megavannan@searchnscore.com , sangeetha@searchnscore.com , sangeetha.vellingiri@searchnscore.com , preethi.mani@searchnscore.com , selvakumar@searchnscore.com , banuchitra@searchnscore.com , steephan@searchnscore.com , pavithra@searchnscore.com";
+	String sendReportTo = "rg@searchnscore.com , indhuja@searchnscore.com , vanitha@searchnscore.com , megavannan@searchnscore.com , sangeetha@searchnscore.com , sangeetha.vellingiri@searchnscore.com , preethi.mani@searchnscore.com , selvakumar@searchnscore.com , steephan@searchnscore.com , pavithra@searchnscore.com";
+	
 	@Parameters({ "daycount" })
 	@Test
 	public void catchpointCharts(int count) throws IOException, InterruptedException {
@@ -49,7 +50,7 @@ public class GetChartsDaily {
 			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
 			"VP [Chrome]", "Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
-			"SB Desktop", "SB CXT-Chrome", "dermaflash.com[Desktop]","dermaflash.com[Mobile]",
+			"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","trydermaflash Mobile",
 			"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
 			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
 			"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
@@ -59,9 +60,9 @@ public class GetChartsDaily {
 		
 		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]",
 				"CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop", "SA CXT Desktop",
-				"Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","dermaflash.com[Desktop]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
-				"SubD [Chrome]","Dr. Denese ACQ Desktop", "SeaCalm- Desktop", "SeaCalm Transactional Test - Desktop","VP [Chrome]",
-				"FixMDSkin - Desktop","ITC CXT-Desktop");
+				"Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","trydermaflash Desktop[Chrome]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
+				"SubD [Chrome]", "SeaCalm- Desktop", "SeaCalm Transactional Test - Desktop","VP [Chrome]", "ITC CXT-Desktop",
+				"Dr. Denese ACQ Desktop","FixMDSkin - Desktop");
 
 		ArrayList<String> brandarraylist = new ArrayList<String>();
 		
@@ -76,7 +77,7 @@ public class GetChartsDaily {
 		else {
 			System.out.println("You have entered an invalid number. We are setting 1 day as default");
 		}
-		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		
 		driver.manage().window().maximize();
@@ -167,14 +168,15 @@ public class GetChartsDaily {
 //			int eleHeight = chart.getSize().getHeight();
 		
 			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
+//			BufferedImage eleScreenshot= fullImg.getSubimage(400, 0, 1200, 670);
 			ImageIO.write(eleScreenshot, "png", screenshot);
 				
-			File screenshotLocation = new File("C:\\Automation\\Catchpoint\\" + brand +".png");
+			File screenshotLocation = new File(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + brand +".png");
 			Files.copy(screenshot, screenshotLocation);
 			
 			XSLFSlide slide = ppt.createSlide();
 			
-			File image = new File("C:\\Automation\\Catchpoint\\" + brand +".png");
+			File image = new File(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + brand +".png");
 		    byte[] picture = IOUtils.toByteArray(new FileInputStream(image));
 		    
 		    XSLFPictureData idx = ppt.addPicture(picture, PictureType.PNG);
@@ -185,7 +187,7 @@ public class GetChartsDaily {
 		SimpleDateFormat date_form = new SimpleDateFormat("ddMMyyyy");
 		String date_pptname = date_form.format(date);
 	    
-	    File file = new File("C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+	    File file = new File(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + date_pptname +".pptx");
         FileOutputStream out = new FileOutputStream(file);
       
         //saving the changes to a file
@@ -203,7 +205,7 @@ public class GetChartsDaily {
 		}
 	
 	    List<String> attachmentList = new ArrayList<String>();
-		attachmentList.add("C:\\Automation\\Catchpoint\\" + date_pptname +".pptx");
+		attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + date_pptname +".pptx");
 		
 	    mailObj.sendEmail(subject, sendReportTo, attachmentList);
 	    ppt.close();

@@ -37,13 +37,13 @@ public class CartLanguageParallel {
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\Cart Language Validation\\cartlang_kittestdata.xlsx", "Sheet1");
+		Object[][] arrayObject = comm_obj.getExcelData(System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\cartlang_kittestdata.xlsx", "Sheet1");
 		return arrayObject;
 	}
 
 	@Test(dataProvider="cartLangInput")
 	public void CompleteValidation(String env, String brand, String campaign, String categories, String browser) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
-		System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
 		
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
@@ -213,7 +213,7 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", "C:\\Automation\\Buyflow\\Cart Language Validation\\Kit\\");
+		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\Kit\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
 		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);

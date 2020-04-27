@@ -34,13 +34,12 @@ public class BrowserDriverFactory {
 		// Creating driver
 		switch (browser) {
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
-//			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			break;
 		case "firefox":
-			System.setProperty("webdriver.firefox.driver", "src/main/resources/geckodriver.exe");
+			System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver-v0.26.0-win64/geckodriver.exe");
 			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
 			break;

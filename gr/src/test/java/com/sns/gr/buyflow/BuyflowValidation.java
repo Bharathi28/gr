@@ -55,32 +55,26 @@ public class BuyflowValidation{
 	List<List<String>> output = new ArrayList<List<String>>();
 	String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
 	
-//	@BeforeSuite
-//	public void getEmailId() {
-//		Scanner in = new Scanner(System.in);
-//		System.out.println("Enter Email id : ");
-//		sendReportTo = in.next();
-//	}
-
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
 		Object[][] arrayObject = null;
 
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_WEEK); 
+//		Calendar calendar = Calendar.getInstance();
+//		int day = calendar.get(Calendar.DAY_OF_WEEK); 
 		
-
-		if(day==7){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Saturday_rundata");
-		}
-		else if(day==1){
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Sunday_rundata");
-		}
-		else{
-			arrayObject = comm_obj.getExcelData("C:\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-//			System.out.println(System.getProperty("user.dir"));
-//			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/run_input.xlsx", "rundata");
-		}		
+//		if(day==7){
+//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Saturday_rundata");
+//		}
+//		else if(day==1){
+//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Sunday_rundata");
+//		}
+//		else{
+//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
+////			System.out.println(System.getProperty("user.dir"));
+////			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/run_input.xlsx", "rundata");
+//		}		
+		
+		arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
 		return arrayObject;
 	}
 	
@@ -179,7 +173,6 @@ public class BuyflowValidation{
 			else {
 				category = "Kit";
 			}
-			
 		}
 		
 		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category);
@@ -201,8 +194,8 @@ public class BuyflowValidation{
 		Thread.sleep(2000);
 			
 		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-		ImageIO.write(confpage.getImage(),"PNG",new File("C:\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
-//		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Screenshots\\" + brand + "_" + ppid +".png"));
+//		ImageIO.write(confpage.getImage(),"PNG",new File("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Screenshots\\" + brand + "\\" + campaign + "_" + ppid +".png"));
 			
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
@@ -240,8 +233,8 @@ public class BuyflowValidation{
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "C:\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
-//		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", System.getProperty("user.dir") + "\\Output\\");
+//		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
+		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Run Output\\");
 		
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
