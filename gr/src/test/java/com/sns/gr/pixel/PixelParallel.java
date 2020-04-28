@@ -76,8 +76,8 @@ public class PixelParallel {
 	
 	@Test(dataProvider="pixelInput")
 	public void pixel(String env, String brand, String campaign, String flow, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
-		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver-v0.26.0-win64/geckodriver.exe");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
+		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
 //		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
 //		System.setProperty("webdriver.chrome.verboseLogging", "true");
 				

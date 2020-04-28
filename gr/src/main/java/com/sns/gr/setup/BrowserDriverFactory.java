@@ -22,11 +22,9 @@ public class BrowserDriverFactory {
 	private WebDriver driver;
 	private String browser;
 
-
 	public BrowserDriverFactory(String browser) {
 		this.browser = browser.toLowerCase();
-	}
-	
+	}	
 
 	public WebDriver createDriver() {
 		System.out.println("Starting " + browser + " locally");	
@@ -34,19 +32,18 @@ public class BrowserDriverFactory {
 		// Creating driver
 		switch (browser) {
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			break;
 		case "firefox":
-			System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver-v0.26.0-win64/geckodriver.exe");
+			System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
 			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
 			break;
 		}
 		return driver;
 	}
-
 
 	public WebDriver createDriverGrid() throws MalformedURLException {
 		String hubUrl = "http://192.168.0.22:4444/wd/hub";		
@@ -60,25 +57,22 @@ public class BrowserDriverFactory {
 			chromeOptions = new ChromeOptions();
 	        chromeOptions.setCapability("platform", "WINDOWS");
 	        chromeOptions.setCapability("browserName", "chrome");
-	        
 	        try {
 				driver = new RemoteWebDriver(new URL(hubUrl), chromeOptions);
 				driver.manage().window().maximize();
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-	        
 			break;
+			
 		case "firefox":
 			firefoxOptions = new FirefoxOptions();
-			
 			try {
 				driver = new RemoteWebDriver(new URL(hubUrl), firefoxOptions);
 				driver.manage().window().maximize();
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-			
 			break;
 		}		
 		return driver;

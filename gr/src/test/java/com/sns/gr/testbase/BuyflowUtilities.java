@@ -249,13 +249,9 @@ public class BuyflowUtilities {
 		else {
 			String products = (String) jse.executeScript("return app.variableMap.products");
 			String[] arr = products.split(";");
-			
 			int arrSize = arr.length;
-			System.out.println("arrSize:" + arrSize);
 			for(int i=1; i<arrSize; i=i+3) {
-				System.out.println(i);
 				offercode = offercode + arr[i] + ",";
-				System.out.println(offercode);
 			}
 			offercode = offercode.substring(0, offercode.length() - 1);
 		}		
@@ -481,52 +477,4 @@ public class BuyflowUtilities {
 		int rnd = new Random().nextInt(arr.length);
 	    return arr[rnd];
 	}
-	
-//	public String calculateKitProductCount(String[] arr, String brand, String campaign) throws ClassNotFoundException, SQLException {
-//		String result = "";
-//		int kit_count = 0;
-//		int prod_count = 0;
-//		
-//		for(String code : arr) {
-//			List<Map<String, Object>> offerdata = get_offerdata(code, brand, campaign);
-//			String category = offerdata.get(0).get("category").toString();
-//			if(category.equalsIgnoreCase("kit")) {
-//				kit_count++;
-//			}
-//			else if(category.equalsIgnoreCase("product")) {
-//				prod_count++;
-//			}
-//		}
-//		result = kit_count + " kit " + prod_count + " product";
-//		return result;
-//	}
-	
-//	public void calculateIndividualProductCount(String[] arr, int count, String brand, String campaign) throws ClassNotFoundException, SQLException {
-//		List<String> products = new ArrayList<String>();
-//		HashMap<String,Integer> prodCount=new LinkedHashMap<String,Integer>();
-//		
-//		for(String code : arr) {
-//			List<Map<String, Object>> offerdata = get_offerdata(code, brand, campaign);
-//			String category = offerdata.get(0).get("category").toString();
-//			
-//			if(category.equalsIgnoreCase("product")) {
-//				if(!(products.contains(code))) {
-//					products.add(code);
-//				}
-//			}
-//		}				
-//		System.out.println(products);
-//		
-//		for(String code : products) {
-//			int number = 0;
-//			for(String offer : arr) {
-//				if(offer.equalsIgnoreCase(code)) {
-//					number++;
-//				}
-//			}
-//			System.out.println(code + " : " + number);
-//			prodCount.put(code, number);
-//		}
-//		System.out.println(prodCount);
-//	}
 }

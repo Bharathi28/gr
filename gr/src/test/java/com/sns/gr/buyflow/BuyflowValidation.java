@@ -53,7 +53,14 @@ public class BuyflowValidation{
 	MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
+	String sendReportTo = "";
+	
+	@BeforeSuite
+	public void getEmailId() {
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter Email id : ");
+		sendReportTo = in.next();
+	}
 	
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {

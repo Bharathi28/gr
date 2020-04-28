@@ -77,7 +77,7 @@ public class GetChartsDaily {
 		else {
 			System.out.println("You have entered an invalid number. We are setting 1 day as default");
 		}
-		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		
 		driver.manage().window().maximize();

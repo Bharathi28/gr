@@ -202,12 +202,15 @@ public class CartLangUtilities {
 					cart_lang = "No Cart Language";
 				}
 			}
-			else if((brand.equalsIgnoreCase("Marajo")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("Sub-D"))){
+			else if((brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("Sub-D"))){
 				if(driver.findElements(By.xpath("//div[@class='shortDescription']//p[2]//strong")).size() != 0) {
 					cart_lang = driver.findElement(By.xpath("//div[@class='shortDescription']//p[2]//strong")).getText();
 				}
 				else if(driver.findElements(By.xpath("//div[@class='shortDescription']//p[3]//strong")).size() != 0) {
 					cart_lang = driver.findElement(By.xpath("//div[@class='shortDescription']//p[3]//strong")).getText();
+				}
+				else if(driver.findElements(By.xpath("//div[@class='shortDescription']//p[5]//strong")).size() != 0) {
+					cart_lang = driver.findElement(By.xpath("//div[@class='shortDescription']//p[5]//strong")).getText();
 				}
 				else {
 					cart_lang = "No Cart Language";

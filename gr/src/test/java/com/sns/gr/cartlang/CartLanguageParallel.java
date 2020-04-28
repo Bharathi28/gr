@@ -43,7 +43,7 @@ public class CartLanguageParallel {
 
 	@Test(dataProvider="cartLangInput")
 	public void CompleteValidation(String env, String brand, String campaign, String categories, String browser) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
-		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
 		
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
@@ -157,10 +157,7 @@ public class CartLanguageParallel {
 				output.add(output_row_30);
 						
 				System.out.println(output_row_30);
-				System.out.println(output);
-										
-				if(!(ppid.equalsIgnoreCase("BL6R36"))) {
-					
+				System.out.println(output);					
 				
 				if(upsell) {
 					// 90 - Day						
@@ -205,7 +202,7 @@ public class CartLanguageParallel {
 						
 					System.out.println(output_row_90);
 					System.out.println(output);			
-				}}
+				}
 				driver.close();
 			}
 		}
