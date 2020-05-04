@@ -34,17 +34,17 @@ public class BuyflowUtilities {
 		else if(category.equalsIgnoreCase("subscribe")) {
 			step="Shop";
 		}
-		String query = "select * from cta_locators where brand='" + brand + "' and campaign='" + campaign + "' and step='" + step + "';";
+		String query = "select * from cta_locators where brand='" + brand + "' and campaign='" + campaign + "' and step='" + step + "'";
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		String elementlocator = "";
 		String elementvalue = "";
 		if(env.toLowerCase().contains("dev")){
-			elementlocator = locator.get(0).get("stglocator").toString();
-			elementvalue = locator.get(0).get("stgvalue").toString();	
+			elementlocator = locator.get(0).get("STGLOCATOR").toString();
+			elementvalue = locator.get(0).get("STGVALUE").toString();	
 		}
 		else {
-			elementlocator = locator.get(0).get(env.toLowerCase() + "locator").toString();
-			elementvalue = locator.get(0).get(env.toLowerCase() + "value").toString();
+			elementlocator = locator.get(0).get(env + "LOCATOR").toString();
+			elementvalue = locator.get(0).get(env + "VALUE").toString();
 		}
 			
 		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
@@ -64,7 +64,7 @@ public class BuyflowUtilities {
 		List<Map<String, Object>> logo_locators = comm_obj.get_element_locator(brand, campaign, "Logo", null);
 		for(Map<String,Object> logo : logo_locators) {
 			
-			String elementvalue = logo.get("elementvalue").toString();
+			String elementvalue = logo.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				driver.findElement(By.xpath(elementvalue)).click();
 				break;
@@ -101,7 +101,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode) throws ClassNotFoundException, SQLException, InterruptedException {
-		
+		System.out.println("Moving to SAS Page...");
 		if((offercode.contains("single")) || (checkIfProduct(brand, campaign, offercode))){
 			if(checkIfShopKit(brand, campaign, offercode)) {
 				click_cta(driver,env,brand,campaign,"ShopKit");
@@ -117,6 +117,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String offer, int singlecheck) throws InterruptedException, ClassNotFoundException, SQLException {
+		System.out.println("Moving to Checkout Page...");
 		String category;
 		if(offer.contains(",")) {
 			category = "Product";
@@ -142,8 +143,8 @@ public class BuyflowUtilities {
 		else {			
 			List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "MoveToCheckout", category);
 			
-			String elementlocator = locator.get(0).get("elementlocator").toString();
-			String elementvalue = locator.get(0).get("elementvalue").toString();
+			String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
+			String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 			
 			WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
 //			WebDriverWait wait = new WebDriverWait(driver,50);
@@ -169,7 +170,6 @@ public class BuyflowUtilities {
 			else {
 				ppu = "No";
 			}
-				
 		}
 		else {
 			ppu = db_obj.checkPPUPresent(brand, campaign);
@@ -183,8 +183,8 @@ public class BuyflowUtilities {
 				
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "Upsell", upsell);
 			
-		String elementlocator = locator.get(0).get("elementlocator").toString();
-		String elementvalue = locator.get(0).get("elementvalue").toString();
+		String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
+		String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 		
 		comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
 
@@ -272,6 +272,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException, InterruptedException {
+		System.out.println("Completing Order");
 		WebDriverWait wait = new WebDriverWait(driver,50);
 		String realm = DBUtilities.get_realm(brand);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -303,11 +304,11 @@ public class BuyflowUtilities {
 	
 	public void fill_form_field(WebDriver driver, String realm, String field, String value) throws ClassNotFoundException, SQLException {
 		
-		String query = "select * from form_fields_locators where realm='" + realm + "' and form='Checkout' and field='" + field + "';";
+		String query = "select * from form_fields_locators where realm='" + realm + "' and form='Checkout' and field='" + field + "'";
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
 		
-		String elementlocator = locator.get(0).get("elementlocator").toString();
-		String elementvalue = locator.get(0).get("elementvalue").toString();
+		String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
+		String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 		
 		if((field.equalsIgnoreCase("State")) || (field.equalsIgnoreCase("Month")) || (field.equalsIgnoreCase("Year"))){
 			Select sel_element = new Select(comm_obj.find_webelement(driver, elementlocator, elementvalue));
@@ -383,7 +384,7 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "FirstName", firstName());
 			fill_form_field(driver, realm, "LastName", lastName());
 			fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
-			
+//			fill_form_field(driver, realm, "AddressLine1", "123 Anywhere street");
 			if(campaign.equalsIgnoreCase("ca")) {
 				fill_form_field(driver, realm, "City", "Anywhere");
 				fill_form_field(driver, realm, "State", "NB");		

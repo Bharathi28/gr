@@ -26,6 +26,7 @@ public class BrowserDriverFactory {
 		this.browser = browser.toLowerCase();
 	}	
 
+	@SuppressWarnings("deprecation")
 	public WebDriver createDriver() {
 		System.out.println("Starting " + browser + " locally");	
 
@@ -33,9 +34,20 @@ public class BrowserDriverFactory {
 		switch (browser) {
 		case "chrome":
 			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
-			driver = new ChromeDriver();
+			
+			ChromeOptions options = new ChromeOptions();
+		    options.addArguments("--ignore-certificate-errors");
+
+		    // configure it as a desired capability
+		    DesiredCapabilities capabilities = new DesiredCapabilities();
+		    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+		    capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+		    capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+		    
+			driver = new ChromeDriver(capabilities);
 			driver.manage().window().maximize();
 			break;
+			
 		case "firefox":
 			System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
 			driver = new FirefoxDriver();

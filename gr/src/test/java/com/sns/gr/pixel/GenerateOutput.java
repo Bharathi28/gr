@@ -11,7 +11,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,13 +37,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.sns.gr.testbase.CommonUtilities;
 import com.sns.gr.testbase.DBUtilities;
+import com.sns.gr.testbase.MailUtilities;
 import com.sns.gr.testbase.PixelUtilities;
 
 import net.lightbody.bmp.BrowserMobProxy;
@@ -46,30 +59,49 @@ import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 
 public class GenerateOutput {
-	static CommonUtilities comm_obj = new CommonUtilities();
 
-	@Test
-	public void output() throws IOException, ClassNotFoundException, SQLException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
-		
+	static CommonUtilities comm_obj = new CommonUtilities();
+	static MailUtilities mailObj = new MailUtilities();
+	
+	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
+	static List<String> attachmentList = new ArrayList<String>();
+
+	static String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
+	
+	@DataProvider(name="pixelInput", parallel=true)
+	public Object[][] testData() {
+		Object[][] arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "Run Data");
+		return arrayObject;
+	}
+	
+	@Test(dataProvider="pixelInput")
+	public void pixel(String env, String brand, String campaign, String flow, String pixelStr) throws IOException, ClassNotFoundException, SQLException, InterruptedException {
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
+		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
+//		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
+//		System.setProperty("webdriver.chrome.verboseLogging", "true");
+				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
 	    proxy.setTrustAllServers(true);
 	    proxy.start(0);
 
 	    // get the Selenium proxy object
-	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+	    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);	    
+	    
+	    ChromeOptions options = new ChromeOptions();
+	    options.addArguments("--ignore-certificate-errors");
 
 	    // configure it as a desired capability
 	    DesiredCapabilities capabilities = new DesiredCapabilities();
+	    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 	    capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+	    capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+	    capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 	    
-	    DBUtilities db_obj = new DBUtilities();
-		PixelUtilities pixel_obj = new PixelUtilities();
-		
-		List<List<String>> output = new ArrayList<List<String>>();
-		
-		List<String> header_list = new ArrayList<String>();
+	    List<List<String>> output = new ArrayList<List<String>>();
+	    
+	    List<String> header_list = new ArrayList<String>();
 		header_list.add("Test Run Environment");
 		header_list.add("Brand");
 		header_list.add("Campaign");
@@ -79,155 +111,157 @@ public class GenerateOutput {
 		header_list.add("Status Code");
 		header_list.add("Data URL");
 		output.add(header_list);
+	    
+	    DBUtilities db_obj = new DBUtilities();
+		PixelUtilities pixel_obj = new PixelUtilities();		
 		
-		File input_file = new File("F:\\Automation\\Pixel\\pixel_testdata.xlsx");
-		FileInputStream inputstream = new FileInputStream(input_file);
-		Workbook testData = new XSSFWorkbook(inputstream);
-		Sheet dataSheet = testData.getSheet("Run Data");
-		Row row;
+		String realm = DBUtilities.get_realm(brand);
+		
 		HashMap<Integer, HashMap> overallOutput = new LinkedHashMap<Integer, HashMap>();
-		
-		for(int itr = 1; itr <= dataSheet.getLastRowNum(); itr++) {
-						
-			row = dataSheet.getRow(itr);
-			if(row == null) {
-				continue;
-			}
-			
-			String env = row.getCell(0).getStringCellValue();					
-			String brand = row.getCell(1).getStringCellValue();
-			String campaign = row.getCell(2).getStringCellValue();
-			String flow = row.getCell(3).getStringCellValue();
-			String pixelStr = row.getCell(4).getStringCellValue();	
-			
-			WebDriver driver = new ChromeDriver();
-	        driver.manage().window().maximize();
-	        driver.get("https://ericduran.github.io/chromeHAR/");
-	        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+											
+		WebDriver driver = new ChromeDriver();
+	    driver.manage().window().maximize();
+	    driver.get("https://ericduran.github.io/chromeHAR/");
+	    WebDriverWait wait = new WebDriverWait(driver,50);
+//	    driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	    
+	    if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
+			driver.findElement(By.xpath("//button[@id='details-button']")).click();
+			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
+		}
 	        
-			String[] pixelArr = pixelStr.split(",");		
-						
-			int j=1;
-			for(String pixel : pixelArr) {	
+	    String[] pixelArr = pixelStr.split(",");		
+			
+		int j=1;
+		for(String pixel : pixelArr) {	
 				
-				HashMap<String, HashMap> envMap = new LinkedHashMap<String, HashMap>();
-				HashMap<String, HashMap> brandMap = new LinkedHashMap<String, HashMap>();
-				HashMap<String, HashMap> campaignMap = new LinkedHashMap<String, HashMap>();
-				HashMap<String, List<HashMap>> pixelMap = new LinkedHashMap<String, List<HashMap>>();
+			HashMap<String, HashMap> envMap = new LinkedHashMap<String, HashMap>();
+			HashMap<String, HashMap> brandMap = new LinkedHashMap<String, HashMap>();
+			HashMap<String, HashMap> campaignMap = new LinkedHashMap<String, HashMap>();
+			HashMap<String, List<HashMap>> pixelMap = new LinkedHashMap<String, List<HashMap>>();
 								
-				List<String> events = db_obj.getAllEvents(pixel);		
+			List<String> events = db_obj.getAllEvents(pixel);		
 				
-				String urlpattern = "";
-			    if(pixel.toLowerCase().contains("cake")) {
-			    	urlpattern = "Cake";
-			    }
-			    else if(pixel.toLowerCase().contains("harmonyconversiontracking")) {
-			    	urlpattern = "HarmonyConversionTracking";
-			    }
-			    else if(pixel.toLowerCase().contains("linkshare")) {
-			    	urlpattern = "Linkshare";
-			    }
-			    else if(pixel.toLowerCase().contains("starmobile")) {
-			    	urlpattern = "StarMobile";
-			    }
-			    else if(pixel.toLowerCase().contains("data+math")) {
-			    	urlpattern = "Data+Math";
-			    }
-			    else if(pixel.toLowerCase().contains("propelmedia")) {
-			    	urlpattern = "PropelMedia";
-			    }
-			    List<HashMap> eventmapList = new ArrayList<HashMap>();
-				for(String event : events) {					
-					HashMap<String, List<HashMap>> eventMap = new LinkedHashMap<String, List<HashMap>>();
-					System.out.println();
-					System.out.println(event);
+			String urlpattern = "";
+			if(pixel.toLowerCase().contains("cake")) {
+				urlpattern = "Cake";
+			}
+			else if(pixel.toLowerCase().contains("harmonyconversiontracking")) {
+			   	urlpattern = "HarmonyConversionTracking";
+			}
+			else if(pixel.toLowerCase().contains("linkshare")) {
+			    urlpattern = "Linkshare";
+			}
+			else if(pixel.toLowerCase().contains("starmobile")) {
+				urlpattern = "StarMobile";
+			}
+			else if(pixel.toLowerCase().contains("data+math")) {
+				urlpattern = "Data+Math";
+			}
+			else if(pixel.toLowerCase().contains("propelmedia")) {
+			    urlpattern = "PropelMedia";
+			}
+			List<HashMap> eventmapList = new ArrayList<HashMap>();
+			for(String event : events) {					
+				HashMap<String, List<HashMap>> eventMap = new LinkedHashMap<String, List<HashMap>>();
+				System.out.println();
+				System.out.println(event);
 									
-					int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
-					if(compatible == 1) {
-						List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
+				int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
+				if(compatible == 1) {
+					List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 						
-						String pattern = db_obj.getSearchPattern(brand, event);
-						String pixelbrandid = db_obj.getPixelBrandId(brand, event);
+					String pattern = db_obj.getSearchPattern(brand, event);
+					String pixelbrandid = db_obj.getPixelBrandId(brand, event);
 						
-						String[] pixelIdArr = pixelbrandid.split(",");						
+					String[] pixelIdArr = pixelbrandid.split(",");						
 						
-						List<HashMap> pagemapList = new ArrayList<HashMap>();
-						for(String page : pages) {													
-							HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
-				        	System.out.println(page);
-							driver.findElement(By.name("har")).sendKeys("F:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + urlpattern + ".har");
-				            Thread.sleep(2000);
-				            driver.findElement(By.id("search")).clear();
-				            driver.findElement(By.id("search")).sendKeys(pattern);
-				            Thread.sleep(2000);
+					List<HashMap> pagemapList = new ArrayList<HashMap>();
+					for(String page : pages) {													
+						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
+				        System.out.println(page);
+//						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+						
+						WebElement searchElmt = driver.findElement(By.id("search"));
+						wait.until(ExpectedConditions.visibilityOf(searchElmt));
+//						Thread.sleep(2000);
+				        driver.findElement(By.id("search")).clear();
+				        driver.findElement(By.id("search")).sendKeys(pattern);
+				        Thread.sleep(2000);
 				            
-				            int noOfRows = driver.findElements(By.xpath("//tr[contains(@class, 'revealed network-item')]")).size();
+				        int noOfRows = driver.findElements(By.xpath("//tr[contains(@class, 'revealed network-item')]")).size();
 				            
-				            List<List<String>> outputList = new ArrayList<List<String>>();
-				            for(int i=1; i<=noOfRows; i++) {			            	
+				        List<List<String>> outputList = new ArrayList<List<String>>();
+				        for(int i=1; i<=noOfRows; i++) {			            	
 					            	
-					            String dataurl = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='name-column'])[" + i + "]")).getAttribute("title").toLowerCase();
-					            String statuscode = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='status-column'])[" + i + "]")).getAttribute("title").toLowerCase();
+					        String dataurl = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='name-column'])[" + i + "]")).getAttribute("title").toLowerCase();
+					        String statuscode = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='status-column'])[" + i + "]")).getAttribute("title").toLowerCase();
 					            
-					            for(String id : pixelIdArr) {
-					            	if(!(id.equalsIgnoreCase(" "))) {
-					            		if(pattern.equalsIgnoreCase("-")) {
-					            			if(dataurl.contains(id.toLowerCase())) {
-					            				List<String> outputData = new ArrayList<String>();
-												outputData.add(statuscode);
-												outputData.add(dataurl);
-												outputList.add(outputData);
-												System.out.println(i + " " + statuscode + " " + dataurl);
-					            			}
+					        for(String id : pixelIdArr) {
+					        	if(!(id.equalsIgnoreCase(" "))) {
+					            	if(pattern.equalsIgnoreCase("-")) {
+					            		if(dataurl.contains(id.toLowerCase())) {
+					            			List<String> outputData = new ArrayList<String>();
+											outputData.add(statuscode);
+											outputData.add(dataurl);
+											outputList.add(outputData);
+											System.out.println(i + " " + statuscode + " " + dataurl);
 					            		}
-					            		else {
-					            			if((dataurl.contains(pattern.toLowerCase())) && (dataurl.contains(id.toLowerCase()))) {
-												List<String> outputData = new ArrayList<String>();
-												outputData.add(statuscode);
-												outputData.add(dataurl);
-												outputList.add(outputData);
-												System.out.println(i + " " + statuscode + " " + dataurl);
-					            			}					            			
-										}
-									}
-									else {
-										if(dataurl.contains(pattern.toLowerCase())) {
+					            	}
+					            	else {
+					            		if((dataurl.contains(pattern.toLowerCase())) && (dataurl.contains(id.toLowerCase()))) {
 											List<String> outputData = new ArrayList<String>();
 											outputData.add(statuscode);
 											outputData.add(dataurl);
 											outputList.add(outputData);
 											System.out.println(i + " " + statuscode + " " + dataurl);
-										}
-									}		
-					            }										            		
-					        } // end of rows
-				            if(outputList.size() == 0) {
-				            	List<String> outputData = new ArrayList<String>();
-								outputData.add(" ");
-								outputData.add(" ");
-								outputList.add(outputData);
-				            }		            				            
-				            pageMap.put(page, outputList);
-				            pagemapList.add(pageMap);
-				        } // end of pages						
-						eventMap.put(event, pagemapList);
-					} // end of compatible if
-					eventmapList.add(eventMap);					
-				} // end of events
-				pixelMap.put(pixel, eventmapList);
-				campaignMap.put(campaign, pixelMap);
-				brandMap.put(brand, campaignMap);
-				envMap.put(env, brandMap);		
-				overallOutput.put(j++, envMap);
-			} // end of pixels
-			writeToSheet(overallOutput, brand, campaign);
-		} // end of brands
-		testData.close();
-		inputstream.close();
+					            		}					            			
+									}
+								}
+								else {
+									if(dataurl.contains(pattern.toLowerCase())) {
+										List<String> outputData = new ArrayList<String>();
+										outputData.add(statuscode);
+										outputData.add(dataurl);
+										outputList.add(outputData);
+										System.out.println(i + " " + statuscode + " " + dataurl);
+									}
+								}		
+					        }										            		
+					    } // end of rows
+				        if(outputList.size() == 0) {
+				            List<String> outputData = new ArrayList<String>();
+							outputData.add(" ");
+							outputData.add(" ");
+							outputList.add(outputData);
+				        }		            				            
+				        pageMap.put(page, outputList);
+				        pagemapList.add(pageMap);
+				    } // end of pages						
+					eventMap.put(event, pagemapList);
+				} // end of compatible if
+				eventmapList.add(eventMap);					
+			} // end of events
+			pixelMap.put(pixel, eventmapList);
+			campaignMap.put(campaign, pixelMap);
+			brandMap.put(brand, campaignMap);
+			envMap.put(env, brandMap);		
+			overallOutput.put(j++, envMap);
+		} // end of pixels
+		writeToSheet(overallOutput, brand, campaign, flow);
+		driver.close();
 	} // end of main
 	
-	public static void writeToSheet(HashMap map, String fileName, String sheetName) throws IOException {	
-		File file = new File("F:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx");
+	@AfterSuite
+	public void populateExcel() throws IOException {
+		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel Orders\\");
+		attachmentList.add(file);
+		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, attachmentList);
+	}
+	
+	public static void writeToSheet(HashMap map, String fileName, String sheetName, String flow) throws IOException {	
+		File file = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx");
 		XSSFWorkbook workbook = null;
 		// Check file existence 
 	    if (file.exists() == false) {
@@ -235,7 +269,7 @@ public class GenerateOutput {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + fileName + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
@@ -421,10 +455,11 @@ public class GenerateOutput {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File("F:\\Automation\\Pixel\\Pixel_Output\\" + brand +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
+	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	
@@ -439,4 +474,4 @@ public class GenerateOutput {
 	    RegionUtil.setBorderLeft(mergedcell.getCellStyle().getBorderLeft(), region, sheet);
 	    RegionUtil.setBorderRight(mergedcell.getCellStyle().getBorderRight(), region, sheet);
 	}
-} // end of class
+}

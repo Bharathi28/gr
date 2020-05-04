@@ -271,8 +271,8 @@ public class CommonUtilities {
 		if(offer != null) {
 			query = query + include_offer;
 		}
-		query = query + ";";
-			
+//		query = query + ";";
+//			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}

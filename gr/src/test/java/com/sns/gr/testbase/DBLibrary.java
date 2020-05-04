@@ -28,6 +28,13 @@ private static Connection connection = null;
 			connection = DriverManager.getConnection(dbUrl,username,password);
 			
 			return connection;
+			
+//			String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+//		    String connectionURL = "jdbc:derby:grdatabase;";
+//		    Class.forName(driver);
+//            connection = DriverManager.getConnection(connectionURL);
+//
+//            return connection;
 		}
 	}
 		

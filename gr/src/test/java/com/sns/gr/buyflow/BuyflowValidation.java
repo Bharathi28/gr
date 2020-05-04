@@ -51,13 +51,13 @@ public class BuyflowValidation{
 	DBUtilities db_obj = new DBUtilities();
 	PricingUtilities pr_obj = new PricingUtilities();
 	MailUtilities mailObj = new MailUtilities();
+	Scanner in = new Scanner(System.in);
 	
 	List<List<String>> output = new ArrayList<List<String>>();
 	String sendReportTo = "";
 	
 	@BeforeSuite
 	public void getEmailId() {
-		Scanner in = new Scanner(System.in);
 		System.out.println("Enter Email id : ");
 		sendReportTo = in.next();
 	}
@@ -91,7 +91,8 @@ public class BuyflowValidation{
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
 		driver.get(url);
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);		
+		System.out.println("Loaded " + brand + " site...");
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);		
 		
 		if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
 			driver.findElement(By.xpath("//button[@id='details-button']")).click();
@@ -102,8 +103,8 @@ public class BuyflowValidation{
 		String str = "";
 		String[] offer_array = ppid.split(",");		
 		String kit_offercode = offer_array[0];
-			
-		for(int i = 0; i < offer_array.length; i++) {				
+		
+		for(int i = 0; i < offer_array.length; i++) {			
 			if((offer_array[i].contains("single")) || (bf_obj.checkIfProduct(brand, campaign, offer_array[i]))){
 				singleCheck = 1;
 			}
@@ -183,7 +184,7 @@ public class BuyflowValidation{
 		}
 		
 		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category);
-		String upsell = offerdata.get("upgrade").toString().toLowerCase();		
+		String upsell = offerdata.get("UPGRADE").toString();		
 		
 		if(category.equalsIgnoreCase("Kit")) {
 			if(ppu.equalsIgnoreCase("Yes")) {

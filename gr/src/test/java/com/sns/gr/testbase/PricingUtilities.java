@@ -59,7 +59,7 @@ public class PricingUtilities {
 			query = query + include_offer;
 		}
 		
-		query = query + ";";
+//		query = query + ";";
 			
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
 		return locator;		
@@ -69,11 +69,11 @@ public class PricingUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		
 		Map<String, Object> offerdata = DBUtilities.get_offerdata(offercode, brand, campaign, "Kit");
-		String kit_name = offerdata.get("description").toString();
+		String kit_name = offerdata.get("DESCRIPTION").toString();
 		
 		List<Map<String, Object>> locator = get_pricing_locator(realm, brand, campaign, "SAS Current Price",kit_name);	
-		if(!(locator.get(0).get("elementvalue").toString().equalsIgnoreCase("n/a"))) {
-			WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString());
+		if(!(locator.get(0).get("ELEMENTVALUE").toString().equalsIgnoreCase("n/a"))) {
+			WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("ELEMENTLOCATOR").toString(), locator.get(0).get("ELEMENTVALUE").toString());
 			String current_price = elmt.getText();	
 			return current_price;
 		}
@@ -87,7 +87,7 @@ public class PricingUtilities {
 		String strike = "";
 		if(brand.equalsIgnoreCase("R4")) {			
 			List<Map<String, Object>> locator = get_pricing_locator(realm, null, null, "SAS Strike", null);
-			WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString());
+			WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("ELEMENTLOCATOR").toString(), locator.get(0).get("ELEMENTVALUE").toString());
 			strike = elmt.getText();	
 		}		
 		return strike;
@@ -97,11 +97,11 @@ public class PricingUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		Map<String, Object> offerdata = DBUtilities.get_offerdata(offercode, brand, campaign, "Product");
-		String kit_name = offerdata.get("description").toString();
+		String kit_name = offerdata.get("DESCRIPTION").toString();
 		
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "Product", kit_name);
 				
-		while(comm_obj.find_mulwebelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString()).size() == 0){
+		while(comm_obj.find_mulwebelement(driver, locator.get(0).get("ELEMENTLOCATOR").toString(), locator.get(0).get("ELEMENTVALUE").toString()).size() == 0){
 			jse.executeScript("window.scrollBy(0,1000)", 0);
 		}
 		
@@ -112,10 +112,10 @@ public class PricingUtilities {
 		String shop_price = null;
 		
 		if(brand.equalsIgnoreCase("Mally")) {
-			shop_price = driver.findElement(By.xpath(locator.get(0).get("elementvalue").toString() + "//span[@class='current-price oneshotPrice out-btn-price']")).getText();
+			shop_price = driver.findElement(By.xpath(locator.get(0).get("ELEMENTVALUE").toString() + "//span[@class='current-price oneshotPrice out-btn-price']")).getText();
 		}
 		else if(brand.equalsIgnoreCase("WestmoreBeauty")){
-			shop_price = driver.findElement(By.xpath(locator.get(0).get("elementvalue").toString() + "/..//span")).getText();
+			shop_price = driver.findElement(By.xpath(locator.get(0).get("ELEMENTVALUE").toString() + "/..//span")).getText();
 		}		
 		return shop_price;
 	}
@@ -140,7 +140,7 @@ public class PricingUtilities {
 String text = "";
 		for(Map<String,Object> loc : locator) {
 			
-			String elementvalue = loc.get("elementvalue").toString();
+			String elementvalue = loc.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				text = driver.findElement(By.xpath(elementvalue)).getText();
 				break;

@@ -218,14 +218,12 @@ public class PixelUtilities {
 	        bf_obj.click_cta(driver, env, brand, campaign, "Kit");
 	        sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
+	    else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
+	    	bf_obj.click_cta(driver, env, brand, campaign, "Kit");
+	    	sas_obj.select_kit(driver, offerdata, brand, campaign);
+	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, campaign, "Kit");
-//	    	 if((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("pnlg"))){
-//	    		 driver.findElement(By.xpath("//a[@class='banner-cta button']")).click();
-//	    	 }
-//	    	 else if((campaign.equalsIgnoreCase("deluxe20off")) || (campaign.equalsIgnoreCase("mb7deluxe20off")) || (campaign.equalsIgnoreCase("pnlsys"))) {
-//	    		 driver.findElement(By.xpath("//a[@class='button cta-button']")).click();
-//	    	 }
 	    }
 	        
 	    Thread.sleep(10000);
@@ -237,6 +235,8 @@ public class PixelUtilities {
         if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
         	sas_obj.select_kitshade(driver, offerdata, brand, campaign);
         	sas_obj.select_duo(driver, offerdata, brand, campaign);
+        }
+        else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
         }
         else {
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata);
@@ -311,7 +311,7 @@ public class PixelUtilities {
             defineNewHar(proxy, brand + "ConfirmationPage");
             
             String upsell_value = "";
-   			upsell_value = offerdata.get("upgrade").toString();
+   			upsell_value = offerdata.get("UPGRADE").toString();
     	    		
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
@@ -320,7 +320,7 @@ public class PixelUtilities {
             Thread.sleep(3000);
 		}        
 	
-		String expected_ppid = offerdata.get("ppid").toString();
+		String expected_ppid = offerdata.get("PPID").toString();
 		System.out.println("Expcted PPID : " + expected_ppid);
 		
         String actual_conf_ppid = bf_obj.fetch_confoffercode(driver, brand, false);
@@ -349,7 +349,7 @@ public class PixelUtilities {
 		
         // Save Order Screenshots        
         Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			
-        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("ppid").toString() +".png"));	
+        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
         
         driver.close();
         return output_row;

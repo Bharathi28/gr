@@ -13,7 +13,7 @@ public class CartLangUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";		
 		
-		String query1 = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "';";
+		String query1 = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "'";
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query1);
 		
 		System.out.println(brand);
@@ -26,7 +26,7 @@ public class CartLangUtilities {
 	
 	public String checkOffers(String brand, String campaign, String kitName) throws ClassNotFoundException, SQLException {
 		
-		String query = "select * from campaign_offers where brand='" + brand + "' and campaign='" + campaign + "' and kit='" + kitName + "';";
+		String query = "select * from campaign_offers where brand='" + brand + "' and campaign='" + campaign + "' and kit='" + kitName + "'";
 		System.out.println(query);
 		
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
@@ -39,7 +39,7 @@ public class CartLangUtilities {
 	}
 	
 	public Map<String, Object> getOffers(String brand, String campaign, String kitName) throws ClassNotFoundException, SQLException {		
-		String query = "select * from campaign_offers where brand='" + brand + "' and campaign='" + campaign + "' and kit='" + kitName + "';";
+		String query = "select * from campaign_offers where brand='" + brand + "' and campaign='" + campaign + "' and kit='" + kitName + "'";
 		System.out.println(query);
 		
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
@@ -174,6 +174,9 @@ public class CartLangUtilities {
 		if(realm.equalsIgnoreCase("R4")) {
 			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
 				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
+			}
+			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
+				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
 			}
 			else {
 				cart_lang = "No Cart Language";
