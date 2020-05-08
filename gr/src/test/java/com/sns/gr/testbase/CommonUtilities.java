@@ -190,11 +190,11 @@ public class CommonUtilities {
 			header_list.add("Environment");
 			header_list.add("Brand");
 			header_list.add("Campaign");
+			header_list.add("Category");
 			header_list.add("e-mail");
 			header_list.add("Expected PPID");
 			header_list.add("Actual PPID");
 			header_list.add("Confirmation Number");
-			header_list.add("Email Received");
 			header_list.add("Checkout Pricing");		
 			header_list.add("Confirmation Pricing");
 			header_list.add("Shipping Billing");
@@ -272,7 +272,7 @@ public class CommonUtilities {
 			query = query + include_offer;
 		}
 //		query = query + ";";
-//			System.out.println(query);
+			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}

@@ -57,10 +57,7 @@ public class PricingUtilities {
 		}
 		if(offer != null) {
 			query = query + include_offer;
-		}
-		
-//		query = query + ";";
-			
+		}					
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
 		return locator;		
 	}
@@ -123,10 +120,10 @@ public class PricingUtilities {
 	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {
 		String realm = DBUtilities.get_realm(brand);	
 		List<Map<String, Object>> locator = null;
-		if((pricing.contains("Checkout")) || (pricing.contains("Paypal"))){
+		if(pricing.contains("Checkout")){
 			locator = get_pricing_locator(realm, null, null, pricing, null);		
 		}
-		else if(pricing.contains("Confirmation")) {
+		else if((pricing.contains("Confirmation")) || (pricing.contains("Paypal"))){
 			if(realm.equalsIgnoreCase("R4")) {
 				locator = get_pricing_locator(realm, null, null, pricing, null);
 			}
@@ -134,10 +131,7 @@ public class PricingUtilities {
 				locator = get_pricing_locator(realm, brand, null, pricing, null);
 			}
 		}
-//		WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("elementlocator").toString(), locator.get(0).get("elementvalue").toString());
-//		String text = elmt.getText();							
-//		return text;
-String text = "";
+		String text = "";
 		for(Map<String,Object> loc : locator) {
 			
 			String elementvalue = loc.get("ELEMENTVALUE").toString();

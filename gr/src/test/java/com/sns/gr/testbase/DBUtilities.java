@@ -18,9 +18,9 @@ public class DBUtilities {
 		String realm = get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "'";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-//		System.out.println(query);
+		System.out.println(query);
 		return offerdata.get(0);		
 	}
 	
@@ -69,8 +69,8 @@ public class DBUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";
 		List<Map<String, Object>> data = null;
-		if(category.equalsIgnoreCase("subscribe")) {
-			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes'";	
+		if(category.equalsIgnoreCase("SubscribeandSave")) {
+			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes' and status='Active'";		
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		else {
@@ -91,7 +91,7 @@ public class DBUtilities {
 			supply = "supplysize";
 		}
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30'";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30' and status='Active'";	
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
 		return data;
 	}
@@ -109,16 +109,27 @@ public class DBUtilities {
 		return priceArr;
 	}
 	
-	public String checkPPUPresent(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";
+	public String checkPPUPresent(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";		
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
 		Map<String, Object> map = camplist.get(0);
-		String ppupresent;
-		if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
-			ppupresent = "Yes";
+		String ppupresent = null;
+		
+		if(category.equalsIgnoreCase("Kit")) {
+			if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
+				ppupresent = "Yes";
+			}
+			else {
+				ppupresent = "No";
+			}
 		}
-		else {
-			ppupresent = "No";
+		else if(category.equalsIgnoreCase("ShopKit")) {
+			if(map.get("SHOPKITUPSELL").toString().equalsIgnoreCase("Yes")) {
+				ppupresent = "Yes";
+			}
+			else {
+				ppupresent = "No";
+			}
 		}
 		return ppupresent;
 	}

@@ -53,12 +53,17 @@ public class CartLanguageParallel {
 			System.out.println(category);
 			
 			List<Map<String, Object>> all_offers;
-			if((brand.equalsIgnoreCase("ReclaimBotanical")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SheerCover"))){
-				all_offers = db_obj.fetch_all_by_category(brand, campaign, "kit");
+			if(category.equalsIgnoreCase("SubscribeandSave")) {
+				all_offers = db_obj.fetch_all_by_category(brand, campaign, category);
 			}
 			else {
-				all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
-			}
+				if((brand.equalsIgnoreCase("ReclaimBotanical")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SheerCover"))){
+					all_offers = db_obj.fetch_all_by_category(brand, campaign, category);
+				}
+				else {
+					all_offers = db_obj.fetch_all_30day_kits(brand, campaign);
+				}
+			}			
 			
 			System.out.println(all_offers.size());
 			
@@ -90,24 +95,43 @@ public class CartLanguageParallel {
 					driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 				}
 					
-				bf_obj.click_cta(driver, env, brand, campaign, category);
-					
-				if(category.equalsIgnoreCase("Kit")) {			
-					sas_obj.select_offer(driver, env, brand, campaign, offer);
-				}
-				else if(category.equalsIgnoreCase("Product")) {
-													
-					Thread.sleep(3000);
-					sas_obj.select_offer(driver, env, brand, campaign, offer);
-				}
-				else if(category.equalsIgnoreCase("Subscribe")) {
-					// Subscribe
-					sas_obj.select_product(driver, offer, brand, campaign);
-					sas_obj.select_fragrance(driver, offer, brand, campaign);
-					sas_obj.select_subscribe(driver, offer, brand, campaign);
-				}			
+//				if(category.equalsIgnoreCase("Kit")) {
+					bf_obj.click_cta(driver, env, brand, campaign, category);
+//				}
+//				else {
+//					bf_obj.click_cta(driver, env, brand, campaign, "Shop");
+//				}
 				
-				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("ppid").toString(), 0);
+				
+				int subscribe = 0;
+				String tempCategory = "";
+				if(category.equalsIgnoreCase("SubscribeandSave")) {
+					subscribe = 1;
+					tempCategory = "Product";
+				}
+				else {
+					tempCategory = category;
+				}
+					
+////				if(category.equalsIgnoreCase("Kit")) {			
+//					sas_obj.select_offer(driver, env, brand, campaign, offer);
+//				}
+//				else if(category.equalsIgnoreCase("Product")) {
+//													
+//					Thread.sleep(3000);
+//					sas_obj.select_offer(driver, env, brand, campaign, offer);
+//				}
+//				else if(category.equalsIgnoreCase("Subscribe")) {
+//					// Subscribe
+//					sas_obj.select_product(driver, offer, brand, campaign);
+//					sas_obj.select_fragrance(driver, offer, brand, campaign);
+//					sas_obj.select_subscribe(driver, offer, brand, campaign);
+//				}			
+				
+				sas_obj.select_offer(driver, env, brand, campaign, offer, category, subscribe);
+				
+//				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("PPID").toString(), 0);
+				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("PPID").toString(), tempCategory);
 				
 				List<String> campaignPages = db_obj.getPages(brand, campaign);
 				boolean upsell = campaignPages.contains("upsellpage");
@@ -120,7 +144,7 @@ public class CartLanguageParallel {
 				// 30-Day
 				String ppid = lang_obj.get_ppid(driver, brand, campaign, offer);
 									
-				System.out.println(offer.get("description").toString());
+				System.out.println(offer.get("DESCRIPTION").toString());
 					
 				String cart_lang = lang_obj.get_cart_language(driver, brand);						
 				if(cart_lang.equalsIgnoreCase("No Cart Language")) {
@@ -139,7 +163,7 @@ public class CartLanguageParallel {
 				String expectedPercentage;
 				String result = null;
 				if(realm.equalsIgnoreCase("R4")) {
-					expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());									
+					expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("DESCRIPTION").toString());									
 					// Assertions
 					result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
 				}
@@ -179,7 +203,7 @@ public class CartLanguageParallel {
 					checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");					
 						
 					if(realm.equalsIgnoreCase("R4")) {
-						expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("description").toString());					
+						expectedPercentage = lang_obj.offerValidation(brand, campaign, offer.get("DESCRIPTION").toString());					
 						// Assertions
 						result = lang_obj.validate_subtotal(cart_lang_price, checkout_subtotal, expectedPercentage);
 					}

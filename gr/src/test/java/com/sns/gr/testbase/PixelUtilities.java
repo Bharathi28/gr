@@ -239,9 +239,9 @@ public class PixelUtilities {
         else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
         }
         else {
-        	sas_obj.select_offer(driver, env, brand, campaign, offerdata);
+        	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Kit", 0);
         }
-        bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("ppid").toString(), 0);
+        bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("PPID").toString(), "Kit");
                      
         String email = "";
         String checkout_pricing = "";
@@ -283,7 +283,7 @@ public class PixelUtilities {
         //////////////////////////////////////////////////////////     
        
 		// Upsell and Confirmation Page Navigation
-		String ppu = db_obj.checkPPUPresent(brand, campaign);
+		String ppu = db_obj.checkPPUPresent(brand, campaign, "Kit");
 		String cc = "";
 		if(flow.equalsIgnoreCase("CCFlow")) {
 			cc = "VISA";
