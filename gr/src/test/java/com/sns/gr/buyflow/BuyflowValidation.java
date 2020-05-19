@@ -151,12 +151,12 @@ public class BuyflowValidation {
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(1000);
 			
-		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {
-			String additionalOrderPopup = driver.findElement(By.id("popup-place-order-fd")).getAttribute("aria-hidden");
-			if(additionalOrderPopup.equalsIgnoreCase("false")) {
-				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
-			}
-		}
+//		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {
+//			String additionalOrderPopup = driver.findElement(By.id("popup-place-order-fd")).getAttribute("aria-hidden");
+//			if(additionalOrderPopup.equalsIgnoreCase("false")) {
+//				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
+//			}
+//		}
 					
 		Thread.sleep(2000);	
 
@@ -165,7 +165,6 @@ public class BuyflowValidation {
 		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
 			
 			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
-			System.out.println("checking campaign upsell " + campaignPPU);
 			category2 = "Kit";
 		}
 		else if(categoryy.equalsIgnoreCase("ShopKit")) {
@@ -176,7 +175,6 @@ public class BuyflowValidation {
 		if(campaignPPU.equalsIgnoreCase("Yes")) {
 			Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category2);
 			String upsell = offerdata.get("UPGRADE").toString();	
-			System.out.println("checking offer upsell " + upsell);
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 		}
 
@@ -188,11 +186,9 @@ public class BuyflowValidation {
 		System.out.println("Actual Offercode : " + conf_offercode);
 			
 		Thread.sleep(2000);
-			
-		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-//		ImageIO.write(confpage.getImage(),"PNG",new File("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		Screenshot confpage = new AShot().takeScreenshot(driver);
 		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Screenshots\\" + brand + "\\" + campaign + "_" + ppid +".png"));
-			
+		
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
 			

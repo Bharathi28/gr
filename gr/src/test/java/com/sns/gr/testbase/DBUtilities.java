@@ -20,7 +20,7 @@ public class DBUtilities {
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-		System.out.println(query);
+//		System.out.println(query);
 		return offerdata.get(0);		
 	}
 	
@@ -34,7 +34,28 @@ public class DBUtilities {
 	public String getUrl(String brand, String campaign, String env) throws ClassNotFoundException, SQLException {
 		String query = "select * from brand where brandname='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> branddata = DBLibrary.dbAction("fetch", query);		
-		String url = branddata.get(0).get(env + "URL").toString();
+		String url = "";
+		if(env.toLowerCase().contains("dev")) {
+			url = branddata.get(0).get("STGURL").toString();
+			url = url.replace(".stg.", "."+ env.toLowerCase() +".");
+		}
+		else {
+			url = branddata.get(0).get(env.toUpperCase() + "URL").toString();
+		}		
+		return url;
+	}
+	
+	public String getPageUrl(String brand, String campaign, String page, String env) throws ClassNotFoundException, SQLException {
+		String query = "select * from page_urls where brand='" + brand + "' and campaign='" + campaign + "' and page='" + page + "'";
+		List<Map<String, Object>> pagedata = DBLibrary.dbAction("fetch", query);		
+		String url = "";
+		if(env.toLowerCase().contains("dev")) {
+			url = pagedata.get(0).get("STGURL").toString();
+			url = url.replace(".stg.", "."+ env.toLowerCase() +".");
+		}
+		else {
+			url = pagedata.get(0).get(env.toUpperCase() + "URL").toString();
+		}		
 		return url;
 	}
 	
@@ -100,7 +121,7 @@ public class DBUtilities {
 		List<String> priceArr = new ArrayList<String>();
 		String query = "select * from r2offers where ppid='" + ppid + "'";
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
-		System.out.println(query);
+//		System.out.println(query);
 		priceArr.add(data.get(0).get("CONTIPRICING").toString());
 		priceArr.add(data.get(0).get("CONTISHIPPING").toString());
 		priceArr.add(data.get(0).get("ENTRYPRICING").toString());
@@ -267,10 +288,10 @@ public class DBUtilities {
 		ppid = arr[0];
 		}
 		String query = "select * from "+realm+"offers where brand = '"+brand+"' and campaign = '"+campaign+"' and ppid = '"+ppid+"'";
-		System.out.println(query);
+//		System.out.println(query);
 		List<Map<String, Object>> joinlist = DBLibrary.dbAction("fetch",query);
 		String description = joinlist.get(0).get("DESCRIPTION").toString();
-		System.out.println(description);
+//		System.out.println(description);
 		return description;
 	}
 }

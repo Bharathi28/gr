@@ -25,11 +25,19 @@ public class SASUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";		
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status<>'Inactive' order by RAND() limit " + count;
+//		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status<>'Inactive' order by RAND() limit " + count;
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status='Active'";
+		
 		List<Map<String, Object>> singles = DBLibrary.dbAction("fetch",query);
 		
+		List<Map<String, Object>> randsingles = new ArrayList<Map<String, Object>>();
+		Random rand = new Random(); 
+		for(int i=0; i<count; i++) {
+			randsingles.add(singles.get(rand.nextInt(singles.size())));
+		}
+		
 		List<String> single_offers = new ArrayList<String>();
-		for(Map<String, Object> product : singles) {
+		for(Map<String, Object> product : randsingles) {
 			single_offers.add(product.get("PPID").toString());
 		}
 		System.out.println("Chosen single : " + single_offers);
@@ -129,7 +137,6 @@ public class SASUtilities {
 				break;
 			}
 		}		
-		System.out.println("Selected shopkit");
 		add_product_to_cart(driver, brand, campaign, category);
 	}
 	
@@ -154,8 +161,6 @@ public class SASUtilities {
 		
 		List<Map<String, Object>> kit_loc = comm_obj.get_element_locator(brand, campaign, "Kit", kit);
 		Thread.sleep(2000);
-		System.out.println(kit_loc.get(0).get("ELEMENTLOCATOR").toString());
-		System.out.println(kit_loc.get(0).get("ELEMENTVALUE").toString());
 		WebElement kit_elmt = comm_obj.find_webelement(driver, kit_loc.get(0).get("ELEMENTLOCATOR").toString(), kit_loc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(2000);
 //		wait.until(ExpectedConditions.elementToBeClickable(kit_elmt));
@@ -259,8 +264,8 @@ public class SASUtilities {
 
 	public void select_supply(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		
-		String kit = offerdata.get("DESCRIPTION").toString().toLowerCase();
-		String supply = offerdata.get("SUPPLYSIZE").toString().toLowerCase();
+		String kit = offerdata.get("DESCRIPTION").toString();
+		String supply = offerdata.get("SUPPLYSIZE").toString();
 		
 		List<Map<String, Object>> supply_loc = comm_obj.get_element_locator(brand, campaign, "Supply", supply + " " + kit);
 		WebElement elmt = comm_obj.find_webelement(driver, supply_loc.get(0).get("ELEMENTLOCATOR").toString(), supply_loc.get(0).get("ELEMENTVALUE").toString());
@@ -275,9 +280,9 @@ public class SASUtilities {
 	
 	public void select_shade(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		
-		String name = offerdata.get("DESCRIPTION").toString().toLowerCase();
-		String shade = offerdata.get("SHADE").toString().toLowerCase();
-		String category = offerdata.get("CATEGORY").toString().toLowerCase();
+		String name = offerdata.get("DESCRIPTION").toString();
+		String shade = offerdata.get("SHADE").toString();
+		String category = offerdata.get("CATEGORY").toString();
 		
 		if(!(shade.equalsIgnoreCase("n/a"))) {
 			
@@ -288,7 +293,6 @@ public class SASUtilities {
 			else if(category.equalsIgnoreCase("Product")) {
 				shade_loc = comm_obj.get_element_locator(brand, campaign, "Shade", shade + " " + name);
 			} 
-						
 			WebElement shade_elmt = comm_obj.find_webelement(driver, shade_loc.get(0).get("ELEMENTLOCATOR").toString(), shade_loc.get(0).get("ELEMENTVALUE").toString());
 			Thread.sleep(1000);
 			shade_elmt.click();
@@ -368,8 +372,7 @@ public class SASUtilities {
 			}
 			else {
 				duo_loc = comm_obj.get_element_locator(brand, campaign, "Duo", duo);
-			} 
-			
+			} 			
 			Thread.sleep(1000);
 			WebElement duo_elmt = comm_obj.find_webelement(driver, duo_loc.get(0).get("ELEMENTLOCATOR").toString(), duo_loc.get(0).get("ELEMENTVALUE").toString());
 			Thread.sleep(1000);
@@ -547,7 +550,6 @@ public class SASUtilities {
 	}
 	
 	public void select_shopkit(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
-		System.out.println("Selecting Shopkit");
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		
 		String product_name = offerdata.get("DESCRIPTION").toString();

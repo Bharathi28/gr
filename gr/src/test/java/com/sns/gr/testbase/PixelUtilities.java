@@ -70,13 +70,28 @@ public class PixelUtilities {
 	
 	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		String query = "";
-		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
-			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active' order by RAND() limit " + runs;
+//		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+//			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active' order by RAND() limit " + runs;
+//		}
+//		else {
+//			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
+//		}		
+		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
 		else {
-			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
-		}				
-		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);		
+			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
+		}	
+		List<Map<String, Object>> offers = DBLibrary.dbAction("fetch", query);
+		
+		List<Map<String, Object>> offerdata = new ArrayList<Map<String, Object>>();
+		Random rand = new Random(); 
+//        return list.get(rand.nextInt(list.size())); 
+		for(int i=0; i<runs; i++) {
+//			offerdata.add(offers.get(i));
+			offerdata.add(offers.get(rand.nextInt(offers.size())));
+		}		
+		
 		int i=0;
 		String lastChar = url.substring(url.length() - 1);
 		String joinChar;
@@ -261,12 +276,12 @@ public class PixelUtilities {
             
 //    		jse.executeScript("window.scrollBy(0,-200)", 0);
     		
-    		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
-    		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
-    		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
-    		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
-    		
-    		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
+//    		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
+//    		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
+//    		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
+//    		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
+//    		
+//    		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
         }
         else if(flow.equalsIgnoreCase("PaypalFlow")) {
         	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
@@ -329,12 +344,12 @@ public class PixelUtilities {
         String conf_num = bf_obj.fetch_conf_num(driver, brand);
         System.out.println("Confirmation Number : " + conf_num);        
 		
-		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
-		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
-		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
-		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
-		
-		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;
+//		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
+//		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
+//		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
+//		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
+//		
+//		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;
 		
 		List<String> output_row = new ArrayList<String>();
 		output_row.add(env);
@@ -344,11 +359,11 @@ public class PixelUtilities {
         output_row.add(expected_ppid);
 		output_row.add(actual_conf_ppid);
 		output_row.add(conf_num);
-		output_row.add("Yes");
-		output_row.add(checkout_pricing);		
+//		output_row.add("Yes");
+//		output_row.add(checkout_pricing);		
 		
         // Save Order Screenshots        
-        Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);			
+		Screenshot confpage = new AShot().takeScreenshot(driver);			
         ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
         
         driver.close();

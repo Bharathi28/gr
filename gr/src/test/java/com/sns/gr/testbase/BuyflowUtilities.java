@@ -20,7 +20,6 @@ public class BuyflowUtilities {
 	
 	CommonUtilities comm_obj = new CommonUtilities();
 	DBUtilities db_obj = new DBUtilities();
-
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -41,8 +40,8 @@ public class BuyflowUtilities {
 			elementvalue = locator.get(0).get("STGVALUE").toString();	
 		}
 		else {
-			elementlocator = locator.get(0).get(env + "LOCATOR").toString();
-			elementvalue = locator.get(0).get(env + "VALUE").toString();
+			elementlocator = locator.get(0).get(env.toUpperCase() + "LOCATOR").toString();
+			elementvalue = locator.get(0).get(env.toUpperCase() + "VALUE").toString();
 		}
 			
 		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
@@ -322,11 +321,12 @@ public class BuyflowUtilities {
 			   Thread.sleep(2000);
 			}			
 
+			Thread.sleep(5000);
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
 			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
-			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
+			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
 			
 			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
@@ -350,7 +350,7 @@ public class BuyflowUtilities {
 			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 			driver.switchTo().window(winHandleBefore);
 			fill_form_field(driver, realm, "Agree", "");
-			return "testbuyer1@guthy-renker.com";
+			return "testbuyer2@guthy-renker.com";
 		}
 		else {
 			String alpha = RandomStringUtils.randomAlphabetic(9);
