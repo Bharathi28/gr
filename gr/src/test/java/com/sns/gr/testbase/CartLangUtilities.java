@@ -52,7 +52,7 @@ public class CartLangUtilities {
 		if(offersPresent.equalsIgnoreCase("Offer Available")) {
 			Map<String, Object> campaignOffer = getOffers(brand, campaign, kitName);
 			// Assertions
-			expectedPercentage = campaignOffer.get("offer").toString();
+			expectedPercentage = campaignOffer.get("OFFER").toString();
 		}
 		else {
 			expectedPercentage = "0";
@@ -175,8 +175,12 @@ public class CartLangUtilities {
 			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
 				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
 			}
-			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
-				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
+			int size = driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size();
+			if(size == 1) {
+				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText();
+			}
+			else if(size == 2) {
+				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText() + driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[2]")).getText();
 			}
 			else {
 				cart_lang = "No Cart Language";

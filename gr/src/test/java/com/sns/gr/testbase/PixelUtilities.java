@@ -241,7 +241,7 @@ public class PixelUtilities {
         else {
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata);
         }
-        bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("ppid").toString(), 0);
+        bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("PPID").toString(), 0);
                      
         String email = "";
         String checkout_pricing = "";
