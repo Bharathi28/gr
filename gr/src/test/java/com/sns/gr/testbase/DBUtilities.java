@@ -18,7 +18,7 @@ public class DBUtilities {
 		String realm = get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "'";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
 //		System.out.println(query);
 		return offerdata.get(0);		
@@ -34,7 +34,28 @@ public class DBUtilities {
 	public String getUrl(String brand, String campaign, String env) throws ClassNotFoundException, SQLException {
 		String query = "select * from brand where brandname='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> branddata = DBLibrary.dbAction("fetch", query);		
-		String url = branddata.get(0).get(env + "URL").toString();
+		String url = "";
+		if(env.toLowerCase().contains("dev")) {
+			url = branddata.get(0).get("STGURL").toString();
+			url = url.replace(".stg.", "."+ env.toLowerCase() +".");
+		}
+		else {
+			url = branddata.get(0).get(env.toUpperCase() + "URL").toString();
+		}		
+		return url;
+	}
+	
+	public String getPageUrl(String brand, String campaign, String page, String env) throws ClassNotFoundException, SQLException {
+		String query = "select * from page_urls where brand='" + brand + "' and campaign='" + campaign + "' and page='" + page + "'";
+		List<Map<String, Object>> pagedata = DBLibrary.dbAction("fetch", query);		
+		String url = "";
+		if(env.toLowerCase().contains("dev")) {
+			url = pagedata.get(0).get("STGURL").toString();
+			url = url.replace(".stg.", "."+ env.toLowerCase() +".");
+		}
+		else {
+			url = pagedata.get(0).get(env.toUpperCase() + "URL").toString();
+		}		
 		return url;
 	}
 	
@@ -69,8 +90,8 @@ public class DBUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";
 		List<Map<String, Object>> data = null;
-		if(category.equalsIgnoreCase("subscribe")) {
-			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes'";	
+		if(category.equalsIgnoreCase("SubscribeandSave")) {
+			String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and subscribe='Yes' and status='Active'";		
 			data = DBLibrary.dbAction("fetch", query);
 		}
 		else {
@@ -91,7 +112,7 @@ public class DBUtilities {
 			supply = "supplysize";
 		}
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30'";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30' and status='Active'";	
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
 		return data;
 	}
@@ -100,7 +121,7 @@ public class DBUtilities {
 		List<String> priceArr = new ArrayList<String>();
 		String query = "select * from r2offers where ppid='" + ppid + "'";
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
-		System.out.println(query);
+//		System.out.println(query);
 		priceArr.add(data.get(0).get("CONTIPRICING").toString());
 		priceArr.add(data.get(0).get("CONTISHIPPING").toString());
 		priceArr.add(data.get(0).get("ENTRYPRICING").toString());
@@ -109,16 +130,27 @@ public class DBUtilities {
 		return priceArr;
 	}
 	
-	public String checkPPUPresent(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";
+	public String checkPPUPresent(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";		
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
 		Map<String, Object> map = camplist.get(0);
-		String ppupresent;
-		if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
-			ppupresent = "Yes";
+		String ppupresent = null;
+		
+		if(category.equalsIgnoreCase("Kit")) {
+			if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
+				ppupresent = "Yes";
+			}
+			else {
+				ppupresent = "No";
+			}
 		}
-		else {
-			ppupresent = "No";
+		else if(category.equalsIgnoreCase("ShopKit")) {
+			if(map.get("SHOPKITUPSELL").toString().equalsIgnoreCase("Yes")) {
+				ppupresent = "Yes";
+			}
+			else {
+				ppupresent = "No";
+			}
 		}
 		return ppupresent;
 	}
@@ -256,10 +288,10 @@ public class DBUtilities {
 		ppid = arr[0];
 		}
 		String query = "select * from "+realm+"offers where brand = '"+brand+"' and campaign = '"+campaign+"' and ppid = '"+ppid+"'";
-		System.out.println(query);
+//		System.out.println(query);
 		List<Map<String, Object>> joinlist = DBLibrary.dbAction("fetch",query);
 		String description = joinlist.get(0).get("DESCRIPTION").toString();
-		System.out.println(description);
+//		System.out.println(description);
 		return description;
 	}
 }

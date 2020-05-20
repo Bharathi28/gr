@@ -33,8 +33,8 @@ public class BrowserDriverFactory {
 		// Creating driver
 		switch (browser) {
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
-			
+			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");			
+//			System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 			ChromeOptions options = new ChromeOptions();
 		    options.addArguments("--ignore-certificate-errors");
 

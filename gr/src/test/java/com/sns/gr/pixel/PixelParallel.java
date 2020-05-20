@@ -61,12 +61,19 @@ import net.lightbody.bmp.client.ClientUtil;
 public class PixelParallel {
 
 	static CommonUtilities comm_obj = new CommonUtilities();
-	static MailUtilities mailObj = new MailUtilities();
+	MailUtilities mailObj = new MailUtilities();
+	Scanner in = new Scanner(System.in);
 	
 	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
 	static List<String> attachmentList = new ArrayList<String>();
 
-	static String sendReportTo = "manibharathi@searchnscore.com , banuchitra@searchnscore.com";
+	String sendReportTo = "";
+	
+	@BeforeSuite
+	public void getEmailId() {
+		System.out.println("Enter Email id : ");
+		sendReportTo = in.next();
+	}
 	
 	@DataProvider(name="pixelInput", parallel=true)
 	public Object[][] testData() {
@@ -306,7 +313,7 @@ public class PixelParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_BuyflowResults", System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel Orders\\");
+		String file = comm_obj.populateOutputExcel(buyflowOverallOutput, "Pixel_Orders", System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel Orders\\");
 		attachmentList.add(file);
 		mailObj.sendEmail("Pixel Buyflow Results", sendReportTo, attachmentList);
 	}

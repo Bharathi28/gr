@@ -190,17 +190,26 @@ public class CommonUtilities {
 			header_list.add("Environment");
 			header_list.add("Brand");
 			header_list.add("Campaign");
+			header_list.add("Category");
 			header_list.add("e-mail");
 			header_list.add("Expected PPID");
 			header_list.add("Actual PPID");
 			header_list.add("Confirmation Number");
-			header_list.add("Email Received");
 			header_list.add("Checkout Pricing");		
 			header_list.add("Confirmation Pricing");
 			header_list.add("Shipping Billing");
 			header_list.add("Card");
 			header_list.add("Browser");
 		}	
+		else if(header.toLowerCase().contains("pixel")) {
+			header_list.add("Environment");
+			header_list.add("Brand");
+			header_list.add("Campaign");
+			header_list.add("e-mail");
+			header_list.add("Expected PPID");
+			header_list.add("Actual PPID");
+			header_list.add("Confirmation Number");
+		}
 		else if(header.toLowerCase().contains("cartlang")) {
 			header_list.add("Environment");
 			header_list.add("Brand");
@@ -212,6 +221,13 @@ public class CommonUtilities {
 			header_list.add("Checkout Shipping");
 			header_list.add("Result");
 		}	
+		else if(header.toLowerCase().contains("cxt")) {
+			header_list.add("Environment");
+			header_list.add("Brand");
+			header_list.add("Campaign");
+			header_list.add("Testcase");
+			header_list.add("Result");
+		}
 		
 		XSSFRow firstRow = resultSheet.createRow(0);
 		for(int j=0; j<header_list.size(); j++) {

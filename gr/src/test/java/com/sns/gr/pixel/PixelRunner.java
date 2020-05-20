@@ -1,17 +1,17 @@
-package com.sns.gr.buyflow;
+package com.sns.gr.pixel;
 
 import org.testng.TestNG;
 
-public class BuyflowRunner {
-
+public class PixelRunner {
 	static TestNG testng;
 
 	public static void main(String[] args) {
 		
 		testng = new TestNG();
 		
-		testng.setTestClasses(new Class[] {BuyflowValidation.class});
+		testng.setTestClasses(new Class[] {PixelParallel.class});
 		testng.setDataProviderThreadCount(5);
 		testng.run();
 	}
+
 }

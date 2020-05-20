@@ -2,10 +2,8 @@ package com.sns.gr.buyflow;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,16 +13,10 @@ import javax.imageio.ImageIO;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.sns.gr.setup.BaseTest;
@@ -35,14 +27,11 @@ import com.sns.gr.testbase.MailUtilities;
 import com.sns.gr.testbase.PricingUtilities;
 import com.sns.gr.testbase.SASUtilities;
 
-import net.lightbody.bmp.BrowserMobProxy;
-import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.client.ClientUtil;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
-public class BuyflowValidation{
+public class BuyflowValidation {
 
 	CommonUtilities comm_obj = new CommonUtilities();
 	BaseTest base_obj = new BaseTest();
@@ -65,60 +54,58 @@ public class BuyflowValidation{
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
 		Object[][] arrayObject = null;
-
-//		Calendar calendar = Calendar.getInstance();
-//		int day = calendar.get(Calendar.DAY_OF_WEEK); 
-		
-//		if(day==7){
-//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Saturday_rundata");
-//		}
-//		else if(day==1){
-//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "Sunday_rundata");
-//		}
-//		else{
-//			arrayObject = comm_obj.getExcelData("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\run_input.xlsx", "rundata");
-////			System.out.println(System.getProperty("user.dir"));
-////			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/run_input.xlsx", "rundata");
-//		}		
-		
 		arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
 		return arrayObject;
 	}
 	
 	@Test(dataProvider="buyflowInput")
-	public void buyflow(String env, String brand, String campaign, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
+	public void buyflow(String env, String brand, String campaign, String categoryy, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
 									
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
 		driver.get(url);
 		System.out.println("Loaded " + brand + " site...");
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);		
+		driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);		
 		
 		if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
 			driver.findElement(By.xpath("//button[@id='details-button']")).click();
 			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 		}
 		
-		int singleCheck = 0;
+		int subscribe = 0;
 		String str = "";
 		String[] offer_array = ppid.split(",");		
 		String kit_offercode = offer_array[0];
 		
-		for(int i = 0; i < offer_array.length; i++) {			
-			if((offer_array[i].contains("single")) || (bf_obj.checkIfProduct(brand, campaign, offer_array[i]))){
-				singleCheck = 1;
+		String tempCategory = "";
+		
+		for(int i = 0; i < offer_array.length; i++) {	
+			if(categoryy.equalsIgnoreCase("Mixed")) {
+				if(offer_array[i].contains("single")){
+					tempCategory = "Product";
+				}
+				else {
+					tempCategory = "Kit";
+				}
 			}
-			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i]);
-			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i]);
-			if(i == ((offer_array.length)-1)) {
-				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, singleCheck);
+			else if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
+				tempCategory = "Product";
+				subscribe = 1;
 			}
 			else {
-				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, singleCheck);
+				tempCategory = categoryy;
+			}
+			
+			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory);
+			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe);
+			if(i == ((offer_array.length)-1)) {
+				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
+			}
+			else {
+				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
 				bf_obj.click_logo(driver, brand, campaign);
 			}
 			str = str + ppidStr + ",";
-			singleCheck = 0;
 		}		
 				
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
@@ -164,33 +151,32 @@ public class BuyflowValidation{
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(1000);
 			
-		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {
-			String additionalOrderPopup = driver.findElement(By.id("popup-place-order-fd")).getAttribute("aria-hidden");
-			if(additionalOrderPopup.equalsIgnoreCase("false")) {
-				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
-			}
-		}
+//		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {
+//			String additionalOrderPopup = driver.findElement(By.id("popup-place-order-fd")).getAttribute("aria-hidden");
+//			if(additionalOrderPopup.equalsIgnoreCase("false")) {
+//				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
+//			}
+//		}
 					
 		Thread.sleep(2000);	
-		String ppu = bf_obj.ppupresent(driver, brand, campaign, ppid, supply,realm);
-		String category = null;
-		for(int i = 0; i < offer_array.length; i++) {
-			if(bf_obj.checkIfProduct(brand, campaign, kit_offercode)) {
-				category = "Product";
-				}
-			else {
-				category = "Kit";
-			}
+
+		String campaignPPU = "";
+		String category2 = "";
+		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
+			
+			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
+			category2 = "Kit";
 		}
-		
-		Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category);
-		String upsell = offerdata.get("UPGRADE").toString();		
-		
-		if(category.equalsIgnoreCase("Kit")) {
-			if(ppu.equalsIgnoreCase("Yes")) {
-				bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-			}
+		else if(categoryy.equalsIgnoreCase("ShopKit")) {
+			campaignPPU = db_obj.checkPPUPresent(brand, campaign, categoryy);
+			category2 = categoryy;
 		}		
+		
+		if(campaignPPU.equalsIgnoreCase("Yes")) {
+			Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category2);
+			String upsell = offerdata.get("UPGRADE").toString();	
+			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
+		}
 
 		Thread.sleep(2000);
 		
@@ -200,11 +186,9 @@ public class BuyflowValidation{
 		System.out.println("Actual Offercode : " + conf_offercode);
 			
 		Thread.sleep(2000);
-			
-		Screenshot confpage = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);		 
-//		ImageIO.write(confpage.getImage(),"PNG",new File("D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Screenshots\\" + brand + "\\" + ppid +".png"));
+		Screenshot confpage = new AShot().takeScreenshot(driver);
 		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Screenshots\\" + brand + "\\" + campaign + "_" + ppid +".png"));
-			
+		
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
 			
@@ -224,11 +208,11 @@ public class BuyflowValidation{
 		output_row.add(env);
 		output_row.add(brand);
 		output_row.add(campaign);
+		output_row.add(categoryy);
 		output_row.add(email);
 		output_row.add(ppid);
 		output_row.add(conf_offercode);
 		output_row.add(conf_num);
-		output_row.add("Yes");
 		output_row.add(checkout_pricing);
 		output_row.add(conf_pricing);	
 		output_row.add(shipbill);	
