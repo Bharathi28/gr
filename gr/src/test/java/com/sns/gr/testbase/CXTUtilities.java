@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -179,6 +181,43 @@ public class CXTUtilities {
 		return addprodtokc;
 	}		
 	
+	public String addProductToCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		String realm = db_obj.get_realm(brand);
+		Map<String, Object> randProd = pickRandomProduct(brand,campaign);
+		String prodPPID = randProd.get("PPID").toString();		
+		String prodName = randProd.get("DESCRIPTION").toString();
+		
+		select_cxt_offer(driver, randProd, realm);
+		driver.findElement(By.xpath("//input[@name='Shop Now']")).click();
+		driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//i[@class ='fa fa-shopping-bag']")).click();
+		String addedproduct = driver.findElement(By.xpath("//div[@id='cart-table']//div")).getAttribute("class");
+		System.out.println(addedproduct);
+		String addtocartresult = "";
+		if(addedproduct.contains(prodPPID)) {
+			addtocartresult = "PASS";
+		}
+		else {
+			addtocartresult = "FAIL";
+		}
+		return addtocartresult;
+	}
+	
+	public String removeProductfromCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
+		driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+		String pagetitle = driver.getTitle();
+		String rmfromcartresult = "";
+		if(pagetitle.contains("Shop")) {
+			rmfromcartresult = "PASS";
+		}
+		else {
+			rmfromcartresult = "FAIL";
+		}
+		return rmfromcartresult;
+	}
+	
 	public void addProductToKC(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
 		HashMap<String,Integer> kcproducts = checkMyNextKit(driver, realm);
@@ -321,6 +360,138 @@ public class CXTUtilities {
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupRemove']//div//div//div[3]//div[2]//a//span")).click();
 		}
 		Thread.sleep(25000);
+	}
+	
+	public String rescheduleShipment(WebDriver driver, String brand) throws ClassNotFoundException, SQLException, InterruptedException, ParseException {
+		String realm = db_obj.get_realm(brand);
+		
+		String rescheduleresult = "";
+		String actualdate = "";
+		String expecteddate = "";
+		
+		if(realm.equals("R4")) {
+			driver.findElement(By.xpath("//a[@class='button popupRevealModal hardLogin shipNow']")).click();
+			Thread.sleep(2000);
+			System.out.println("Datepicker icon : " + driver.findElement(By.xpath("//input[@class='delayshipdate hasDatepicker']")).isDisplayed());
+			driver.findElement(By.xpath("//input[@class='delayshipdate hasDatepicker']")).click();
+			Thread.sleep(2000);
+			actualdate = driver.findElement(By.xpath("//span[@class='nextship']")).getText();
+			expecteddate = setDate(driver);						
+			driver.findElement(By.xpath("//button[@class='button kcpopup-btn medium-4 small-12 shipNowConfirm']")).click();
+		}
+		else {
+			driver.findElement(By.xpath("//div[@class='shipNowButton large-12 small-6 column']//a//span")).click();
+			Thread.sleep(2000);
+			System.out.println("Datepicker icon : " + driver.findElement(By.xpath("//input[@id='delayshipdate']")).isDisplayed());
+			driver.findElement(By.xpath("//input[@id='delayshipdate']")).click();
+			Thread.sleep(2000);
+			actualdate = driver.findElement(By.xpath("(//div[@class='shipDate'])[2]")).getText();
+			expecteddate = setDate(driver);			
+			driver.findElement(By.xpath("//div[@id='shipKitNowPopup']//div//div//div[3]//div[2]//a//span")).click();
+		}
+		while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
+			// Wait until spinner disappears
+		}
+		Thread.sleep(2000);
+		System.out.println("Actual Date : " + actualdate);
+		System.out.println("Expected Date : " + expecteddate);
+		
+		if(actualdate.equalsIgnoreCase(expecteddate)) {
+			rescheduleresult = "PASS";
+		}
+		else {
+			rescheduleresult = "FAIL";
+		}
+		return rescheduleresult;
+	}
+	
+	public String setDate(WebDriver driver) throws ParseException, InterruptedException {
+		Calendar now = Calendar.getInstance();	
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd yyyy");
+		now.add(Calendar.DAY_OF_MONTH, 30); 
+		String newDate = sdf.format(now.getTime()); 
+		System.out.println(newDate);		
+		
+		String reschedule_month = new SimpleDateFormat("MMMM").format(now.getTime());
+		String reschedule_year = Integer.toString(now.get(Calendar.YEAR));
+		String reschedule_day = Integer.toString(now.get(Calendar.DAY_OF_MONTH));
+		System.out.println(reschedule_month + " " + reschedule_year);
+		
+		String datepicker_month = driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText();
+		String datepicker_year = driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText();
+		System.out.println(datepicker_month + " " + datepicker_year);	
+		
+		changeMonth(driver, now, reschedule_month, reschedule_year, datepicker_month, datepicker_year);
+		Thread.sleep(1000);
+		int dateset = 0;
+		List<WebElement> weeks = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr"));
+		for(int i=1; i<=weeks.size(); i++) {
+			List<WebElement> days = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td"));
+			for(int j=1; j<=days.size(); j++) {				
+				if(driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a")).size() != 0) {
+					WebElement dayelmt = driver.findElement(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a"));
+					String dpday = dayelmt.getText();
+					if(dpday.equals(reschedule_day)) {
+						dayelmt.click();
+						dateset=1;
+						break;
+					}
+					else {
+						continue;
+					}
+				}				
+			}
+			if(dateset == 1) {
+				break;
+			}
+		}
+		return newDate;
+	}
+	
+	public void changeMonth(WebDriver driver, Calendar now, String reschedule_month, String reschedule_year, String datepicker_month, String datepicker_year) throws ParseException {
+		SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM");		
+		SimpleDateFormat outputFormat = new SimpleDateFormat("MM"); // 01-12
+		
+		// Change Datepicker month and year to Integer format
+		now.setTime(inputFormat.parse(datepicker_month));
+		String dpmonthnumstr = outputFormat.format(now.getTime());
+		int dpmonth = Integer.parseInt(dpmonthnumstr);
+		int dpyear = Integer.parseInt(datepicker_year);
+		
+		// Change Reschedule month and year to Integer format
+		now.setTime(inputFormat.parse(reschedule_month));
+		String remonthnumstr = outputFormat.format(now.getTime());
+		int remonth = Integer.parseInt(remonthnumstr);
+		int reyear = Integer.parseInt(reschedule_year);
+		
+		if(dpyear == reyear) {
+			if(dpmonth == remonth) {
+				
+			}
+			else if(dpmonth>remonth) {
+				int diff = dpmonth-remonth;
+				while(diff>0) {
+					driver.findElement(By.xpath("//a[@data-handler='prev']//span")).click();
+					diff--;
+				}
+			}
+			else if(remonth>dpmonth) {
+				int diff = remonth-dpmonth;
+				while(diff>0) {
+					driver.findElement(By.xpath("//a[@data-handler='next']//span")).click();
+					diff--;
+				}
+			}
+		}
+		else {
+			if(reyear>dpyear) {
+				driver.findElement(By.xpath("//a[@data-handler='next']//span")).click();
+			}
+			else if(dpyear>reyear) {
+				driver.findElement(By.xpath("//a[@data-handler='prev']//span")).click();
+			}
+		}
 	}
 	
 	public String getPageTitle(WebDriver driver) {

@@ -213,10 +213,18 @@ public class SASUtilities {
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
 		
-		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {
-			if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
-				driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
-			}	
+		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {	
+			if(brand.equalsIgnoreCase("Sheercover")) {
+				if(driver.findElements(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).size() != 0) {
+					driver.findElement(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).click();
+				}
+			}
+			else {
+				if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
+					driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
+				}
+			}
+			
 		}
 		Thread.sleep(1000);
 	}
@@ -243,7 +251,7 @@ public class SASUtilities {
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 		
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
