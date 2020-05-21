@@ -172,8 +172,20 @@ public class CartLangUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String cart_lang = "";		
 		if(realm.equalsIgnoreCase("R4")) {
+
+			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
+				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
+			}
+			int size = driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size();
+			if(size == 1) {
+				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText();
+			}
+			else if(size == 2) {
+				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText() + driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[2]")).getText();
+			}
+
 			
-			if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
+			/*if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
 				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
 					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText().contains("$")) {
 						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
@@ -182,7 +194,8 @@ public class CartLangUtilities {
 				else {
 					cart_lang = "No Cart Language";
 				}
-			}
+
+			}*/
 			else {
 				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
 					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText().contains("$")) {
