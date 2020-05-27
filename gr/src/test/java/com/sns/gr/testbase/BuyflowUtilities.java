@@ -19,7 +19,7 @@ import com.sns.gr.testbase.DBLibrary;
 public class BuyflowUtilities {
 	
 	CommonUtilities comm_obj = new CommonUtilities();
-	DBUtilities db_obj = new DBUtilities();
+	DBUtilities db_obj = new DBUtilities();	
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;

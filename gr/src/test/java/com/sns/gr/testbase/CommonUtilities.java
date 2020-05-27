@@ -24,7 +24,7 @@ import org.openqa.selenium.WebElement;
 import com.sns.gr.testbase.DBLibrary;
 
 public class CommonUtilities {
-	
+		
 	public String[][] getExcelData(String fileName, String sheetName) {
 		String[][] arrayExcelData = null;
 		try {			
@@ -260,6 +260,12 @@ public class CommonUtilities {
 	}
 	
 	public List<Map<String, Object>> get_element_locator(String brand, String campaign, String step, String offer) throws ClassNotFoundException, SQLException {
+		
+		String origcampaign = campaign_repeat(brand, campaign, "locators");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String query = "select * from locators_new where ";
 		String include_brand = "brand='" + brand + "'";
 		String include_campaign = "campaign='" + campaign + "'";
@@ -288,9 +294,30 @@ public class CommonUtilities {
 			query = query + include_offer;
 		}
 //		query = query + ";";
-//			System.out.println(query);
+			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
+	}
+	
+	public String campaign_repeat(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String origcampaign = "";
+		String query = "select * from campaign_repeat where brand='" + brand + "' and campaign='" + campaign + "'";
+		List<Map<String, Object>> campdetails = DBLibrary.dbAction("fetch",query);
+		if(campdetails.size()==1) {
+			if(category.equalsIgnoreCase("locators")) {
+				origcampaign = campdetails.get(0).get("LOCATORS_SAMEAS").toString();
+			}
+			else if(category.equalsIgnoreCase("offers")) {
+				origcampaign = campdetails.get(0).get("OFFERS_SAMEAS").toString();
+			}
+			else if(category.equalsIgnoreCase("pages")) {
+				origcampaign = campdetails.get(0).get("PAGES_SAMEAS").toString();
+			}
+		}
+		else {
+			origcampaign = "n/a";
+		}
+		return origcampaign;
 	}
 	
 	public WebElement find_webelement(WebDriver driver, String elementlocator, String elementvalue) {
