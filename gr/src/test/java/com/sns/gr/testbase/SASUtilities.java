@@ -162,7 +162,7 @@ public class SASUtilities {
 		List<Map<String, Object>> kit_loc = comm_obj.get_element_locator(brand, campaign, "Kit", kit);
 		Thread.sleep(2000);
 		WebElement kit_elmt = comm_obj.find_webelement(driver, kit_loc.get(0).get("ELEMENTLOCATOR").toString(), kit_loc.get(0).get("ELEMENTVALUE").toString());
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 //		wait.until(ExpectedConditions.elementToBeClickable(kit_elmt));
 		
 		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
@@ -179,8 +179,9 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}
-		
-		kit_elmt.click();		
+		jse.executeScript("window.scrollBy(0,250)", 0);
+		kit_elmt.click();	
+		Thread.sleep(2000);
 		Thread.sleep(1000);
 		if((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) {
 			jse.executeScript("window.scrollBy(0,700)", 0);
@@ -209,11 +210,11 @@ public class SASUtilities {
 			driver.findElement(By.xpath("//button[@class = 'button checkout']")).click();
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("core"))||(campaign.equalsIgnoreCase("core_full_15neck")))) {
+		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("core_full_15neck"))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
-		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
+		/*if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
 			jse.executeScript("window.scrollBy(0,400)", 0);
 			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
 				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
@@ -222,7 +223,7 @@ public class SASUtilities {
 				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
 			}
 			
-		}
+		}*/
 		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
 			jse.executeScript("window.scrollBy(0,200)",0);
 			driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
@@ -239,6 +240,7 @@ public class SASUtilities {
 	public void select_gift(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String gift = offerdata.get("GIFT").toString();
+		String kit = offerdata.get("DESCRIPTION").toString();
 		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&((campaign.equalsIgnoreCase("pnlsys")) || (campaign.equalsIgnoreCase("core")))&&(gift.equalsIgnoreCase("Skin Rejuvenating Trio"))) {
 			driver.findElement(By.xpath("//ul[@class = 'slick-dots']//li[2]/button")).click();
 			Thread.sleep(1000);
@@ -252,19 +254,30 @@ public class SASUtilities {
 			Thread.sleep(1000);								
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("corehrt"))||(campaign.equalsIgnoreCase("pnlbb"))||(campaign.equalsIgnoreCase("corehrt2"))||(campaign.equalsIgnoreCase("crepeerase")))) {
+		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("corehrt"))||(campaign.equalsIgnoreCase("pnlbb"))||(campaign.equalsIgnoreCase("corehrt2")))) {
 			jse.executeScript("window.scrollBy(0,500)", 0);
 
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 		
 
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring"))||(campaign.equalsIgnoreCase("core_full_15neck")))) {
+		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring"))||(campaign.equalsIgnoreCase("core")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
+		else if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
+			jse.executeScript("window.scrollBy(0,400)", 0);
+			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
+				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
+			}
+			else {
+				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
+			}
+			
+		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
-			driver.findElement(By.xpath("//button[@class='button checkout']")).click();
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("20offdeluxe"))) {
 			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
@@ -407,7 +420,9 @@ public class SASUtilities {
 		
 		if(!(easypay.equalsIgnoreCase("n/a"))&& !((campaign.equalsIgnoreCase("newcc"))|| (category.equalsIgnoreCase("Product"))) ) {
 			List<Map<String, Object>> pay_loc = comm_obj.get_element_locator(brand, campaign, "EasyPay", easypay + " " + kit);
-			Thread.sleep(1000);
+			System.out.println(pay_loc);
+			Thread.sleep(3000);
+			jse.executeScript("window.scrollBy(0,250)", 0);
 			WebElement pay_elmt = comm_obj.find_webelement(driver, pay_loc.get(0).get("ELEMENTLOCATOR").toString(), pay_loc.get(0).get("ELEMENTVALUE").toString());
 			Thread.sleep(1000);
 			pay_elmt.click();
@@ -448,7 +463,6 @@ public class SASUtilities {
 			List<Map<String, Object>> frag_loc = null;
 			if(category.equalsIgnoreCase("Kit")) {
 				frag_loc = comm_obj.get_element_locator(brand, campaign, "Fragrance", fragrance + " " + kitname);
-				System.out.println("fragrance location"+frag_loc);
 			}
 			else if(category.equalsIgnoreCase("Product")) {
 				
