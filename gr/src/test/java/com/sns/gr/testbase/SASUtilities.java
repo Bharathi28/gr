@@ -45,6 +45,11 @@ public class SASUtilities {
 	}
 	
 	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe) throws ClassNotFoundException, SQLException, InterruptedException {		
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String ppid_str = "";
 		Map<String, Object> offerdata;
 		
@@ -77,6 +82,11 @@ public class SASUtilities {
 	
 	public void select_offer(WebDriver driver, String env, String brand, String campaign, Map<String, Object> offerdata, String category, int subscribe) throws ClassNotFoundException, SQLException, InterruptedException {
 				
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String pagepattern = offerdata.get("PAGEPATTERN").toString().toLowerCase();
 		if(subscribe == 1) {
 			pagepattern = pagepattern.replace("onetime", "subscribe");
@@ -197,6 +207,7 @@ public class SASUtilities {
 //			Thread.sleep(2000);
 //			driver.findElement(By.xpath("//button[@class='button checkout']")).click();
 //		}
+		
 		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
 			jse.executeScript("window.scrollBy(0,800)", 0);
 			driver.findElement(By.id("valuePack-next-btn")).click();
@@ -224,15 +235,26 @@ public class SASUtilities {
 			}
 			
 		}*/
+
+
 		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
 			jse.executeScript("window.scrollBy(0,200)",0);
 			driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
 		}
-
-		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {
-			if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
-				driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
-			}	
+		
+		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {	
+			if(brand.equalsIgnoreCase("Sheercover")) {
+				jse.executeScript("window.scrollBy(0,200)",0);
+				Thread.sleep(1000);
+				if(driver.findElements(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).size() != 0) {
+					driver.findElement(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).click();
+				}
+			}
+			else {
+				if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
+					driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
+				}
+			}
 		}
 		Thread.sleep(1000);
 	}
@@ -261,10 +283,13 @@ public class SASUtilities {
 		}
 		
 
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring"))||(campaign.equalsIgnoreCase("core")))) {
+
+		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
+
 		else if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
 			jse.executeScript("window.scrollBy(0,400)", 0);
 			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
@@ -273,7 +298,13 @@ public class SASUtilities {
 			else {
 				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
 			}
+		}
 			
+
+		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
+			jse.executeScript("window.scrollBy(0,400)", 0);
+			driver.findElement(By.xpath("//h3[contains(text(),'" + kit +"')]/../..//div[@class='checkout-button sas-kit-sticky-checkout hide-section']//button")).click();
+
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
 			jse.executeScript("window.scrollBy(0,300)", 0);
@@ -288,7 +319,6 @@ public class SASUtilities {
 		else if(driver.findElements(By.cssSelector("#gift ~ .market a.buttons-next")).size() != 0) {
 			driver.findElement(By.cssSelector("#gift ~ .market a.buttons-next")).click();
 		}
-		Thread.sleep(1000);
 	}
 
 	public void select_supply(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
@@ -334,6 +364,10 @@ public class SASUtilities {
 		String kitname = offerdata.get("DESCRIPTION").toString();
 		String kitshade = offerdata.get("KITSHADE").toString();
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "KitShade", kitshade + " " + kitname);
+		
+		if((brand.equalsIgnoreCase("WestmoreBeauty")) && (campaign.equalsIgnoreCase("bodycoverage"))) {
+			jse.executeScript("window.scrollBy(0,400)", 0);
+		}
 		
 		WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("ELEMENTLOCATOR").toString(), locator.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(2000);
@@ -455,7 +489,6 @@ public class SASUtilities {
 		String kitname = offerdata.get("DESCRIPTION").toString();
 		String fragrance = offerdata.get("FRAGRANCE").toString();
 		
-		System.out.println("fragrance"+fragrance);
 		String category = offerdata.get("CATEGORY").toString();
 		
 		if((!(fragrance.equalsIgnoreCase("n/a")))  && (!(fragrance.equals(" ")))){
