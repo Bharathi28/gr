@@ -78,11 +78,15 @@ public class BuyflowValidation {
 		String kit_offercode = offer_array[0];
 		
 		String tempCategory = "";
+		String tempCampaign = campaign;
 		
 		for(int i = 0; i < offer_array.length; i++) {	
 			if(categoryy.equalsIgnoreCase("Mixed")) {
 				if(offer_array[i].contains("single")){
 					tempCategory = "Product";
+					if(!(campaign.equals("Core"))) {
+						campaign="Core";
+					}
 				}
 				else {
 					tempCategory = "Kit";
@@ -91,8 +95,23 @@ public class BuyflowValidation {
 			else if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
 				tempCategory = "Product";
 				subscribe = 1;
+				if(!(campaign.equals("Core"))) {
+					campaign="Core";
+				}
 			}
-			else {
+			else if(categoryy.equalsIgnoreCase("Product")) {
+				tempCategory = categoryy;
+				if(!(campaign.equals("Core"))) {
+					campaign="Core";
+				}
+			}
+			else if(categoryy.equalsIgnoreCase("ShopKit")) {
+				tempCategory = categoryy;
+				if(!(campaign.equals("Core"))) {
+					campaign="Core";
+				}
+			}
+			else if(categoryy.equalsIgnoreCase("Kit")) {
 				tempCategory = categoryy;
 			}
 			
@@ -107,6 +126,7 @@ public class BuyflowValidation {
 			}
 			str = str + ppidStr + ",";
 		}		
+		campaign = tempCampaign;
 				
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
 			if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){

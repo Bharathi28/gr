@@ -258,9 +258,11 @@ public class CXTUtilities {
 	
 	public String removeProductfromCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
+		Thread.sleep(2000);
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
-			driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+			Thread.sleep(1000);
+			driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[@class='button remove-product']")).click();
 		}
 		else {
 			driver.findElement(By.xpath("(//button[@class='button-text delete-product cxt-button-link-layout'])[1]")).click();
@@ -283,10 +285,13 @@ public class CXTUtilities {
 			WebElement mcelmt = comm_obj.find_webelement(driver, mcloc.get(0).get("ELEMENTLOCATOR").toString(), mcloc.get(0).get("ELEMENTVALUE").toString());
 			if(realm.equals("R4")) {
 				mcelmt.click();
-				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
-					driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
-					driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
-					Thread.sleep(2000);
+				Thread.sleep(2000);
+				while(driver.findElements(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).size() != 0) {
+					Thread.sleep(1000);
+					driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct'][1]")).click();
+					Thread.sleep(1000);
+					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[@class='button remove-product']")).click();
+//					Thread.sleep(2000);
 				}
 				checkShoppingCartEmpty(driver, realm);
 			}
@@ -424,6 +429,7 @@ public class CXTUtilities {
 		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
 		while(prodelmts.size() == 0){
 			jse.executeScript("window.scrollBy(0,200)", 0);
+			Thread.sleep(2000);
 		}
 		Thread.sleep(1000);
 		WebElement product = driver.findElement(By.xpath(productLocator));
@@ -499,28 +505,35 @@ public class CXTUtilities {
 		setDate(driver, now);
 		
 		WebElement confirmelmt = comm_obj.find_webelement(driver, confirmloc.get(0).get("ELEMENTLOCATOR").toString(), confirmloc.get(0).get("ELEMENTVALUE").toString());
+		Thread.sleep(1000);
 		confirmelmt.click();
 		Thread.sleep(1000);
 		
-		if(realm.equals("R4")) {
-			while(driver.findElements(By.xpath("//div[@class='success clearfix']")).size() == 0) {
-				// Wait until success text appears
-			}	
+		
+		if(driver.findElements(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='ship-now-error-popup']")).size() != 0) {
+			driver.findElement(By.xpath("//button[@class='button kcpopup-btn medium-4 small-12 shipNowErrorConfirm']")).click();
+			return "Ship now cannot be processed";
 		}
 		else {
-			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
-				// Wait until spinner disappears
+			if(realm.equals("R4")) {
+				while(driver.findElements(By.xpath("//div[@class='success clearfix']")).size() == 0) {
+					// Wait until success text appears
+				}	
 			}
-		}			
-		Thread.sleep(1000);
-		List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
-		WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
-		String actualdate = actualdateelmt.getText();
-		Thread.sleep(1000);
-		System.out.println("Actual Date : " + actualdate);
-		System.out.println("Expected Date : " + expecteddate);
+			else {
+				while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
+					// Wait until spinner disappears
+				}
+			}			
+			Thread.sleep(1000);
+			List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
+			WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
+			String actualdate = actualdateelmt.getText();
+			Thread.sleep(1000);
+			return actualdate;
+		}	
 	
-		return actualdate;
+		
 	}
 	
 	public void setDate(WebDriver driver, Calendar now) throws ParseException, InterruptedException {
@@ -658,6 +671,7 @@ public class CXTUtilities {
 			
 			String elementvalue = loc.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
+				Thread.sleep(1000);
 				driver.findElement(By.xpath(elementvalue)).click();
 				break;
 			}

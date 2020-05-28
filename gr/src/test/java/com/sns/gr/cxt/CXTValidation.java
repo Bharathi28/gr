@@ -180,6 +180,7 @@ public class CXTValidation {
 				output_row.add("FAIL");
 				cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Failure", "fullpage");
 			}
+			jse.executeScript("window.scrollTo(0, 0)", 0);
 			output.add(output_row);
 		}			
 		
@@ -204,25 +205,32 @@ public class CXTValidation {
 		
 		String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
 				
-		if (realm.equals("R4")) {
-			actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
-		}		
-		else {
-			actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
-		}
-		expected = "Success! Your next shipment has been rescheduled.";			
-				System.out.println(brand + " --"+actualdate+"--");
-				System.out.println(brand + " --"+expecteddate+"--");
-		if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
-			System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
-			output_row.add("FAIL");
+		if(actualdate.equals("Ship now cannot be processed")) {
+			System.out.println(brand + "- Step 5 - Reschedule Next Shipment - Error - We're sorry, we weren't able to process your 'Ship Now' request at this time.");
+			output_row.add("Fail - Reschedule Next Shipment cannot be processed");
 			cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
 		}
+		else {
+			if (realm.equals("R4")) {
+				actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
+			}		
+			else {
+				actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
+			}
+			expected = "Success! Your next shipment has been rescheduled.";			
+					System.out.println(brand + " --"+actualdate+"--");
+					System.out.println(brand + " --"+expecteddate+"--");
+			if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
+				System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
+				output_row.add("FAIL");
+				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
+			}
+		}		
 		output.add(output_row);
 				
 		//Step 6
@@ -409,7 +417,7 @@ public class CXTValidation {
 		output_row.add(campaign);
 		output_row.add("Logout");
 		cxt_obj.LogoutCXT(driver, brand, campaign);
-		if((brand.equalsIgnoreCase("ITCosmetics")) || (brand.equalsIgnoreCase("Smileactives"))){
+		if((brand.equalsIgnoreCase("ITCosmetics")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("CrepeErase"))){
 			actual = driver.getCurrentUrl();
 			expected = "login";
 		}
