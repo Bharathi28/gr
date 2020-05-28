@@ -24,7 +24,7 @@ import org.openqa.selenium.WebElement;
 import com.sns.gr.testbase.DBLibrary;
 
 public class CommonUtilities {
-		
+	
 	public String[][] getExcelData(String fileName, String sheetName) {
 		String[][] arrayExcelData = null;
 		try {			
@@ -294,7 +294,7 @@ public class CommonUtilities {
 			query = query + include_offer;
 		}
 //		query = query + ";";
-			System.out.println(query);
+//			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}

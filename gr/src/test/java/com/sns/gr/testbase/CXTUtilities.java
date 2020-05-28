@@ -117,7 +117,7 @@ public class CXTUtilities {
 	}
 	
 	public Map<String, Object> pickRandomProduct(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String query = "select * from cxt_offers where brand='" + brand + "' and campaign='" + campaign + "' and status='Active'";
+		String query = "select * from cxt_offers where brand='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> cxtoffers = DBLibrary.dbAction("fetch", query);
 
 		Random rand = new Random(); 
@@ -386,18 +386,13 @@ public class CXTUtilities {
 		
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//button[@id='add-to-cart']/..//button[2]")).click();
-			Thread.sleep(1000);
 			driver.findElement(By.xpath("//div[@id='confirmAddToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='Confirm ']")).click();
-			Thread.sleep(25000);
 		}
 		else {
 			driver.findElement(By.xpath("//button[@class='addBtn cxt-button secondary-button-small']")).click();
-			Thread.sleep(1000);
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupAdd']//div//div//div[3]//div[2]//a//span")).click();
-			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
-				// Wait until spinner disappears
-			}
 		}		
+		Thread.sleep(25000);
 	}	
 	
 	public void select_cxt_offer(WebDriver driver, Map<String, Object> cxtoffer, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
@@ -464,6 +459,7 @@ public class CXTUtilities {
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		int index =  kcproducts.size();
+		System.out.println("Index: " + index);
 		
 		if(realm.equals("R4")) {
 			WebElement prodRemove = driver.findElement(By.xpath("(//div[@class='kitimages']//div[@class='kitimages-section']//a//img)[" + index + "]"));
@@ -472,7 +468,6 @@ public class CXTUtilities {
 			Thread.sleep(2000);		
 			driver.findElement(By.xpath("(//a[@class='button hollow remove-kitproduct removeBtn'])[" + index + "]")).click();
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupRemove']//div[@class='remove-product-popup']//div//button[text()='Confirm ']")).click();
-			Thread.sleep(25000);
 		}
 		else {
 			WebElement prodRemove = driver.findElement(By.xpath("(//div[@class='imageWrapper'])[" + index + "]"));
@@ -481,9 +476,6 @@ public class CXTUtilities {
 			Thread.sleep(2000);
 			driver.findElement(By.xpath("//div[@class='imageWrapper']//div[3]//div[2]//div[6]//a//span")).click();
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupRemove']//div//div//div[3]//div[2]//a//span")).click();
-			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
-				// Wait until spinner disappears
-			}
 		}
 	}
 	
@@ -532,8 +524,6 @@ public class CXTUtilities {
 			Thread.sleep(1000);
 			return actualdate;
 		}	
-	
-		
 	}
 	
 	public void setDate(WebDriver driver, Calendar now) throws ParseException, InterruptedException {
@@ -709,6 +699,7 @@ public class CXTUtilities {
 		if(offer != null) {
 			query = query + include_offer;
 		}
+			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}

@@ -19,7 +19,7 @@ import com.sns.gr.testbase.DBLibrary;
 public class BuyflowUtilities {
 	
 	CommonUtilities comm_obj = new CommonUtilities();
-	DBUtilities db_obj = new DBUtilities();	
+	DBUtilities db_obj = new DBUtilities();
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String category) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -155,13 +155,15 @@ public class BuyflowUtilities {
 //	}
 	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
-		Thread.sleep(3000);
+		Thread.sleep(4000);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "Upsell", upsell);
 			
 		String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
 		String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
+		jse.executeScript("window.scrollBy(0,350)", 0);
+		Thread.sleep(4000);
 		
 		comm_obj.find_webelement(driver, elementlocator, elementvalue).click();
 
@@ -224,6 +226,7 @@ public class BuyflowUtilities {
 			}
 		}
 		else {
+			
 			String products = (String) jse.executeScript("return app.variableMap.products");
 			String[] arr = products.split(";");
 			int arrSize = arr.length;
@@ -413,14 +416,14 @@ public class BuyflowUtilities {
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
-				fill_form_field(driver, realm, "CardNumber", "4111111111111122");
+				fill_form_field(driver, realm, "CardNumber", "4111111111111111");
 			}
 			else {
 				fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
 			}		
 			fill_form_field(driver, realm, "Month", "12");
 			fill_form_field(driver, realm, "Year", "2020");	
-			jse.executeScript("window.scrollBy(0,300)", 0);
+			jse.executeScript("window.scrollBy(0,200)", 0);
 			Thread.sleep(2000);
 			fill_form_field(driver, realm, "Agree", "");
 			Thread.sleep(2000);

@@ -117,8 +117,7 @@ public class PricingUtilities {
 		return shop_price;
 	}
 	
-	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException, InterruptedException {
-		
+	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {
 		String realm = DBUtilities.get_realm(brand);	
 		List<Map<String, Object>> locator = null;
 		if(pricing.contains("Checkout")){
@@ -134,15 +133,10 @@ public class PricingUtilities {
 		}
 		String text = "";
 		for(Map<String,Object> loc : locator) {
-			String elementvalue = loc.get("ELEMENTVALUE").toString();
 			
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase"))) {
-				elementvalue = "(" + elementvalue + ")[2]";
-			}
+			String elementvalue = loc.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
-				Thread.sleep(1000);
 				text = driver.findElement(By.xpath(elementvalue)).getText();
-				System.out.println(text);
 				break;
 			}
 		}
