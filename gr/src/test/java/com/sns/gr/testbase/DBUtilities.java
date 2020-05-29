@@ -12,9 +12,14 @@ import org.openqa.selenium.WebDriver;
 import com.sns.gr.testbase.DBLibrary;
 
 public class DBUtilities {
-	CommonUtilities comm_obj = new CommonUtilities();
+	static CommonUtilities comm_obj = new CommonUtilities();
 
 	public static Map<String, Object> get_offerdata(String ppid, String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
 		
 		String realm = get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	

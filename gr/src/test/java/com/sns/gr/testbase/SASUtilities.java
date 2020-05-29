@@ -185,14 +185,12 @@ public class SASUtilities {
 			Thread.sleep(2000);
 		}
 
-		if((brand.equalsIgnoreCase("FixMDSkin")) && ((campaign.equalsIgnoreCase("Core"))||(campaign.equalsIgnoreCase("fb2"))||(campaign.equalsIgnoreCase("fb")))){
+		if(brand.equalsIgnoreCase("FixMDSkin")){
 			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}
-		jse.executeScript("window.scrollBy(0,250)", 0);
 		kit_elmt.click();	
 		Thread.sleep(2000);
-		Thread.sleep(1000);
 		if((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) {
 			jse.executeScript("window.scrollBy(0,700)", 0);
 			driver.findElement(By.xpath("(//button[@class='button primary next-section'])[1]")).click();
@@ -278,14 +276,10 @@ public class SASUtilities {
 
 		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("corehrt"))||(campaign.equalsIgnoreCase("pnlbb"))||(campaign.equalsIgnoreCase("corehrt2")))) {
 			jse.executeScript("window.scrollBy(0,500)", 0);
-
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
-		
-
 
 		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
-
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
@@ -298,8 +292,7 @@ public class SASUtilities {
 			else {
 				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
 			}
-		}
-			
+		}			
 
 		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
 			jse.executeScript("window.scrollBy(0,400)", 0);

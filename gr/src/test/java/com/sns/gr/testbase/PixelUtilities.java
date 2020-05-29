@@ -69,6 +69,11 @@ public class PixelUtilities {
 	}
 	
 	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String query = "";
 //		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("TryCrepeErase")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 //			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active' order by RAND() limit " + runs;

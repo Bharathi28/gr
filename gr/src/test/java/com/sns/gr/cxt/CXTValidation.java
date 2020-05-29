@@ -129,8 +129,7 @@ public class CXTValidation {
 		output_row = new ArrayList<String>();
 		output_row.add(env);
 		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Soft Login");	
+		output_row.add(campaign);			
 		url = db_obj.getUrl(brand, campaign, env);
 		driver.get(url);
 		String message = "";
@@ -138,11 +137,13 @@ public class CXTValidation {
 			actual = cxt_obj.getPageTitle(driver);
 			expected = "Shop";
 			message = "Softlogin";
+			output_row.add("Soft Login");
 		}
 		else if(realm.equalsIgnoreCase("R2")) {
 			actual = driver.findElement(By.xpath("//h2[@class='kit-section-header']")).getText();
 			expected = "My Next Kit";
 			message = "Softlogin/Navigation to My Next Kit";
+			output_row.add("Softlogin/Navigation to My Next Kit");
 		}
 		if(actual.equals(expected)) {
 			System.out.println("Step 3 - "+ message +" Successful");	

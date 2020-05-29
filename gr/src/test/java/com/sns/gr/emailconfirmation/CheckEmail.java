@@ -22,8 +22,8 @@ import com.sns.gr.testbase.CommonUtilities;
 public class CheckEmail {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "F:\\Automation\\Drivers\\chromedriver_win32\\chromedriver.exe");
-		System.setProperty("webdriver.gecko.driver", "F:\\Automation\\Drivers\\geckodriver-v0.22.0-win64\\geckodriver.exe");		
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
+		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");		
 		
 		Scanner in = new Scanner(System.in);
 		
@@ -51,7 +51,7 @@ public class CheckEmail {
 		driver.manage().window().maximize();
 				
 		for(String brand : brands) {
-			File input_file = new File("F:\\Automation\\Buyflow\\DailyOrders\\Result.xlsx");
+			File input_file = new File(System.getProperty("user.dir")+"\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_572020");
 //			File input_file = new File("F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\BuyflowResults_10232019.xlsx");
 			FileInputStream inputstream = new FileInputStream(input_file);
 			Workbook testData = new XSSFWorkbook(inputstream);

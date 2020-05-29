@@ -106,8 +106,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String offer, String category) throws InterruptedException, ClassNotFoundException, SQLException {
-		System.out.println("Moving to Checkout Page...");		
-				
+		System.out.println("Moving to Checkout Page...");				
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		Thread.sleep(2000);
 		// Check if the page is already in checkout
@@ -118,6 +117,9 @@ public class BuyflowUtilities {
 			
 		}
 		else {			
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("product"))){
+				campaign = "crepeerase";
+			}
 			List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "MoveToCheckout", category);
 			
 			String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
@@ -131,28 +133,6 @@ public class BuyflowUtilities {
 			Thread.sleep(2000);
 		}	
 	}
-//	public String ppupresent(WebDriver driver, String brand, String campaign, String ppid, String supply, String realm) throws ClassNotFoundException, SQLException {
-//		List<String> category = db_obj.getCategory(brand, campaign, ppid);
-//		String category1 = null;
-//		for (String s : category)
-//		{
-//		    category1 = s;
-//		}
-//		String ppu = null;
-//		if(brand.equalsIgnoreCase("DermaFlash") && campaign.equalsIgnoreCase("Core") && category1.equalsIgnoreCase("Product")) {
-//			String desc = db_obj.getdescription(brand, campaign, ppid, realm);
-//			if(desc.equalsIgnoreCase("DermaFlash Luxe")) {
-//				ppu = "Yes";
-//			}
-//			else {
-//				ppu = "No";
-//			}
-//		}
-//		else {
-//			ppu = db_obj.checkPPUPresent(brand, campaign);
-//		}
-//		return ppu;
-//	}
 	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
 		Thread.sleep(4000);
@@ -329,7 +309,7 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
-			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
+			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
 			
 			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
@@ -353,7 +333,7 @@ public class BuyflowUtilities {
 			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 			driver.switchTo().window(winHandleBefore);
 			fill_form_field(driver, realm, "Agree", "");
-			return "testbuyer2@guthy-renker.com";
+			return "testbuyer1@guthy-renker.com";
 		}
 		else {
 			String alpha = RandomStringUtils.randomAlphabetic(9);
