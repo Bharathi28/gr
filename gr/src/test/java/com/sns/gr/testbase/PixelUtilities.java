@@ -69,9 +69,10 @@ public class PixelUtilities {
 	}
 	
 	public List<List<String>> generateTestRuns(DesiredCapabilities capabilities, BrowserMobProxy proxy, String env, String brand, String campaign, String flow, List<String> pixellist, int runs, String url) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
-		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
-		if(!(origcampaign.equals("n/a"))){
-			campaign = origcampaign;
+		String origcampaign = campaign;
+		String tempcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(tempcampaign.equals("n/a"))){
+			campaign = tempcampaign;
 		}
 		
 		String query = "";
@@ -89,11 +90,11 @@ public class PixelUtilities {
 		}	
 		List<Map<String, Object>> offers = DBLibrary.dbAction("fetch", query);
 		
+		campaign = origcampaign;
 		List<Map<String, Object>> offerdata = new ArrayList<Map<String, Object>>();
 		Random rand = new Random(); 
-//        return list.get(rand.nextInt(list.size())); 
+ 
 		for(int i=0; i<runs; i++) {
-//			offerdata.add(offers.get(i));
 			offerdata.add(offers.get(rand.nextInt(offers.size())));
 		}		
 		
@@ -197,6 +198,12 @@ public class PixelUtilities {
 	    	pattern = "PropelMedia";
 	    }   
 	    	    
+	    String origcampaign = campaign;
+		String tempcampaign = comm_obj.campaign_repeat(brand, campaign, "locators");
+		if(!(tempcampaign.equals("n/a"))){
+			campaign = tempcampaign;
+		}
+		
 	    ///////////////////////////////////////////////////////////		    
 	    // Home Page
 		if((!((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19")))) && (!((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b"))))){
@@ -216,13 +223,15 @@ public class PixelUtilities {
 				driver.navigate().refresh();
 			}
 		    Thread.sleep(10000);
-		    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_homepage_" + pattern + "_" + flow +".har");
+		    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_homepage_" + pattern + "_" + flow +".har");
 		}	    
 	    
 	    //////////////////////////////////////////////////////////
         // SAS Page
 	    defineNewHar(proxy, brand + "SASPage");
 	        
+	    
+		
 	    // Navigate to SAS Page
 	    if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19"))) || ((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b")))){
 	    	driver.get(url);	    
@@ -235,20 +244,20 @@ public class PixelUtilities {
 		    Thread.sleep(10000);
 	    }	    	
 	    else if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
-	        bf_obj.click_cta(driver, env, brand, campaign, "Kit");
+	        bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
 	        sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
 	    else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
-	    	bf_obj.click_cta(driver, env, brand, campaign, "Kit");
+	    	bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
 	    	sas_obj.select_kit(driver, offerdata, brand, campaign);
 	    }
 	    else {
-	    	 bf_obj.click_cta(driver, env, brand, campaign, "Kit");
+	    	 bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
 	    }
 	        
 	    Thread.sleep(10000);
 //	    wait.until(pageLoadCondition);
-	    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_saspage_" + pattern + "_" + flow +".har");
+	    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_saspage_" + pattern + "_" + flow +".har");
 	    ////////////////////////////////////////////////////////////  
         // Checkout Page	        
         defineNewHar(proxy, brand + "CheckoutPage");
@@ -263,14 +272,9 @@ public class PixelUtilities {
         }
         if(!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) {
         	bf_obj.move_to_checkout(driver, brand, campaign, offerdata.get("PPID").toString(), "Kit");
-        }
-
-        
-
-                     
+        }        
         String email = "";
-        String checkout_pricing = "";
-        
+                
         if(flow.equalsIgnoreCase("CCFlow")) {
         	Thread.sleep(4000);
             if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
@@ -282,26 +286,15 @@ public class PixelUtilities {
             email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
-            
-//    		jse.executeScript("window.scrollBy(0,-200)", 0);
-    		
-//    		String checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
-//    		String checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
-//    		String checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
-//    		String checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
-//    		
-//    		checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
         }
         else if(flow.equalsIgnoreCase("PaypalFlow")) {
-        	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+        	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
         	defineNewHar(proxy, brand + "PaypalReviewPage");
         	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
-            
-//    		jse.executeScript("window.scrollBy(0,-200)", 0);
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
         }
         
         
@@ -321,7 +314,7 @@ public class PixelUtilities {
         	// Navigate to Confirmation Page	        
         	bf_obj.complete_order(driver, brand, cc);          
             Thread.sleep(10000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
 		}
 		else {
 			// Upsell Page
@@ -329,7 +322,7 @@ public class PixelUtilities {
             // Navigate to Upsell Page	        
             bf_obj.complete_order(driver, brand, cc);
             Thread.sleep(20000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_upsellpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_upsellpage_" + pattern + "_" + flow +".har");
             
             //////////////////////////////////////////////////////////
             // Confirmation Page	        
@@ -341,7 +334,7 @@ public class PixelUtilities {
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
             Thread.sleep(20000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
             Thread.sleep(3000);
 		}        
 	
@@ -353,14 +346,7 @@ public class PixelUtilities {
         
         String conf_num = bf_obj.fetch_conf_num(driver, brand);
         System.out.println("Confirmation Number : " + conf_num);        
-		
-//		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
-//		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
-//		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
-//		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
-//		
-//		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;
-		
+	
 		List<String> output_row = new ArrayList<String>();
 		output_row.add(env);
 		output_row.add(brand);
@@ -369,8 +355,6 @@ public class PixelUtilities {
         output_row.add(expected_ppid);
 		output_row.add(actual_conf_ppid);
 		output_row.add(conf_num);
-//		output_row.add("Yes");
-//		output_row.add(checkout_pricing);		
 		
         // Save Order Screenshots        
 		Screenshot confpage = new AShot().takeScreenshot(driver);			

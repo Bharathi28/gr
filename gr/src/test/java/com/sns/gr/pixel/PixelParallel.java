@@ -227,8 +227,13 @@ public class PixelParallel {
 									
 				int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
 				if(compatible == 1) {
+					String origcampaign = campaign;
+					String tempcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
+					if(!(tempcampaign.equals("n/a"))){
+						campaign = tempcampaign;
+					}
 					List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
-						
+					campaign = origcampaign;
 					String pattern = db_obj.getSearchPattern(brand, event);
 					String pixelbrandid = db_obj.getPixelBrandId(brand, event);
 						
@@ -238,7 +243,6 @@ public class PixelParallel {
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-//						driver.findElement(By.name("har")).sendKeys("C:\\Automation\\Pixel\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
 						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
 						
 						WebElement searchElmt = driver.findElement(By.id("search"));
