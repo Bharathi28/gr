@@ -134,7 +134,7 @@ public class PricingUtilities {
 		String text = "";
 		for(Map<String,Object> loc : locator) {
 			String elementvalue = loc.get("ELEMENTVALUE").toString();
-			if((brand.equalsIgnoreCase("CrepeErase")) && campaign.equalsIgnoreCase("crepeerase")) {
+			if((pricing.contains("Checkout")) && campaign.equalsIgnoreCase("crepeerase")) {
 				elementvalue = "(" + elementvalue + ")[2]";
 			}						
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
