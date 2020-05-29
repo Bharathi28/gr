@@ -141,7 +141,7 @@ public class DBUtilities {
 	}
 	
 	public String checkPPUPresent(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
-		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "locators");
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
 		}
