@@ -454,7 +454,7 @@ public class SASUtilities {
 		
 		if(!(easypay.equalsIgnoreCase("n/a"))&& !((campaign.equalsIgnoreCase("newcc"))|| (category.equalsIgnoreCase("Product"))) ) {
 			List<Map<String, Object>> pay_loc = comm_obj.get_element_locator(brand, campaign, "EasyPay", easypay + " " + kit);
-			System.out.println(pay_loc);
+//			System.out.println(pay_loc);
 			Thread.sleep(3000);
 			jse.executeScript("window.scrollBy(0,250)", 0);
 			WebElement pay_elmt = comm_obj.find_webelement(driver, pay_loc.get(0).get("ELEMENTLOCATOR").toString(), pay_loc.get(0).get("ELEMENTVALUE").toString());

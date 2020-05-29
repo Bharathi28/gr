@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import com.sns.gr.testbase.DBLibrary;
 
 public class DBUtilities {
+	CommonUtilities comm_obj = new CommonUtilities();
 
 	public static Map<String, Object> get_offerdata(String ppid, String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
 		
@@ -87,6 +88,10 @@ public class DBUtilities {
 	}
 	
 	public List<Map<String, Object>> fetch_all_by_category(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";
 		List<Map<String, Object>> data = null;
@@ -102,6 +107,11 @@ public class DBUtilities {
 	}
 	
 	public List<Map<String, Object>> fetch_all_30day_kits(String brand, String campaign) throws ClassNotFoundException, SQLException {	
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";
 		String supply;
@@ -131,6 +141,11 @@ public class DBUtilities {
 	}
 	
 	public String checkPPUPresent(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "locators");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
+		
 		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";		
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
 		Map<String, Object> map = camplist.get(0);
@@ -176,6 +191,11 @@ public class DBUtilities {
 	}
 	
 	public List<String> getPages(String brand, String campaign) throws ClassNotFoundException, SQLException {
+		
+		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
+		if(!(origcampaign.equals("n/a"))){
+			campaign = origcampaign;
+		}
 		
 		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
