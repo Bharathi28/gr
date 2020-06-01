@@ -117,7 +117,7 @@ public class CXTUtilities {
 	}
 	
 	public Map<String, Object> pickRandomProduct(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String query = "select * from cxt_offers where brand='" + brand + "' and campaign='" + campaign + "'";
+		String query = "select * from cxt_offers where brand='" + brand + "' and campaign='" + campaign + "' and status='Active'";
 		List<Map<String, Object>> cxtoffers = DBLibrary.dbAction("fetch", query);
 
 		Random rand = new Random(); 
@@ -258,11 +258,9 @@ public class CXTUtilities {
 	
 	public String removeProductfromCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
-		Thread.sleep(2000);
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
-			Thread.sleep(1000);
-			driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[@class='button remove-product']")).click();
+			driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
 		}
 		else {
 			driver.findElement(By.xpath("(//button[@class='button-text delete-product cxt-button-link-layout'])[1]")).click();
@@ -285,13 +283,10 @@ public class CXTUtilities {
 			WebElement mcelmt = comm_obj.find_webelement(driver, mcloc.get(0).get("ELEMENTLOCATOR").toString(), mcloc.get(0).get("ELEMENTVALUE").toString());
 			if(realm.equals("R4")) {
 				mcelmt.click();
-				Thread.sleep(2000);
-				while(driver.findElements(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).size() != 0) {
-					Thread.sleep(1000);
-					driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct'][1]")).click();
-					Thread.sleep(1000);
-					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[@class='button remove-product']")).click();
-//					Thread.sleep(2000);
+				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
+					driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
+					driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+					Thread.sleep(2000);
 				}
 				checkShoppingCartEmpty(driver, realm);
 			}
@@ -386,13 +381,18 @@ public class CXTUtilities {
 		
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//button[@id='add-to-cart']/..//button[2]")).click();
+			Thread.sleep(1000);
 			driver.findElement(By.xpath("//div[@id='confirmAddToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='Confirm ']")).click();
+			Thread.sleep(25000);
 		}
 		else {
 			driver.findElement(By.xpath("//button[@class='addBtn cxt-button secondary-button-small']")).click();
+			Thread.sleep(1000);
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupAdd']//div//div//div[3]//div[2]//a//span")).click();
+			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
+				// Wait until spinner disappears
+			}
 		}		
-		Thread.sleep(25000);
 	}	
 	
 	public void select_cxt_offer(WebDriver driver, Map<String, Object> cxtoffer, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
@@ -424,7 +424,6 @@ public class CXTUtilities {
 		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
 		while(prodelmts.size() == 0){
 			jse.executeScript("window.scrollBy(0,200)", 0);
-			Thread.sleep(2000);
 		}
 		Thread.sleep(1000);
 		WebElement product = driver.findElement(By.xpath(productLocator));
@@ -459,7 +458,6 @@ public class CXTUtilities {
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		int index =  kcproducts.size();
-		System.out.println("Index: " + index);
 		
 		if(realm.equals("R4")) {
 			WebElement prodRemove = driver.findElement(By.xpath("(//div[@class='kitimages']//div[@class='kitimages-section']//a//img)[" + index + "]"));
@@ -468,6 +466,7 @@ public class CXTUtilities {
 			Thread.sleep(2000);		
 			driver.findElement(By.xpath("(//a[@class='button hollow remove-kitproduct removeBtn'])[" + index + "]")).click();
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupRemove']//div[@class='remove-product-popup']//div//button[text()='Confirm ']")).click();
+			Thread.sleep(25000);
 		}
 		else {
 			WebElement prodRemove = driver.findElement(By.xpath("(//div[@class='imageWrapper'])[" + index + "]"));
@@ -476,10 +475,15 @@ public class CXTUtilities {
 			Thread.sleep(2000);
 			driver.findElement(By.xpath("//div[@class='imageWrapper']//div[3]//div[2]//div[6]//a//span")).click();
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupRemove']//div//div//div[3]//div[2]//a//span")).click();
+			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
+				// Wait until spinner disappears
+			}
 		}
 	}
 	
 	public String rescheduleShipment(WebDriver driver, String brand, String expecteddate, Calendar now) throws ClassNotFoundException, SQLException, InterruptedException, ParseException {
+		String rescheduleresult = "PASS";
+		
 		String realm = db_obj.get_realm(brand);
 		
 		List<Map<String, Object>> reschedulebuttonloc = get_cxt_locator(realm, "RescheduleButton", "");
@@ -487,6 +491,7 @@ public class CXTUtilities {
 		List<Map<String, Object>> confirmloc = get_cxt_locator(realm, "ConfirmReschedule", "");
 		
 		WebElement reschedulebuttonelmt = comm_obj.find_webelement(driver, reschedulebuttonloc.get(0).get("ELEMENTLOCATOR").toString(), reschedulebuttonloc.get(0).get("ELEMENTVALUE").toString());
+		Thread.sleep(1000);
 		reschedulebuttonelmt.click();
 		Thread.sleep(1000);
 		
@@ -494,22 +499,19 @@ public class CXTUtilities {
 		datepickerelmt.click();
 		Thread.sleep(1000);
 		
-		setDate(driver, now);
+		rescheduleresult = setDate(driver, now);	
 		
 		WebElement confirmelmt = comm_obj.find_webelement(driver, confirmloc.get(0).get("ELEMENTLOCATOR").toString(), confirmloc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(1000);
 		confirmelmt.click();
 		Thread.sleep(1000);
 		
-		
-		if(driver.findElements(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='ship-now-error-popup']")).size() != 0) {
-			driver.findElement(By.xpath("//button[@class='button kcpopup-btn medium-4 small-12 shipNowErrorConfirm']")).click();
-			return "Ship now cannot be processed";
-		}
-		else {
+		if(rescheduleresult.equals("PASS")) {			
+			
 			if(realm.equals("R4")) {
-				while(driver.findElements(By.xpath("//div[@class='success clearfix']")).size() == 0) {
-					// Wait until success text appears
+				
+				while(driver.findElement(By.xpath("//img[@alt='Loading']/../..")).getAttribute("style").equalsIgnoreCase("display: block; top: 75px;")) {
+					// Wait until spinner disappears
 				}	
 			}
 			else {
@@ -517,17 +519,20 @@ public class CXTUtilities {
 					// Wait until spinner disappears
 				}
 			}			
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
 			WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
 			String actualdate = actualdateelmt.getText();
 			Thread.sleep(1000);
-			return actualdate;
+			System.out.println("Actual Date : " + actualdate);
+			System.out.println("Expected Date : " + expecteddate);
+			rescheduleresult = actualdate;
 		}	
+		return rescheduleresult;
 	}
 	
-	public void setDate(WebDriver driver, Calendar now) throws ParseException, InterruptedException {
-				
+	public String setDate(WebDriver driver, Calendar now) throws ParseException, InterruptedException {
+		String setdateresult = "PASS";
 		String reschedule_month = new SimpleDateFormat("MMMM").format(now.getTime());
 		String reschedule_year = Integer.toString(now.get(Calendar.YEAR));
 		String reschedule_day = Integer.toString(now.get(Calendar.DAY_OF_MONTH));
@@ -535,33 +540,37 @@ public class CXTUtilities {
 		String datepicker_month = driver.findElement(By.xpath("//span[@class='ui-datepicker-month']")).getText();
 		String datepicker_year = driver.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText();
 		
-		changeMonth(driver, now, reschedule_month, reschedule_year, datepicker_month, datepicker_year);
+		setdateresult = changeMonth(driver, now, reschedule_month, reschedule_year, datepicker_month, datepicker_year);
 		Thread.sleep(1000);
 		int dateset = 0;
-		List<WebElement> weeks = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr"));
-		for(int i=1; i<=weeks.size(); i++) {
-			List<WebElement> days = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td"));
-			for(int j=1; j<=days.size(); j++) {				
-				if(driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a")).size() != 0) {
-					WebElement dayelmt = driver.findElement(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a"));
-					String dpday = dayelmt.getText();
-					if(dpday.equals(reschedule_day)) {
-						dayelmt.click();
-						dateset=1;
-						break;
-					}
-					else {
-						continue;
-					}
-				}				
-			}
-			if(dateset == 1) {
-				break;
+		if(setdateresult.equals("PASS")) {
+			List<WebElement> weeks = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr"));
+			for(int i=1; i<=weeks.size(); i++) {
+				List<WebElement> days = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td"));
+				for(int j=1; j<=days.size(); j++) {				
+					if(driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a")).size() != 0) {
+						WebElement dayelmt = driver.findElement(By.xpath("//table[@class='ui-datepicker-calendar']//tbody//tr[" + i + "]//td[" + j + "]//a"));
+						String dpday = dayelmt.getText();
+						if(dpday.equals(reschedule_day)) {
+							dayelmt.click();
+							dateset=1;
+							break;
+						}
+						else {
+							continue;
+						}
+					}				
+				}
+				if(dateset == 1) {
+					break;
+				}
 			}
 		}
+		return setdateresult;
 	}
 	
-	public void changeMonth(WebDriver driver, Calendar now, String reschedule_month, String reschedule_year, String datepicker_month, String datepicker_year) throws ParseException {
+	public String changeMonth(WebDriver driver, Calendar now, String reschedule_month, String reschedule_year, String datepicker_month, String datepicker_year) throws ParseException {
+		String changemonthresult = "PASS";
 		SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM");		
 		SimpleDateFormat outputFormat = new SimpleDateFormat("MM"); // 01-12
 		
@@ -579,7 +588,6 @@ public class CXTUtilities {
 		
 		if(dpyear == reyear) {
 			if(dpmonth == remonth) {
-				
 			}
 			else if(dpmonth>remonth) {
 				int diff = dpmonth-remonth;
@@ -591,8 +599,15 @@ public class CXTUtilities {
 			else if(remonth>dpmonth) {
 				int diff = remonth-dpmonth;
 				while(diff>0) {
-					driver.findElement(By.xpath("//a[@data-handler='next']//span")).click();
-					diff--;
+					if(driver.findElements(By.xpath("//a[@data-handler='next']//span")).size() != 0) {
+						driver.findElement(By.xpath("//a[@data-handler='next']//span")).click();
+						diff--;
+					}
+					else {
+						changemonthresult = "FAIL";
+						driver.findElement(By.xpath("(//div[contains(text(),'Reschedule Next Shipment')])[2]")).click();
+						diff--;
+					}
 				}
 			}
 		}
@@ -604,6 +619,7 @@ public class CXTUtilities {
 				driver.findElement(By.xpath("//a[@data-handler='prev']//span")).click();
 			}
 		}
+		return changemonthresult;
 	}
 	
 	public String getPageTitle(WebDriver driver) {
@@ -661,7 +677,7 @@ public class CXTUtilities {
 			
 			String elementvalue = loc.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 				driver.findElement(By.xpath(elementvalue)).click();
 				break;
 			}
@@ -699,7 +715,6 @@ public class CXTUtilities {
 		if(offer != null) {
 			query = query + include_offer;
 		}
-			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}
