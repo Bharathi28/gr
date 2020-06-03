@@ -22,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -260,7 +261,12 @@ public class CXTUtilities {
 		String realm = db_obj.get_realm(brand);
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
-			driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+			Thread.sleep(2000);
+			if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
+				Thread.sleep(1000);
+				driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+			}					
+			Thread.sleep(2000);
 		}
 		else {
 			driver.findElement(By.xpath("(//button[@class='button-text delete-product cxt-button-link-layout'])[1]")).click();
@@ -284,8 +290,15 @@ public class CXTUtilities {
 			if(realm.equals("R4")) {
 				mcelmt.click();
 				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
-					driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
-					driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+					if(driver.findElements(By.xpath("(//a[@class='removeproduct'])[1]")).size() != 0) {
+						Thread.sleep(2000);
+						driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
+					}
+					Thread.sleep(2000);
+					if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
+						Thread.sleep(1000);
+						driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+					}					
 					Thread.sleep(2000);
 				}
 				checkShoppingCartEmpty(driver, realm);
@@ -416,6 +429,9 @@ public class CXTUtilities {
 		String productLocator = "";		
 		if(realm.equals("R4")) {
 			productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
+			if(prodName.contains("-2A")) {
+				productLocator = "(" + productLocator + ")[2]";
+			}
 		}
 		else {
 			productLocator = "//div[@class='product-name']//h2//a[contains(text(),'" + prodName + "')]";
@@ -423,7 +439,8 @@ public class CXTUtilities {
 		
 		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
 		while(prodelmts.size() == 0){
-			jse.executeScript("window.scrollBy(0,200)", 0);
+			jse.executeScript("window.scrollBy(0,350)", 0);
+			Thread.sleep(2000);
 		}
 		Thread.sleep(1000);
 		WebElement product = driver.findElement(By.xpath(productLocator));
@@ -505,14 +522,21 @@ public class CXTUtilities {
 		Thread.sleep(1000);
 		confirmelmt.click();
 		Thread.sleep(1000);
-		
+		System.out.println(rescheduleresult);
 		if(rescheduleresult.equals("PASS")) {			
 			
 			if(realm.equals("R4")) {
-				
-				while(driver.findElement(By.xpath("//img[@alt='Loading']/../..")).getAttribute("style").equalsIgnoreCase("display: block; top: 75px;")) {
+				String display = "block";
+				while(display.equals("block")) {
 					// Wait until spinner disappears
-				}	
+					display = driver.findElement(By.xpath("//img[@alt='Loading']/../..")).getAttribute("style");
+					if(display.contains("block")) {
+						display = "block";
+					}
+					else {
+						display = "none";
+					}
+				}
 			}
 			else {
 				while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
@@ -522,6 +546,7 @@ public class CXTUtilities {
 			Thread.sleep(2000);
 			List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
 			WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
+			Thread.sleep(1000);
 			String actualdate = actualdateelmt.getText();
 			Thread.sleep(1000);
 			System.out.println("Actual Date : " + actualdate);
@@ -646,10 +671,12 @@ public class CXTUtilities {
 		unelmt.sendKeys(username);
 		WebElement pwdelmt = comm_obj.find_webelement(driver, pwdloc.get(0).get("ELEMENTLOCATOR").toString(), pwdloc.get(0).get("ELEMENTVALUE").toString());
 		pwdelmt.sendKeys(password);
+		
 		WebElement signinelmt = comm_obj.find_webelement(driver, signinloc.get(0).get("ELEMENTLOCATOR").toString(), signinloc.get(0).get("ELEMENTVALUE").toString());
+		Thread.sleep(1000);
 		signinelmt.click();		
 		
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 	
 	public void accessLoggedInProfile(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
