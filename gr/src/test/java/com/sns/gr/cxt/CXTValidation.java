@@ -334,8 +334,21 @@ public class CXTValidation {
 		output_row.add(campaign);
 		output_row.add("Add Product to KC");	
 		cxt_obj.addProductToKC(driver, brand, campaign);
-		actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
-		expected = "Success! Your kit has been updated.";
+		if(realm.equals("R4")) {			
+			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
+			actual = successmsg.replace('\n', ' ');
+			
+			cxt_obj.openMyNextKit(driver, realm);
+			Thread.sleep(1000);
+			String totalKCValue = driver.findElement(By.xpath("//div[@class='total clearfix']//span[@class='label-value']")).getText();
+			expected = "Success! Updated Kit Total is " + totalKCValue + ". See My Next Kit.";
+			System.out.println(actual);
+			System.out.println(expected);
+		}
+		else {
+			actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
+			expected = "Success! Your kit has been updated.";
+		}
 		if(actual.equals(expected)) {
 			System.out.println(brand + "- Step 9 - Adding Product to KC Successful");
 			output_row.add("PASS");
@@ -355,8 +368,19 @@ public class CXTValidation {
 		output_row.add(campaign);
 		output_row.add("Remove Product from KC");
 		cxt_obj.removeProductFromKC(driver, brand);
-		actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
-		expected = "Success! Your kit has been updated.";
+		if(realm.equals("R4")) {			
+			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
+			actual = successmsg.replace('\n', ' ');
+		
+			String totalKCValue = driver.findElement(By.xpath("//div[@class='total clearfix']//span[@class='label-value']")).getText();
+			expected = "Success! Updated Kit Total is " + totalKCValue + ". See My Next Kit.";
+			System.out.println(actual);
+			System.out.println(expected);
+		}
+		else {
+			actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
+			expected = "Success! Your kit has been updated.";
+		}
 		if(actual.equals(expected)) {
 			System.out.println(brand + "- Step 10 - Removing Product from KC Successful");	
 			output_row.add("PASS");

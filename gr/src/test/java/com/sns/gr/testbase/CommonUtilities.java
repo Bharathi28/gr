@@ -300,10 +300,10 @@ public class CommonUtilities {
 	}
 	
 	public String campaign_repeat(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
-		String origcampaign = "";
+		String origcampaign = "n/a";
 		String query = "select * from campaign_repeat where brand='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> campdetails = DBLibrary.dbAction("fetch",query);
-		if(campdetails.size()==1) {
+		while(campdetails.size()==1) {
 			if(category.equalsIgnoreCase("locators")) {
 				origcampaign = campdetails.get(0).get("LOCATORS_SAMEAS").toString();
 			}
@@ -313,9 +313,8 @@ public class CommonUtilities {
 			else if(category.equalsIgnoreCase("pages")) {
 				origcampaign = campdetails.get(0).get("PAGES_SAMEAS").toString();
 			}
-		}
-		else {
-			origcampaign = "n/a";
+			query = "select * from campaign_repeat where brand='" + brand + "' and campaign='" + origcampaign + "'";
+			campdetails = DBLibrary.dbAction("fetch",query);
 		}
 		return origcampaign;
 	}

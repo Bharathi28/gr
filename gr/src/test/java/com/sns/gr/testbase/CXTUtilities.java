@@ -394,9 +394,20 @@ public class CXTUtilities {
 		
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//button[@id='add-to-cart']/..//button[2]")).click();
+			String display = "none";
+			while(display.equals("none")) {
+				// Wait until success text appears
+				display = driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']")).getAttribute("style");
+				if(display.contains("block")) {
+					display = "block";
+				}
+				else {
+					display = "none";
+				}
+			}		
 			Thread.sleep(1000);
-			driver.findElement(By.xpath("//div[@id='confirmAddToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='Confirm ']")).click();
-			Thread.sleep(25000);
+			driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='OK ']")).click();
+			Thread.sleep(1000);
 		}
 		else {
 			driver.findElement(By.xpath("//button[@class='addBtn cxt-button secondary-button-small']")).click();
@@ -428,9 +439,13 @@ public class CXTUtilities {
 		String prodName = cxtoffer.get("DESCRIPTION").toString();
 		String productLocator = "";		
 		if(realm.equals("R4")) {
-			productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
 			if(prodName.contains("-2A")) {
+				prodName = prodName.replace("-2A", "");
+				productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
 				productLocator = "(" + productLocator + ")[2]";
+			}
+			else {
+				productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
 			}
 		}
 		else {
@@ -439,7 +454,7 @@ public class CXTUtilities {
 		
 		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
 		while(prodelmts.size() == 0){
-			jse.executeScript("window.scrollBy(0,350)", 0);
+			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}
 		Thread.sleep(1000);
