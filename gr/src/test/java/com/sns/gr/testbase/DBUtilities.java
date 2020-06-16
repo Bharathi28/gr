@@ -30,6 +30,29 @@ public class DBUtilities {
 		return offerdata.get(0);		
 	}
 	
+	public String[] get_combo(String brand, String campaign) throws ClassNotFoundException, SQLException {
+		String query = "select * from brand_combo where brand='" + brand + "' and campaign='" + campaign + "'";
+		List<Map<String, Object>> combodata = DBLibrary.dbAction("fetch", query);	
+		String data = combodata.get(0).get("COMBOLIST").toString();
+		String[] brandArr = data.split(",");
+		return brandArr;
+	}
+	
+	public String check_ppid(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+		String realm = get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";	
+		
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and status ='Active'";
+		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);	
+		int size = offerdata.size();
+		String ppidPresent = "No";
+		if(size > 0) {
+			ppidPresent = "Yes";
+		}
+		return ppidPresent;
+	}
+	
+	
 	public static String get_realm(String brand) throws ClassNotFoundException, SQLException {
 		String realmQuery = "select * from brand_realm where brand ='" + brand + "'";
 		List<Map<String, Object>> realmResult = DBLibrary.dbAction("fetch", realmQuery);

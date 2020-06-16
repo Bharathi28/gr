@@ -59,7 +59,7 @@ public class BuyflowValidation {
 	}
 	
 	@Test(dataProvider="buyflowInput")
-	public void buyflow(String env, String brand, String campaign, String categoryy, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
+	public void buyflow(String env, String brand, String campaign, String categoryy, String nav, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
 									
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
@@ -115,8 +115,8 @@ public class BuyflowValidation {
 				tempCategory = categoryy;
 			}
 			
-			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory);
-			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe);
+			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);
+			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
 			if(i == ((offer_array.length)-1)) {
 				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
 			}
@@ -127,7 +127,7 @@ public class BuyflowValidation {
 			str = str + ppidStr + ",";
 		}		
 		campaign = tempCampaign;
-				
+						
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
 			if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
 				driver.findElement(By.xpath("//a[@id='creditCardPath']")).click();
@@ -171,19 +171,11 @@ public class BuyflowValidation {
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(1000);
 			
-//		if(driver.findElements(By.id("popup-place-order-fd")).size() != 0) {
-//			String additionalOrderPopup = driver.findElement(By.id("popup-place-order-fd")).getAttribute("aria-hidden");
-//			if(additionalOrderPopup.equalsIgnoreCase("false")) {
-//				driver.findElement(By.xpath("//a[text()='Place Additional Order']")).click();
-//			}
-//		}
-					
 		Thread.sleep(2000);	
 
 		String campaignPPU = "";
 		String category2 = "";
 		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
-			
 			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
 			category2 = "Kit";
 		}
@@ -245,7 +237,6 @@ public class BuyflowValidation {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-//		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", "D:\\Bharathi\\Automation\\Buyflow\\DailyOrders\\Run Output\\");
 		String file = comm_obj.populateOutputExcel(output, "BuyflowResults", System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Run Output\\");
 		
 		List<String> attachmentList = new ArrayList<String>();

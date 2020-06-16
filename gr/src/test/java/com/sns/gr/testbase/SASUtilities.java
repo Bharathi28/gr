@@ -44,7 +44,51 @@ public class SASUtilities {
 		return single_offers;
 	}
 	
-	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe) throws ClassNotFoundException, SQLException, InterruptedException {		
+	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe, String nav) throws ClassNotFoundException, SQLException, InterruptedException {		
+		String[] brandArr = db_obj.get_combo(brand, campaign);
+		if(brandArr.length > 0) {
+			for(String arrelmt : brandArr) {
+				String[] brand_campaign = arrelmt.split("-");
+				String temp_brand = brand_campaign[0];
+				String temp_campaign = brand_campaign[1];
+				String ppidPresent = db_obj.check_ppid(temp_brand, temp_campaign, ppid);
+				if(ppidPresent == "Yes") {
+					brand = temp_brand;
+					campaign = temp_campaign;
+					break;
+				}
+			}	
+		}			
+		
+		if(nav.equalsIgnoreCase("brands-nav")) {
+			if(driver.findElements(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']")).size() == 0) {
+				if(brand.contains("CrepeErase")) {
+					driver.findElement(By.xpath("//img[@alt='Crepe Erase']")).click();
+				}
+				else if(brand.contains("SpotFade")) {
+					driver.findElement(By.xpath("//img[@alt='Spot Fade']")).click();
+				}
+			}
+			else {
+				String insideBrand = driver.findElement(By.xpath("(//a[@class='logo-image'])[3]")).getAttribute("title");
+				insideBrand = insideBrand.replace(" ", "");
+				if(brand.equalsIgnoreCase(insideBrand)){
+					
+				}
+				else {
+					driver.findElement(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']//a")).click();
+					driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+					if(brand.contains("CrepeErase")) {
+						driver.findElement(By.xpath("//img[@alt='Crepe Erase']")).click();
+					}
+					else if(brand.contains("SpotFade")) {
+						driver.findElement(By.xpath("//img[@alt='Spot Fade']")).click();
+					}
+				}
+			}			
+			bf_obj.click_cta(driver,env,brand,campaign,category);
+		}
+				
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
@@ -62,14 +106,14 @@ public class SASUtilities {
 				
 			for(String single_offer : single_offers) {
 				offerdata = DBUtilities.get_offerdata(single_offer, brand, campaign, "Product");
-				select_offer(driver,env,brand,campaign,offerdata,category,subscribe);
+				select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
 				ppid_str = single_offer + ",";
 			}			
 		}
 		else {
 			ppid_str = ppid;		
 			offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, category);
-			select_offer(driver,env,brand,campaign,offerdata,category, subscribe);
+			select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
 		}
 		
 		String last_char = ppid_str.substring(ppid_str.length() - 1);

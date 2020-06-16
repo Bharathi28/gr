@@ -58,6 +58,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void click_logo(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException {
+		
 		List<Map<String, Object>> logo_locators = comm_obj.get_element_locator(brand, campaign, "Logo", null);
 		for(Map<String,Object> logo : logo_locators) {
 			
@@ -97,17 +98,37 @@ public class BuyflowUtilities {
 		return shopkit;
 	}
 	
-	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode, String category) throws ClassNotFoundException, SQLException, InterruptedException {
+	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode, String category, String nav) throws ClassNotFoundException, SQLException, InterruptedException {
 		System.out.println("Moving to SAS Page...");
 		if(offercode.contains("single")){
 			category ="Product";
 		}
-		click_cta(driver,env,brand,campaign,category);
+		if(nav.equalsIgnoreCase("brands-nav")) {
+			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+			Thread.sleep(1000);				
+		}
+		else {
+			click_cta(driver,env,brand,campaign,category);
+		}
+		Thread.sleep(2000);
 	}
 	
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String offer, String category) throws InterruptedException, ClassNotFoundException, SQLException {
 		System.out.println("Moving to Checkout Page...");				
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		
+		if(brand.contains("BodyFirm-")) {
+			if(brand.contains("CrepeErase")) {
+				brand = "CrepeErase";
+			}
+			else if(brand.contains("SpotFade")) {
+				brand = "SpotFade";
+			}
+			else {
+				brand = "BodyFirm";
+			}
+		}
+		
 		Thread.sleep(2000);
 		// Check if the page is already in checkout
 		if(driver.findElements(By.id("dwfrm_personinf_contact_email")).size() != 0) {
