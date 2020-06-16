@@ -261,10 +261,10 @@ public class SASUtilities {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String gift = offerdata.get("GIFT").toString();
 		String kit = offerdata.get("DESCRIPTION").toString();
-		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&((campaign.equalsIgnoreCase("pnlsys")) || (campaign.equalsIgnoreCase("core")))&&(gift.equalsIgnoreCase("Skin Rejuvenating Trio"))) {
-			driver.findElement(By.xpath("//ul[@class = 'slick-dots']//li[2]/button")).click();
-			Thread.sleep(1000);
-		}
+//		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&((campaign.equalsIgnoreCase("pnlsys")) || (campaign.equalsIgnoreCase("core")))&&(gift.equalsIgnoreCase("Skin Rejuvenating Trio"))) {
+//			driver.findElement(By.xpath("//ul[@class = 'slick-dots']//li[2]/button")).click();
+//			Thread.sleep(1000);
+//		}
 		
 		if(!(gift.equalsIgnoreCase("n/a"))) {
 			List<Map<String, Object>> gift_loc = comm_obj.get_element_locator(brand, campaign, "Gift", gift);
