@@ -43,14 +43,6 @@ public class CXTUtilities {
 		
 		String dateStr = monthStr + dayStr + yearStr;
 		
-		String filename = "";
-		if(result.equalsIgnoreCase("Success")) {
-			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots\\" + brand + "\\" + step + "_" + dateStr +".png";
-		}
-		else {
-			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Run_Output\\" + brand + "_" + step + "_" + dateStr +".png";
-		}
-		
 		Screenshot ss = null;
 		if(part.equalsIgnoreCase("visiblepart")) {
 			ss = new AShot().takeScreenshot(driver);
@@ -58,7 +50,18 @@ public class CXTUtilities {
 		else if(part.equalsIgnoreCase("fullpage")) {
 			ss = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(ShootingStrategies.scaling(1.25f), 1000)).takeScreenshot(driver);
 		}
-		ImageIO.write(ss.getImage(),"PNG",new File(filename));
+		
+		String filename = "";
+		if(result.equalsIgnoreCase("Success")) {
+			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots\\" + brand + "\\" + step + "_" + dateStr +".png";
+			ImageIO.write(ss.getImage(),"PNG",new File(filename));
+		}
+		else {
+			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Run_Output\\" + brand + "_" + step + "_" + dateStr +".png";
+			ImageIO.write(ss.getImage(),"PNG",new File(filename));
+			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots\\" + brand + "\\" + step + "_" + dateStr +".png";
+			ImageIO.write(ss.getImage(),"PNG",new File(filename));
+		}		
 	}
 	
 	public void openMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException {
@@ -261,9 +264,9 @@ public class CXTUtilities {
 		String realm = db_obj.get_realm(brand);
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 			if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 				driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
 			}					
 			Thread.sleep(2000);
@@ -291,12 +294,12 @@ public class CXTUtilities {
 				mcelmt.click();
 				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
 					if(driver.findElements(By.xpath("(//a[@class='removeproduct'])[1]")).size() != 0) {
-						Thread.sleep(2000);
+						Thread.sleep(3000);
 						driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
 					}
-					Thread.sleep(2000);
+					Thread.sleep(3000);
 					if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-						Thread.sleep(1000);
+						Thread.sleep(3000);
 						driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
 					}					
 					Thread.sleep(2000);

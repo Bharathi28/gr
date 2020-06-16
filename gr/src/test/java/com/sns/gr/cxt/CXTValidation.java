@@ -336,12 +336,22 @@ public class CXTValidation {
 		cxt_obj.addProductToKC(driver, brand, campaign);
 		if(realm.equals("R4")) {			
 			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
-			actual = successmsg.replace('\n', ' ');
 			
-			cxt_obj.openMyNextKit(driver, realm);
-			Thread.sleep(1000);
-			String totalKCValue = driver.findElement(By.xpath("//div[@class='total clearfix']//span[@class='label-value']")).getText();
-			expected = "Success! Updated Kit Total is " + totalKCValue + ". See My Next Kit.";
+//			String toReplace = " ";
+//
+//			int lastindex = successmsg.lastIndexOf(toReplace);
+//			StringBuilder builder = new StringBuilder();
+//			builder.append(successmsg.substring(0, lastindex));
+//			builder.append("");
+//			builder.append(successmsg.substring(lastindex + toReplace.length()));
+//			System.out.println(builder);
+//			actual = builder.toString();
+			
+			actual = successmsg.replace(" ", "");	
+			expected = "Thankyouforloving" + brand;
+			if(brand.equals("Mally")) {
+				expected = expected+"Beauty";
+			}
 			System.out.println(actual);
 			System.out.println(expected);
 		}
@@ -367,15 +377,25 @@ public class CXTValidation {
 		output_row.add(brand);
 		output_row.add(campaign);
 		output_row.add("Remove Product from KC");
+		int number_before = cxt_obj.getNumberofProductsinKC(driver, realm);
+		Thread.sleep(2000);
 		cxt_obj.removeProductFromKC(driver, brand);
 		if(realm.equals("R4")) {			
-			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
-			actual = successmsg.replace('\n', ' ');
-		
-			String totalKCValue = driver.findElement(By.xpath("//div[@class='total clearfix']//span[@class='label-value']")).getText();
-			expected = "Success! Updated Kit Total is " + totalKCValue + ". See My Next Kit.";
+			
+			int number_after = cxt_obj.getNumberofProductsinKC(driver, realm);
+			if(number_before == (number_after + 1)) {
+				actual = expected = "PASS";
+			}
+			System.out.println("Remove from KC");
 			System.out.println(actual);
 			System.out.println(expected);
+//			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
+//			actual = successmsg.replace('\n', ' ');
+//		
+//			String totalKCValue = driver.findElement(By.xpath("//div[@class='total clearfix']//span[@class='label-value']")).getText();
+//			expected = "Success! Updated Kit Total is " + totalKCValue + ". See My Next Kit.";
+//			System.out.println(actual);
+//			System.out.println(expected);
 		}
 		else {
 			actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();

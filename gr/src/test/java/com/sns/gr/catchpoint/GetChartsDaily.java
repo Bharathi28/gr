@@ -51,7 +51,7 @@ public class GetChartsDaily {
 //			"SubD [Chrome]", "SubD[Mobie-Web test]", "ITC CXT-Desktop", "IT CXT Mobile",
 //			"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
 //			"VP [Chrome]", "Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SA CXT Desktop", "SA CXT Mobile",
-//			"SB Desktop", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","trydermaflash Mobile",
+//			"SB Desktop", "SB Mobile", "SB CXT-Chrome", "trydermaflash Desktop[Chrome]","trydermaflash Mobile",
 //			"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
 //			"Volaire ACQ Desktop", "Volaire ACQ MOBILE",
 //			"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile", 
@@ -59,24 +59,19 @@ public class GetChartsDaily {
 //			"SeaCalm- Desktop", "SeaCalm-Mobile", "SeaCalm Transactional Test - Desktop", "SeaCalm Transactional Test - Mobile",
 //			"FixMDSkin - Desktop", "FixMDSkin - Mobile");		
 		
-//		List<String> brandlistfor1day = Arrays.asList("ITC CXT-Desktop", "IT CXT Mobile",
-//				"Mally Core[Desktop]", "Mally Core[Mobile]", "Mally Transactional Test - Desktop", "Mally Transactional Test - Mobile",
-//				"SeaCalm- Desktop", "SeaCalm-Mobile", "SeaCalm Transactional Test - Desktop", "SeaCalm Transactional Test - Mobile",
-//				"VP [Chrome]");
+//		List<String> brandlistfor1day = Arrays.asList("Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile",
+//				"Mally Core[Desktop]", "Mally Core[Mobile]", "SubD [Chrome]", "SubD[Mobie-Web test]");
 		
-//		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]", "CXT- USER Navigation Flow", "MB CXT Mobile Transaction Test",
-//				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]", "CrepeErase Transactional Test - Desktop", "CrepeErase Transactional Test - Mobile",
-//				"Westmore ACQ- Desktop", "Westmore ACQ-Mobile", "WestMoreBeauty CXT Desktop", "Westmorebeauty CXT Mobile");		
+//		List<String> brandlistfor1day = Arrays.asList("SeaCalm- Desktop", "SeaCalm-Mobile", "SB Desktop", "SB Mobile",
+//				"Volaire ACQ Desktop", "Volaire ACQ MOBILE","VP [Chrome]","trydermaflash Desktop[Chrome]","trydermaflash Mobile");	
 		
-		List<String> brandlistfor1day = Arrays.asList("Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", 
-				"SB Desktop", "trydermaflash Desktop[Chrome]","trydermaflash Mobile",
-				"Volaire ACQ Desktop", "Volaire ACQ MOBILE");		
+		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]",
+				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]","Westmore ACQ- Desktop", "Westmore ACQ-Mobile");		
 		
-		
-		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]","CrepeErase Transactional Test - Desktop", "Meaningful Beauty [Chrome]",
-				"CXT- USER Navigation Flow","Westmore ACQ- Desktop","WestMoreBeauty CXT Desktop","Smileactives Brand.com-Desktop", "SA CXT Desktop",
-				"Volaire ACQ Desktop","SB Desktop", "SB CXT-Chrome","trydermaflash Desktop[Chrome]","Mally Core[Desktop]","Mally Transactional Test - Desktop",
-				"SubD [Chrome]", "SeaCalm- Desktop", "SeaCalm Transactional Test - Desktop","VP [Chrome]", "ITC CXT-Desktop",
+		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]", "Meaningful Beauty [Chrome]",
+				"Westmore ACQ- Desktop","Smileactives Brand.com-Desktop",
+				"Volaire ACQ Desktop","SB Desktop", "trydermaflash Desktop[Chrome]","Mally Core[Desktop]",
+				"SubD [Chrome]", "SeaCalm- Desktop","VP [Chrome]", 
 				"Dr. Denese ACQ Desktop","FixMDSkin - Desktop");
 
 		ArrayList<String> brandarraylist = new ArrayList<String>();
@@ -182,8 +177,8 @@ public class GetChartsDaily {
 //			int eleWidth = chart.getSize().getWidth();
 //			int eleHeight = chart.getSize().getHeight();
 		
-//			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
-			BufferedImage eleScreenshot= fullImg.getSubimage(400, 0, 1200, 670);
+			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
+//			BufferedImage eleScreenshot= fullImg.getSubimage(400, 0, 1200, 670);
 			ImageIO.write(eleScreenshot, "png", screenshot);
 				
 			File screenshotLocation = new File(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + brand +".png");
