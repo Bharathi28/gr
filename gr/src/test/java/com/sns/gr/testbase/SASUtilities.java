@@ -43,51 +43,16 @@ public class SASUtilities {
 		System.out.println("Chosen single : " + single_offers);
 		return single_offers;
 	}
-	
-	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe, String nav) throws ClassNotFoundException, SQLException, InterruptedException {		
-		String[] brandArr = db_obj.get_combo(brand, campaign);
-		if(brandArr != null) {
-			for(String arrelmt : brandArr) {
-				String[] brand_campaign = arrelmt.split("-");
-				String temp_brand = brand_campaign[0];
-				String temp_campaign = brand_campaign[1];
-				String ppidPresent = db_obj.check_ppid(temp_brand, temp_campaign, ppid);
-				if(ppidPresent == "Yes") {
-					brand = temp_brand;
-					campaign = temp_campaign;
-					break;
-				}
-			}	
-		}			
 		
-		if(nav.equalsIgnoreCase("brands-nav")) {
-			if(driver.findElements(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']")).size() == 0) {
-				if(brand.contains("CrepeErase")) {
-					driver.findElement(By.xpath("//img[@alt='Crepe Erase']")).click();
-				}
-				else if(brand.contains("SpotFade")) {
-					driver.findElement(By.xpath("//img[@alt='Spot Fade']")).click();
-				}
-			}
-			else {
-				String insideBrand = driver.findElement(By.xpath("(//a[@class='logo-image'])[3]")).getAttribute("title");
-				insideBrand = insideBrand.replace(" ", "");
-				if(brand.equalsIgnoreCase(insideBrand)){
-					
-				}
-				else {
-					driver.findElement(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']//a")).click();
-					driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
-					if(brand.contains("CrepeErase")) {
-						driver.findElement(By.xpath("//img[@alt='Crepe Erase']")).click();
-					}
-					else if(brand.contains("SpotFade")) {
-						driver.findElement(By.xpath("//img[@alt='Spot Fade']")).click();
-					}
-				}
-			}			
-			bf_obj.click_cta(driver,env,brand,campaign,category);
-		}
+	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe, String nav) throws ClassNotFoundException, SQLException, InterruptedException {		
+		
+		String combo_present = db_obj.check_combo(brand, campaign);
+		List<String> combo_brand_campaign = new ArrayList<String>();
+		if(combo_present.equalsIgnoreCase("Yes")) {
+			combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, ppid, category);
+			brand = combo_brand_campaign.get(0);
+			campaign = combo_brand_campaign.get(1);
+		}	
 				
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
 		if(!(origcampaign.equals("n/a"))){

@@ -41,20 +41,33 @@ public class DBUtilities {
 		return brandArr;
 	}
 	
-	public String check_ppid(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
-		String realm = get_realm(brand);
-		String tableName = realm.toLowerCase() + "offers";	
+	public String check_combo(String brand, String campaign) throws ClassNotFoundException, SQLException {
+		String combo_present = "No";
+		String[] combodata = get_combo(brand, campaign);
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and status ='Active'";
-		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);	
-		int size = offerdata.size();
-		String ppidPresent = "No";
-		if(size > 0) {
-			ppidPresent = "Yes";
-		}
-		return ppidPresent;
+		if(combodata != null) {
+			combo_present = "Yes";
+		}		
+		return combo_present;
+	}	
+	
+	public List<String> get_combo_brandlist(String[] combodata) throws ClassNotFoundException, SQLException {
+		List<String> combo_brand_list = new ArrayList<String>();
+		for(String data : combodata) {
+			String[] brand_campaign = data.split("-");			
+			combo_brand_list.add(brand_campaign[0]);
+		}			
+		return combo_brand_list;
 	}
 	
+	public List<String> get_combo_campaignlist(String[] combodata) throws ClassNotFoundException, SQLException {
+		List<String> combo_campaign_list = new ArrayList<String>();
+		for(String data : combodata) {
+			String[] brand_campaign = data.split("-");			
+			combo_campaign_list.add(brand_campaign[1]);
+		}		
+		return combo_campaign_list;
+	}
 	
 	public static String get_realm(String brand) throws ClassNotFoundException, SQLException {
 		String realmQuery = "select * from brand_realm where brand ='" + brand + "'";

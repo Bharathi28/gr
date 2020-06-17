@@ -1,6 +1,7 @@
 package com.sns.gr.testbase;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -98,6 +99,114 @@ public class BuyflowUtilities {
 		return shopkit;
 	}
 	
+	public String campaign_category_validation(String categoryy, String campaign, String ppid) {
+		String tempCategory = "";
+		int subscribe = 0;
+		if(categoryy.equalsIgnoreCase("Mixed")) {
+			if(ppid.contains("single")){
+				tempCategory = "Product";
+				if(!(campaign.equals("Core"))) {
+					campaign="Core";
+				}
+			}
+			else {
+				tempCategory = "Kit";
+			}
+		}
+		else if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
+			tempCategory = "Product";
+			subscribe = 1;
+			if(!(campaign.equals("Core"))) {
+				campaign="Core";
+			}
+		}
+		else if(categoryy.equalsIgnoreCase("Product")) {
+			tempCategory = categoryy;
+			if(!(campaign.equals("Core"))) {
+				campaign="Core";
+			}
+		}
+		else if(categoryy.equalsIgnoreCase("ShopKit")) {
+			tempCategory = categoryy;
+			if(!(campaign.equals("Core"))) {
+				campaign="Core";
+			}
+		}
+		else if(categoryy.equalsIgnoreCase("Kit")) {
+			tempCategory = categoryy;
+		}
+		return tempCategory + "-" + campaign + "-" + subscribe;
+	}
+	
+	public List<String> check_ppid_in_combo(String brand, String campaign, String ppid, String category) throws ClassNotFoundException, SQLException {
+				
+		String[] brandArr = db_obj.get_combo(brand, campaign);
+		List<String> brand_campaign_list = new ArrayList<String>();
+				
+		for(String arrelmt : brandArr) {
+			String[] brand_campaign = arrelmt.split("-");
+			String temp_brand = brand_campaign[0];
+			String temp_campaign = brand_campaign[1];
+			
+			String camp_cat_val = campaign_category_validation(category, campaign, ppid);
+			String[] camp_cat_val_arr = camp_cat_val.split("-");
+			
+			temp_campaign = camp_cat_val_arr[1];			
+			
+			String ppidPresent = check_ppid_in_brand(temp_brand, temp_campaign, ppid, category);
+			System.out.println(temp_brand + temp_campaign + ppid + ppidPresent);
+			if(ppidPresent == "Yes") {
+				brand_campaign_list.add(temp_brand);
+				brand_campaign_list.add(temp_campaign);
+				break;
+			}
+		}			
+		return brand_campaign_list;		
+	}
+	
+	public String check_ppid_in_brand(String brand, String campaign, String ppid, String category) throws ClassNotFoundException, SQLException {
+		System.out.println(brand + " " + campaign);
+		String realm = db_obj.get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";	
+					
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and status ='Active'";
+		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);	
+		int size = offerdata.size();
+		String ppidPresent = "No";
+		if(size > 0) {
+			ppidPresent = "Yes";
+		}
+		return ppidPresent;
+	}
+	
+	public void combo_navigation_to_sas(WebDriver driver, String env, String combobrand, String combocampaign, String brand, String campaign, String nav, String category) throws ClassNotFoundException, SQLException, InterruptedException {
+		List<Map<String, Object>> brand_logo = comm_obj.get_element_locator(combobrand, combocampaign, "BrandLogo", brand);
+		driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+		Thread.sleep(1000);
+		if(driver.findElements(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']")).size() == 0) {
+			WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
+			Thread.sleep(1000);
+			elmt.click();
+		}
+		else {
+			String insideBrand = driver.findElement(By.xpath("(//a[@class='logo-image'])[3]")).getAttribute("title");
+			insideBrand = insideBrand.replace(" ", "");
+			if(brand.equalsIgnoreCase(insideBrand)){
+				if(category.equalsIgnoreCase("Kit")) {
+					driver.findElement(By.xpath("//div[@class='title-bar']//button[@class='menu-icon']")).click();
+				}
+			}
+			else {
+				driver.findElement(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']//a")).click();
+				driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+				WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
+				Thread.sleep(1000);
+				elmt.click();
+			}
+		}			
+		click_cta(driver,env,brand,campaign,category);
+	}
+	
 	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode, String category, String nav) throws ClassNotFoundException, SQLException, InterruptedException {
 		System.out.println("Moving to SAS Page...");
 		if(offercode.contains("single")){
@@ -107,9 +216,8 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 			Thread.sleep(1000);				
 		}
-		else {
-			click_cta(driver,env,brand,campaign,category);
-		}
+		
+		click_cta(driver,env,brand,campaign,category);
 		Thread.sleep(2000);
 	}
 	

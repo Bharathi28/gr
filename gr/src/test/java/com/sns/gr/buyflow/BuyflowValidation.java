@@ -71,51 +71,32 @@ public class BuyflowValidation {
 			driver.findElement(By.xpath("//button[@id='details-button']")).click();
 			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 		}
-		
-		int subscribe = 0;
+		int subscribe =  0;
 		String str = "";
 		String[] offer_array = ppid.split(",");		
 		String kit_offercode = offer_array[0];
 		
 		String tempCategory = "";
 		String tempCampaign = campaign;
+		String origbrand = brand;
+		String origcampaign = campaign;
 		
 		for(int i = 0; i < offer_array.length; i++) {	
-			if(categoryy.equalsIgnoreCase("Mixed")) {
-				if(offer_array[i].contains("single")){
-					tempCategory = "Product";
-					if(!(campaign.equals("Core"))) {
-						campaign="Core";
-					}
-				}
-				else {
-					tempCategory = "Kit";
-				}
-			}
-			else if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
-				tempCategory = "Product";
-				subscribe = 1;
-				if(!(campaign.equals("Core"))) {
-					campaign="Core";
-				}
-			}
-			else if(categoryy.equalsIgnoreCase("Product")) {
-				tempCategory = categoryy;
-				if(!(campaign.equals("Core"))) {
-					campaign="Core";
-				}
-			}
-			else if(categoryy.equalsIgnoreCase("ShopKit")) {
-				tempCategory = categoryy;
-				if(!(campaign.equals("Core"))) {
-					campaign="Core";
-				}
-			}
-			else if(categoryy.equalsIgnoreCase("Kit")) {
-				tempCategory = categoryy;
-			}
+			String camp_cat_val = bf_obj.campaign_category_validation(categoryy, origcampaign, offer_array[i]);
+			String[] camp_cat_val_arr = camp_cat_val.split("-");
 			
-			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);
+			tempCategory = camp_cat_val_arr[0];
+			campaign = camp_cat_val_arr[1];
+			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);
+			
+			if(nav.equalsIgnoreCase("brands-nav")) {
+				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);		
+				bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, combo_brand_campaign.get(0), combo_brand_campaign.get(1), nav, categoryy);
+			}
+			else {
+				bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);
+			}			
+			
 			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
 			if(i == ((offer_array.length)-1)) {
 				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
@@ -127,7 +108,9 @@ public class BuyflowValidation {
 			str = str + ppidStr + ",";
 		}		
 		campaign = tempCampaign;
-						
+//		brand = origbrand;
+//		campaign = origcampaign;
+		
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
 			if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
 				driver.findElement(By.xpath("//a[@id='creditCardPath']")).click();
