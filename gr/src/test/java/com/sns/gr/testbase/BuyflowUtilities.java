@@ -116,19 +116,7 @@ public class BuyflowUtilities {
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String offer, String category) throws InterruptedException, ClassNotFoundException, SQLException {
 		System.out.println("Moving to Checkout Page...");				
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
-		
-		if(brand.contains("BodyFirm-")) {
-			if(brand.contains("CrepeErase")) {
-				brand = "CrepeErase";
-			}
-			else if(brand.contains("SpotFade")) {
-				brand = "SpotFade";
-			}
-			else {
-				brand = "BodyFirm";
-			}
-		}
-		
+				
 		Thread.sleep(2000);
 		// Check if the page is already in checkout
 		if(driver.findElements(By.id("dwfrm_personinf_contact_email")).size() != 0) {

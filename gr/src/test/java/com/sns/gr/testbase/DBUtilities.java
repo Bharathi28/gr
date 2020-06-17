@@ -33,8 +33,11 @@ public class DBUtilities {
 	public String[] get_combo(String brand, String campaign) throws ClassNotFoundException, SQLException {
 		String query = "select * from brand_combo where brand='" + brand + "' and campaign='" + campaign + "'";
 		List<Map<String, Object>> combodata = DBLibrary.dbAction("fetch", query);	
-		String data = combodata.get(0).get("COMBOLIST").toString();
-		String[] brandArr = data.split(",");
+		String[] brandArr = null;
+		if(combodata.size() > 0) {
+			String data = combodata.get(0).get("COMBOLIST").toString();
+			brandArr = data.split(",");
+		}		
 		return brandArr;
 	}
 	

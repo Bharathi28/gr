@@ -46,7 +46,7 @@ public class SASUtilities {
 	
 	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe, String nav) throws ClassNotFoundException, SQLException, InterruptedException {		
 		String[] brandArr = db_obj.get_combo(brand, campaign);
-		if(brandArr.length > 0) {
+		if(brandArr != null) {
 			for(String arrelmt : brandArr) {
 				String[] brand_campaign = arrelmt.split("-");
 				String temp_brand = brand_campaign[0];
