@@ -78,11 +78,9 @@ public class BuyflowValidation {
 		
 		String tempCategory = "";
 		String tempCampaign = campaign;
-		String origbrand = brand;
-		String origcampaign = campaign;
 		
 		for(int i = 0; i < offer_array.length; i++) {	
-			String camp_cat_val = bf_obj.campaign_category_validation(categoryy, origcampaign, offer_array[i]);
+			String camp_cat_val = bf_obj.campaign_category_validation(categoryy, campaign, offer_array[i]);
 			String[] camp_cat_val_arr = camp_cat_val.split("-");
 			
 			tempCategory = camp_cat_val_arr[0];
@@ -108,8 +106,6 @@ public class BuyflowValidation {
 			str = str + ppidStr + ",";
 		}		
 		campaign = tempCampaign;
-//		brand = origbrand;
-//		campaign = origcampaign;
 		
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
 			if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
@@ -152,10 +148,9 @@ public class BuyflowValidation {
 		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
 			
 		bf_obj.complete_order(driver, brand, cc);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 			
-		Thread.sleep(2000);	
-
+		
 		String campaignPPU = "";
 		String category2 = "";
 		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {

@@ -209,11 +209,6 @@ public class SASUtilities {
 			Thread.sleep(2000);
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
-//		if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))){
-//			jse.executeScript("window.scrollBy(0,1000)", 0);
-//			Thread.sleep(2000);
-//			driver.findElement(By.xpath("//button[@class='button checkout']")).click();
-//		}
 		
 		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
 			jse.executeScript("window.scrollBy(0,800)", 0);
@@ -232,17 +227,11 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
-		/*if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
-			jse.executeScript("window.scrollBy(0,400)", 0);
-			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
-				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
-			}
-			else {
-				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
-			}
-			
-		}*/
-
+		if(brand.equalsIgnoreCase("SpotFade")) {
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			Thread.sleep(1000);
+			driver.findElement(By.xpath("//a[@class='cta']")).click();
+		}
 
 		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
 			jse.executeScript("window.scrollBy(0,200)",0);
