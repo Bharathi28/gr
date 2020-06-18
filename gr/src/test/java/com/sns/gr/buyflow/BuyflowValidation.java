@@ -74,15 +74,25 @@ public class BuyflowValidation {
 		int subscribe =  0;
 		String str = "";
 		String[] offer_array = ppid.split(",");	
-//		String kit_offercode = offer_array[0];
-		System.out.println(offer_array);
-		System.out.println(offer_array[offer_array.length-1]);
+		
 		if(offer_array[offer_array.length-1].contains("single")) {
+			categoryy = "Kit";
 			String[] single_array = offer_array[offer_array.length-1].split(" ");
 			String no_of_singles_str = single_array[0];
 			int no_of_singles = Integer.parseInt(no_of_singles_str);
-				System.out.println("number" + no_of_singles);
-			List<String> single_offers = sas_obj.fetch_random_singles(brand, campaign, no_of_singles);
+				
+			String single_brand = "";
+			String single_campaign = "";
+			if(brand.equalsIgnoreCase("BodyFirm")) {
+				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[0], categoryy);
+				single_brand = combo_brand_campaign.get(0);
+				single_campaign = combo_brand_campaign.get(1);
+			}
+			else {
+				single_brand = brand;
+				single_campaign = campaign;
+			}
+			List<String> single_offers = sas_obj.fetch_random_singles(single_brand, single_campaign, no_of_singles);
 					
 			ppid = offer_array[0];
 				
@@ -99,42 +109,66 @@ public class BuyflowValidation {
 		
 		String tempCategory = "";
 		String tempCampaign = campaign;
-		
+		offer_array = ppid.split(",");		
+				
 		for(int i = 0; i < offer_array.length; i++) {	
 			System.out.println(offer_array[i]);
 			System.out.println(categoryy);
-			String camp_cat_val = bf_obj.campaign_category_validation(categoryy, campaign, offer_array[i]);
+			
+			String offer_brand = "";
+			String offer_campaign = "";			
+			
+			if(brand.equalsIgnoreCase("BodyFirm")){
+				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);	
+				offer_brand = combo_brand_campaign.get(0);
+				offer_campaign = combo_brand_campaign.get(1);
+				System.out.println("offer---" + offer_array[i]);
+				System.out.println("offer_brand---" + offer_brand);
+				System.out.println("offer_campaign---" + offer_campaign);
+				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);
+				if(isProduct.equalsIgnoreCase("yes")) {
+					tempCategory = "Product";
+				}
+				else {
+					tempCategory = "Kit";
+				}
+				
+				if(nav.equalsIgnoreCase("brands-nav")) {
+					bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, offer_brand, offer_campaign, nav, tempCategory);
+				}
+				else {
+					bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
+				}
+			}
+			else {
+				offer_brand = brand;
+				offer_campaign = campaign;
+				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);
+				if(isProduct.equalsIgnoreCase("yes")) {
+					tempCategory = "Product";
+				}
+				else {
+					tempCategory = "Kit";
+				}
+				bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
+			}
+			
+			String camp_cat_val = bf_obj.campaign_repeat_validation(categoryy, offer_brand, offer_campaign, offer_array[i]);
 			String[] camp_cat_val_arr = camp_cat_val.split("-");
 			
 			tempCategory = camp_cat_val_arr[0];
 			campaign = camp_cat_val_arr[1];
 			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);
-			System.out.println(tempCategory);
+			System.out.println(tempCategory);					
 			
-			if(nav.equalsIgnoreCase("brands-nav")) {
-				List<String> combo_brand_campaign = new ArrayList<String>();
-				if(offer_array[i].contains("single")) {
-					combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i-1], categoryy);	
-				}
-				else {
-					combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);	
-				}					
-				bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, combo_brand_campaign.get(0), combo_brand_campaign.get(1), nav, tempCategory);
-			}
-			else {
-				bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);
-			}			
-			
-//			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
-			sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
+			sas_obj.get_offer(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, subscribe, nav);
 			if(i == ((offer_array.length)-1)) {
-				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);
+				bf_obj.move_to_checkout(driver, offer_brand, offer_campaign, tempCategory);
 			}
 			else {
-				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);
+				bf_obj.move_to_checkout(driver, offer_brand, offer_campaign, tempCategory);
 				bf_obj.click_logo(driver, brand, campaign);
 			}
-//			str = str + ppidStr + ",";
 		}		
 		campaign = tempCampaign;
 		
@@ -181,24 +215,7 @@ public class BuyflowValidation {
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(2000);			
 		
-//		String campaignPPU = "";
-//		String category2 = "";
-//		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
-//			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
-//			category2 = "Kit";
-//		}
-//		else if(categoryy.equalsIgnoreCase("ShopKit")) {
-//			campaignPPU = db_obj.checkPPUPresent(brand, campaign, categoryy);
-//			category2 = categoryy;
-//		}		
-//		
-//		if(campaignPPU.equalsIgnoreCase("Yes")) {
-//			Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category2);
-//			String upsell = offerdata.get("UPGRADE").toString();	
-//			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-//		}
-
-		if((categoryy.contains("Kit")) || (categoryy.contains("Mixed"))) {
+		if(categoryy.contains("Kit")) {
 			String upsell = bf_obj.check_upsell_select(brand, campaign, ppid, categoryy, nav);
 			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 			Thread.sleep(2000);

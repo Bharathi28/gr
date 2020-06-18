@@ -41,37 +41,6 @@ public class DBUtilities {
 		return brandArr;
 	}
 	
-	public String check_combo(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String combo_present = "No";
-		String[] combodata = get_combo(brand, campaign);
-		
-		if(combodata != null) {
-			combo_present = "Yes";
-		}		
-		return combo_present;
-	}	
-	
-	public List<String> get_combo_brandlist(String brand, String campaign) throws ClassNotFoundException, SQLException {
-		String[] combodata = get_combo(brand, campaign);
-		List<String> combo_brand_list = null;
-		if(combodata != null) {
-			for(String data : combodata) {
-				String[] brand_campaign = data.split("-");			
-				combo_brand_list.add(brand_campaign[0]);
-			}
-		}					
-		return combo_brand_list;
-	}
-	
-	public List<String> get_combo_campaignlist(String[] combodata) throws ClassNotFoundException, SQLException {
-		List<String> combo_campaign_list = new ArrayList<String>();
-		for(String data : combodata) {
-			String[] brand_campaign = data.split("-");			
-			combo_campaign_list.add(brand_campaign[1]);
-		}		
-		return combo_campaign_list;
-	}
-	
 	public static String get_realm(String brand) throws ClassNotFoundException, SQLException {
 		String realmQuery = "select * from brand_realm where brand ='" + brand + "'";
 		List<Map<String, Object>> realmResult = DBLibrary.dbAction("fetch", realmQuery);
@@ -119,21 +88,20 @@ public class DBUtilities {
 		return categories;
 	}
 	
-	public List<String> getCategory(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+	public String isProduct(String brand, String ppid) throws ClassNotFoundException, SQLException {
 		String realm = get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	
+		String isproduct = "No";
 		
-		String query = "select distinct category from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "'";
-		List<Map<String, Object>> unique_categories = DBLibrary.dbAction("fetch", query);
-		
-		List<String> categories = new ArrayList<String>();
-		for(Map<String, Object> category : unique_categories) {
-			String catg = category.get("CATEGORY").toString();
-			categories.add(catg);
+		String query = "select * from " + tableName + " where brand='" + brand + "' and ppid='" + ppid + "'";
+		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
+		String category = offerdata.get(0).get("CATEGORY").toString();
+		if(category.equalsIgnoreCase("Product")) {
+			isproduct = "Yes";
 		}
-		return categories;
+		return isproduct;
 	}
-	
+		
 	public List<Map<String, Object>> fetch_all_by_category(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
 		if(!(origcampaign.equals("n/a"))){

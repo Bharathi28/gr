@@ -131,7 +131,7 @@ public class CartLanguageParallel {
 				sas_obj.select_offer(driver, env, brand, campaign, offer, category, subscribe);
 				
 //				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("PPID").toString(), 0);
-				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("PPID").toString(), tempCategory);
+				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);
 				
 				List<String> campaignPages = db_obj.getPages(brand, campaign);
 				boolean upsell = campaignPages.contains("upsellpage");

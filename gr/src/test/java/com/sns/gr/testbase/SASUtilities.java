@@ -26,7 +26,6 @@ public class SASUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";		
 		
-//		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status<>'Inactive' order by RAND() limit " + count;
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status='Active'";
 		
 		List<Map<String, Object>> singles = DBLibrary.dbAction("fetch",query);
@@ -34,6 +33,10 @@ public class SASUtilities {
 		List<Map<String, Object>> randsingles = new ArrayList<Map<String, Object>>();
 		Random rand = new Random(); 
 		for(int i=0; i<count; i++) {
+			System.out.println(i);
+			System.out.println(singles.size());
+			System.out.println(rand.nextInt(singles.size()));
+			System.out.println(singles.get(rand.nextInt(singles.size())));
 			randsingles.add(singles.get(rand.nextInt(singles.size())));
 		}
 		
@@ -47,14 +50,6 @@ public class SASUtilities {
 		
 	public String get_offer(WebDriver driver, String env, String brand, String campaign, String ppid, String category, int subscribe, String nav) throws ClassNotFoundException, SQLException, InterruptedException {		
 		
-		String combo_present = db_obj.check_combo(brand, campaign);
-		List<String> combo_brand_campaign = new ArrayList<String>();
-		if(combo_present.equalsIgnoreCase("Yes")) {
-			combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, ppid, category);
-			brand = combo_brand_campaign.get(0);
-			campaign = combo_brand_campaign.get(1);
-		}	
-				
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
@@ -63,30 +58,9 @@ public class SASUtilities {
 		String ppid_str = "";
 		Map<String, Object> offerdata;
 		
-//		if(ppid.contains("single")) {
-//			String[] single_array = ppid.split(" ");
-//			String no_of_singles_str = single_array[0];
-//			int no_of_singles = Integer.parseInt(no_of_singles_str);
-//				
-//			List<String> single_offers = fetch_random_singles(brand, campaign, no_of_singles);
-//				
-//			for(String single_offer : single_offers) {
-//				offerdata = DBUtilities.get_offerdata(single_offer, brand, campaign, "Product");
-//				select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
-//				ppid_str = single_offer + ",";
-//			}			
-//		}
-//		else {
-			ppid_str = ppid;		
-			offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, category);
-			select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
-//		}
-		
-//		String last_char = ppid_str.substring(ppid_str.length() - 1);
-//		if(last_char.equalsIgnoreCase(",")) {
-//			ppid_str = ppid_str.substring(0, ppid_str.length() - 1);
-//		}
-		
+		ppid_str = ppid;		
+		offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, category);
+		select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
 		return ppid_str;
 	}	
 	

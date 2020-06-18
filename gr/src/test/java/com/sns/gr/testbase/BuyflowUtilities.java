@@ -2,6 +2,7 @@ package com.sns.gr.testbase;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -71,49 +72,13 @@ public class BuyflowUtilities {
 		}
 	}		
 	
-	public boolean checkIfProduct(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
-		List<String> categories = db_obj.getCategory(brand, campaign, ppid);
-		boolean product = false;
-		if((categories.contains("kit")) && (categories.contains("Product"))){
-			product = false;
-		}
-		else if(categories.contains("kit")){
-			product = false;
-		}
-
-		else if(categories.contains("Product")||categories.contains("ShopKit")){
-
-			product = true;
-		}
-		return product;
-	}
-	public boolean checkIfShopKit(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
-		List<String> categories = db_obj.getCategory(brand, campaign, ppid);
-		boolean shopkit = false;
-		if(categories.contains("Product")){
-			shopkit = false;
-		}
-		else if(categories.contains("ShopKit")){
-			shopkit = true;
-		}
-		return shopkit;
-	}
-	
-	public String campaign_category_validation(String categoryy, String campaign, String ppid) {
+	public String campaign_repeat_validation(String categoryy, String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
+		System.out.println(brand);
+		System.out.println(campaign);
+		
 		String tempCategory = "";
 		int subscribe = 0;
-		if(categoryy.equalsIgnoreCase("Mixed")) {
-			if(ppid.contains("single")){
-				tempCategory = "Product";
-				if(!(campaign.equals("Core"))) {
-					campaign="Core";
-				}
-			}
-			else {
-				tempCategory = "Kit";
-			}
-		}
-		else if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
+		if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
 			tempCategory = "Product";
 			subscribe = 1;
 			if(!(campaign.equals("Core"))) {
@@ -133,7 +98,16 @@ public class BuyflowUtilities {
 			}
 		}
 		else if(categoryy.equalsIgnoreCase("Kit")) {
-			tempCategory = categoryy;
+			String isproduct = db_obj.isProduct(brand, ppid);
+			if(isproduct.equalsIgnoreCase("Yes")) {
+				tempCategory = "Product";
+				if(!(campaign.equals("Core"))) {
+					campaign="Core";
+				}
+			}
+			else {
+				tempCategory = categoryy;
+			}
 		}
 		return tempCategory + "-" + campaign + "-" + subscribe;
 	}
@@ -147,11 +121,6 @@ public class BuyflowUtilities {
 			String[] brand_campaign = arrelmt.split("-");
 			String temp_brand = brand_campaign[0];
 			String temp_campaign = brand_campaign[1];
-			
-			String camp_cat_val = campaign_category_validation(category, campaign, ppid);
-			String[] camp_cat_val_arr = camp_cat_val.split("-");
-			
-			temp_campaign = camp_cat_val_arr[1];			
 			
 			String ppidPresent = check_ppid_in_brand(temp_brand, temp_campaign, ppid);
 			
@@ -183,27 +152,11 @@ public class BuyflowUtilities {
 		List<Map<String, Object>> brand_logo = comm_obj.get_element_locator(combobrand, combocampaign, "BrandLogo", brand);
 		driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 		Thread.sleep(1000);
-//		if(driver.findElements(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']")).size() == 0) {
-			WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
-			Thread.sleep(1000);
-			elmt.click();
-//		}
-//		else {
-//			String insideBrand = driver.findElement(By.xpath("(//a[@class='logo-image'])[3]")).getAttribute("title");
-//			insideBrand = insideBrand.replace(" ", "");
-//			if(brand.equalsIgnoreCase(insideBrand)){
-//				if(category.equalsIgnoreCase("Kit")) {
-//					driver.findElement(By.xpath("//div[@class='title-bar']//button[@class='menu-icon']")).click();
-//				}
-//			}
-//			else {
-//				driver.findElement(By.xpath("//li[@class='nav-brand-crepeerase nav-mainmenu']//a")).click();
-//				driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
-//				WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
-//				Thread.sleep(1000);
-//				elmt.click();
-//			}
-//		}			
+		
+		WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
+		Thread.sleep(1000);
+		elmt.click();
+			
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit"))) {
 			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 		}
@@ -255,58 +208,59 @@ public class BuyflowUtilities {
 	}
 	
 	public String check_upsell_select(String brand, String campaign, String ppid, String category, String nav) throws ClassNotFoundException, SQLException {
-		String temp_category = "";
-		String ppuPresent = "";
+				
 		String upsell = "";
+		String upsell_brand = "";
+		String upsell_campaign = "";
+		String kit_ppid = ppid;
+		String[] offer_array = ppid.split(",");
 		
-		if((category.equalsIgnoreCase("Mixed")) || (category.equalsIgnoreCase("Kit"))) {
-			ppuPresent = db_obj.checkPPUPresent(brand, campaign, "Kit");
-			temp_category = "Kit";
-		}
-		else if(category.equalsIgnoreCase("ShopKit")) {
-			ppuPresent = db_obj.checkPPUPresent(brand, campaign, category);
-			temp_category = category;
-		}	
+		String ppuPresent = db_obj.checkPPUPresent(brand, campaign, category);
+		
 		if(ppuPresent.equalsIgnoreCase("Yes")) {
-			if(nav.equalsIgnoreCase("main-nav")) {			
-				if(ppid.contains(",")) {
-					if(ppid.contains("single")) {
-						String[] arr = ppid.split(",");
-						Map<String, Object> offerdata = DBUtilities.get_offerdata(arr[0], brand, campaign, temp_category);
-						upsell = offerdata.get("UPGRADE").toString();
+			if(ppid.contains(",")) {									
+				List<String> offer_list = Arrays.asList(offer_array);
+				int list_size = offer_list.size();
+				while(list_size > 0) {
+					if(brand.equalsIgnoreCase("BodyFirm")) {
+						List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, offer_list.get(list_size-1), category);	
+						upsell_brand = combo_brand_campaign.get(0);
 					}
 					else {
-						String upsell_offer = check_deluxe_kit(brand, campaign, ppid, temp_category);
-						Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, brand, campaign, temp_category);
-						upsell = offerdata.get("UPGRADE").toString();
+						upsell_brand = brand;
+					}
+					
+					String isproduct = db_obj.isProduct(upsell_brand, offer_list.get(list_size-1));
+					if(isproduct.equalsIgnoreCase("Yes")) {
+						offer_list.remove(list_size-1);
+						kit_ppid = kit_ppid.replace("," + offer_list.get(list_size-1), "");
+						list_size = offer_list.size();
+					}
+					else {
+						break;
 					}
 				}
-				else {
-					Map<String, Object> offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, temp_category);
-					upsell = offerdata.get("UPGRADE").toString();
-				}
+				String upsell_offer = kit_ppid;
+				if(kit_ppid.contains(",")) {
+					upsell_offer = check_deluxe_kit(brand, campaign, kit_ppid, category);
+				}				
+				Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, brand, campaign, category);
+				upsell = offerdata.get("UPGRADE").toString();
 			}
 			else {
-				if(ppid.contains(",")) {
-					if(ppid.contains("single")) {
-						String[] arr = ppid.split(",");
-						List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, arr[0], category);
-						Map<String, Object> offerdata = DBUtilities.get_offerdata(arr[0], combo_brand_campaign.get(0), combo_brand_campaign.get(1), temp_category);
-						upsell = offerdata.get("UPGRADE").toString();
-					}
-					else {
-						String upsell_offer = check_deluxe_kit(brand, campaign, ppid, temp_category);
-						Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, brand, campaign, temp_category);
-						upsell = offerdata.get("UPGRADE").toString();
-					}
+				if(brand.equalsIgnoreCase("BodyFirm")) {
+					List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, ppid, category);	
+					upsell_brand = combo_brand_campaign.get(0);
+					upsell_campaign = combo_brand_campaign.get(1);
 				}
 				else {
-					List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, ppid, category);
-					Map<String, Object> offerdata = DBUtilities.get_offerdata(ppid, combo_brand_campaign.get(0), combo_brand_campaign.get(1), temp_category);
-					upsell = offerdata.get("UPGRADE").toString();
+					upsell_brand = brand;
+					upsell_campaign = campaign;
 				}
+				Map<String, Object> offerdata = DBUtilities.get_offerdata(ppid, upsell_brand, upsell_campaign, category);
+				upsell = offerdata.get("UPGRADE").toString();
 			}
-		}		
+		}
 		return upsell;
 	}
 	
@@ -316,11 +270,10 @@ public class BuyflowUtilities {
 		List<String> kit_type = new ArrayList<String>();
 		String[] offer_arr = ppid.split(",");
 				
-		String combo_present = db_obj.check_combo(brand, campaign);
 		List<String> combo_brand_campaign = new ArrayList<String>();
 		
 		for(String offer : offer_arr) {
-			if(combo_present.equalsIgnoreCase("Yes")) {
+			if(brand.equalsIgnoreCase("BodyFirm")) {
 				combo_brand_campaign = check_ppid_in_combo(brand, campaign, offer, category);
 				brand = combo_brand_campaign.get(0);
 				campaign = combo_brand_campaign.get(1);
