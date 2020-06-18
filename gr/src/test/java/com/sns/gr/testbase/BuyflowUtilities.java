@@ -251,6 +251,58 @@ public class BuyflowUtilities {
 		}	
 	}
 	
+	public String check_upsell_select(String brand, String campaign, String ppid, String category, String nav) throws ClassNotFoundException, SQLException {
+		String temp_category = "";
+		String ppuPresent = "";
+		String upsell = "";
+		if(nav.equalsIgnoreCase("main_nav")) {
+			if((category.equalsIgnoreCase("Mixed")) || (category.equalsIgnoreCase("Kit"))) {
+				ppuPresent = db_obj.checkPPUPresent(brand, campaign, "Kit");
+				temp_category = "Kit";
+			}
+			else if(category.equalsIgnoreCase("ShopKit")) {
+				ppuPresent = db_obj.checkPPUPresent(brand, campaign, category);
+				temp_category = category;
+			}	
+			if(ppuPresent.equalsIgnoreCase("Yes")) {
+				if(ppid.contains(",")) {
+					if(ppid.contains("single")) {
+						String[] arr = ppid.split(",");
+						Map<String, Object> offerdata = DBUtilities.get_offerdata(arr[0], brand, campaign, temp_category);
+						upsell = offerdata.get("UPGRADE").toString();
+					}
+					else {
+						String upsell_offer = check_deluxe_kit(brand, campaign, ppid, temp_category);
+						Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, brand, campaign, temp_category);
+						upsell = offerdata.get("UPGRADE").toString();
+					}
+				}
+				else {
+					Map<String, Object> offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, temp_category);
+					upsell = offerdata.get("UPGRADE").toString();
+				}
+			}
+		}
+		else {
+			
+		}
+		return upsell;
+	}
+	
+	public String check_deluxe_kit(String brand, String campaign, String ppid, String category) throws ClassNotFoundException, SQLException {
+		String upsell_offer = "";
+		String kit_type = "";
+		String[] offer_arr = ppid.split(",");
+		for(String offer : offer_arr) {
+			Map<String, Object> offerdata = DBUtilities.get_offerdata(offer, brand, campaign, category);
+			String type = offerdata.get("KIT_TYPE").toString();
+			kit_type = type + "-";
+		}
+		
+//		if(kit_type.contains("basic-basic"))
+		return upsell_offer;
+	}
+	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
 		Thread.sleep(4000);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -455,7 +507,9 @@ public class BuyflowUtilities {
 		else {
 			String alpha = RandomStringUtils.randomAlphabetic(9);
 			String num = RandomStringUtils.randomNumeric(4);
-			String email = alpha + "-" + num + "@yopmail.com";
+//			String email = alpha + "-" + num + "@yopmail.com";
+//			String email = alpha + "-" + num + "@rm2rf.com";
+			String email = alpha + "-" + num + "@guerrillamail.com";
 			
 			fill_form_field(driver, realm, "Email", email.toLowerCase());
 			fill_form_field(driver, realm, "PhoneNumber", "8887878787");		

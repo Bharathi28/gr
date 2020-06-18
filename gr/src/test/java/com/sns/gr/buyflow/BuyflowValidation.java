@@ -148,27 +148,30 @@ public class BuyflowValidation {
 		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
 			
 		bf_obj.complete_order(driver, brand, cc);
-		Thread.sleep(2000);
-			
+		Thread.sleep(2000);			
 		
-		String campaignPPU = "";
-		String category2 = "";
-		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
-			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
-			category2 = "Kit";
-		}
-		else if(categoryy.equalsIgnoreCase("ShopKit")) {
-			campaignPPU = db_obj.checkPPUPresent(brand, campaign, categoryy);
-			category2 = categoryy;
-		}		
-		
-		if(campaignPPU.equalsIgnoreCase("Yes")) {
-			Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category2);
-			String upsell = offerdata.get("UPGRADE").toString();	
-			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
-		}
+//		String campaignPPU = "";
+//		String category2 = "";
+//		if((categoryy.equalsIgnoreCase("Mixed")) || (categoryy.equalsIgnoreCase("Kit"))) {
+//			campaignPPU = db_obj.checkPPUPresent(brand, campaign, "Kit");
+//			category2 = "Kit";
+//		}
+//		else if(categoryy.equalsIgnoreCase("ShopKit")) {
+//			campaignPPU = db_obj.checkPPUPresent(brand, campaign, categoryy);
+//			category2 = categoryy;
+//		}		
+//		
+//		if(campaignPPU.equalsIgnoreCase("Yes")) {
+//			Map<String, Object> offerdata = DBUtilities.get_offerdata(kit_offercode, brand, campaign, category2);
+//			String upsell = offerdata.get("UPGRADE").toString();	
+//			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
+//		}
 
-		Thread.sleep(2000);
+		if((categoryy.contains("Kit")) || (categoryy.contains("Mixed"))) {
+			String upsell = bf_obj.check_upsell_select(brand, campaign, ppid, categoryy, nav);
+			bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
+			Thread.sleep(2000);
+		}	
 		
 		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));
 			
