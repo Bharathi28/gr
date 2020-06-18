@@ -163,7 +163,7 @@ public class SASUtilities {
 		Thread.sleep(2000);
 		System.out.println("Adding product to cart");
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")) || (category.equalsIgnoreCase("SubscribeandSave"))) {
-			if((brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
+			if((brand.equalsIgnoreCase("BodyFirm")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
 				if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
 					Thread.sleep(1000);
 					driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();

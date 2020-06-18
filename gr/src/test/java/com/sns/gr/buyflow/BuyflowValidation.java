@@ -80,16 +80,25 @@ public class BuyflowValidation {
 		String tempCampaign = campaign;
 		
 		for(int i = 0; i < offer_array.length; i++) {	
+			System.out.println(offer_array[i]);
+			System.out.println(categoryy);
 			String camp_cat_val = bf_obj.campaign_category_validation(categoryy, campaign, offer_array[i]);
 			String[] camp_cat_val_arr = camp_cat_val.split("-");
 			
 			tempCategory = camp_cat_val_arr[0];
 			campaign = camp_cat_val_arr[1];
 			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);
+			System.out.println(tempCategory);
 			
 			if(nav.equalsIgnoreCase("brands-nav")) {
-				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);		
-				bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, combo_brand_campaign.get(0), combo_brand_campaign.get(1), nav, categoryy);
+				List<String> combo_brand_campaign = new ArrayList<String>();
+				if(offer_array[i].contains("single")) {
+					combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i-1], categoryy);	
+				}
+				else {
+					combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);	
+				}					
+				bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, combo_brand_campaign.get(0), combo_brand_campaign.get(1), nav, tempCategory);
 			}
 			else {
 				bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);

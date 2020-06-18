@@ -26,7 +26,7 @@ public class DBUtilities {
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-//		System.out.println(query);
+		System.out.println(query);
 		return offerdata.get(0);		
 	}
 	
@@ -51,12 +51,15 @@ public class DBUtilities {
 		return combo_present;
 	}	
 	
-	public List<String> get_combo_brandlist(String[] combodata) throws ClassNotFoundException, SQLException {
-		List<String> combo_brand_list = new ArrayList<String>();
-		for(String data : combodata) {
-			String[] brand_campaign = data.split("-");			
-			combo_brand_list.add(brand_campaign[0]);
-		}			
+	public List<String> get_combo_brandlist(String brand, String campaign) throws ClassNotFoundException, SQLException {
+		String[] combodata = get_combo(brand, campaign);
+		List<String> combo_brand_list = null;
+		if(combodata != null) {
+			for(String data : combodata) {
+				String[] brand_campaign = data.split("-");			
+				combo_brand_list.add(brand_campaign[0]);
+			}
+		}					
 		return combo_brand_list;
 	}
 	
