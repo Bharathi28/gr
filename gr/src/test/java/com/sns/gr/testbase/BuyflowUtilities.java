@@ -224,7 +224,7 @@ public class BuyflowUtilities {
 		Thread.sleep(2000);
 	}
 	
-	public void move_to_checkout(WebDriver driver, String brand, String campaign, String offer, String category) throws InterruptedException, ClassNotFoundException, SQLException {
+	public void move_to_checkout(WebDriver driver, String brand, String campaign, String category) throws InterruptedException, ClassNotFoundException, SQLException {
 		System.out.println("Moving to Checkout Page...");				
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				

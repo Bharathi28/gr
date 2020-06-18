@@ -22,6 +22,7 @@ public class SASUtilities {
 	DBUtilities db_obj = new DBUtilities();	
 		
 	public List<String> fetch_random_singles(String brand, String campaign, int count) throws ClassNotFoundException, SQLException {
+		System.out.println(count);
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";		
 		
@@ -62,29 +63,29 @@ public class SASUtilities {
 		String ppid_str = "";
 		Map<String, Object> offerdata;
 		
-		if(ppid.contains("single")) {
-			String[] single_array = ppid.split(" ");
-			String no_of_singles_str = single_array[0];
-			int no_of_singles = Integer.parseInt(no_of_singles_str);
-				
-			List<String> single_offers = fetch_random_singles(brand, campaign, no_of_singles);
-				
-			for(String single_offer : single_offers) {
-				offerdata = DBUtilities.get_offerdata(single_offer, brand, campaign, "Product");
-				select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
-				ppid_str = single_offer + ",";
-			}			
-		}
-		else {
+//		if(ppid.contains("single")) {
+//			String[] single_array = ppid.split(" ");
+//			String no_of_singles_str = single_array[0];
+//			int no_of_singles = Integer.parseInt(no_of_singles_str);
+//				
+//			List<String> single_offers = fetch_random_singles(brand, campaign, no_of_singles);
+//				
+//			for(String single_offer : single_offers) {
+//				offerdata = DBUtilities.get_offerdata(single_offer, brand, campaign, "Product");
+//				select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
+//				ppid_str = single_offer + ",";
+//			}			
+//		}
+//		else {
 			ppid_str = ppid;		
 			offerdata = DBUtilities.get_offerdata(ppid, brand, campaign, category);
 			select_offer(driver, env, brand, campaign, offerdata, category, subscribe);
-		}
+//		}
 		
-		String last_char = ppid_str.substring(ppid_str.length() - 1);
-		if(last_char.equalsIgnoreCase(",")) {
-			ppid_str = ppid_str.substring(0, ppid_str.length() - 1);
-		}
+//		String last_char = ppid_str.substring(ppid_str.length() - 1);
+//		if(last_char.equalsIgnoreCase(",")) {
+//			ppid_str = ppid_str.substring(0, ppid_str.length() - 1);
+//		}
 		
 		return ppid_str;
 	}	

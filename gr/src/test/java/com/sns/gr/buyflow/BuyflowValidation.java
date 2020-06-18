@@ -73,8 +73,29 @@ public class BuyflowValidation {
 		}
 		int subscribe =  0;
 		String str = "";
-		String[] offer_array = ppid.split(",");		
-		String kit_offercode = offer_array[0];
+		String[] offer_array = ppid.split(",");	
+//		String kit_offercode = offer_array[0];
+		System.out.println(offer_array);
+		System.out.println(offer_array[offer_array.length-1]);
+		if(offer_array[offer_array.length-1].contains("single")) {
+			String[] single_array = offer_array[offer_array.length-1].split(" ");
+			String no_of_singles_str = single_array[0];
+			int no_of_singles = Integer.parseInt(no_of_singles_str);
+				System.out.println("number" + no_of_singles);
+			List<String> single_offers = sas_obj.fetch_random_singles(brand, campaign, no_of_singles);
+					
+			ppid = offer_array[0];
+				
+			for(String single_offer : single_offers) {
+				ppid = ppid + "," + single_offer;
+			}			
+		}		
+		
+		String last_char = ppid.substring(ppid.length() - 1);
+		if(last_char.equalsIgnoreCase(",")) {
+			ppid = ppid.substring(0, ppid.length() - 1);
+		}
+		System.out.println(ppid);
 		
 		String tempCategory = "";
 		String tempCampaign = campaign;
@@ -104,15 +125,16 @@ public class BuyflowValidation {
 				bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], tempCategory, nav);
 			}			
 			
-			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
+//			String ppidStr = sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
+			sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], tempCategory, subscribe, nav);
 			if(i == ((offer_array.length)-1)) {
-				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
+				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);
 			}
 			else {
-				bf_obj.move_to_checkout(driver, brand, campaign, ppidStr, tempCategory);
+				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);
 				bf_obj.click_logo(driver, brand, campaign);
 			}
-			str = str + ppidStr + ",";
+//			str = str + ppidStr + ",";
 		}		
 		campaign = tempCampaign;
 		
@@ -194,7 +216,7 @@ public class BuyflowValidation {
 		String conf_num = bf_obj.fetch_conf_num(driver, brand);
 		System.out.println("Confirmation Number : " + conf_num);	
 			
-		String last_char = conf_offercode.substring(conf_offercode.length() - 1);
+		last_char = conf_offercode.substring(conf_offercode.length() - 1);
 		if(last_char.equalsIgnoreCase(",")) {
 			conf_offercode = conf_offercode.substring(0, conf_offercode.length() - 1);
 		}		
