@@ -73,9 +73,7 @@ public class BuyflowUtilities {
 	}		
 	
 	public String campaign_repeat_validation(String categoryy, String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
-		System.out.println(brand);
-		System.out.println(campaign);
-		
+				
 		String tempCategory = "";
 		int subscribe = 0;
 		if(categoryy.equalsIgnoreCase("SubscribeandSave")) {
@@ -134,7 +132,6 @@ public class BuyflowUtilities {
 	}
 	
 	public String check_ppid_in_brand(String brand, String campaign, String ppid) throws ClassNotFoundException, SQLException {
-		System.out.println(brand + " " + campaign);
 		String realm = db_obj.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	
 					
@@ -208,44 +205,55 @@ public class BuyflowUtilities {
 	}
 	
 	public String check_upsell_select(String brand, String campaign, String ppid, String category, String nav) throws ClassNotFoundException, SQLException {
-				
+		String realm = db_obj.get_realm(brand);
 		String upsell = "";
 		String upsell_brand = "";
 		String upsell_campaign = "";
 		String kit_ppid = ppid;
 		String[] offer_array = ppid.split(",");
+		System.out.println(brand + kit_ppid);
+		System.out.println(brand + offer_array.length);
 		
 		String ppuPresent = db_obj.checkPPUPresent(brand, campaign, category);
 		
 		if(ppuPresent.equalsIgnoreCase("Yes")) {
-			if(ppid.contains(",")) {									
-				List<String> offer_list = Arrays.asList(offer_array);
-				int list_size = offer_list.size();
-				while(list_size > 0) {
-					if(brand.equalsIgnoreCase("BodyFirm")) {
-						List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, offer_list.get(list_size-1), category);	
-						upsell_brand = combo_brand_campaign.get(0);
-					}
-					else {
-						upsell_brand = brand;
+			if(ppid.contains(",")) {		
+				if(realm.equalsIgnoreCase("R4")) {
+					List<String> offer_list = Arrays.asList(offer_array);
+					int list_size = offer_list.size();
+					
+					for(int i = list_size-1; i>0; i--) {
+						if(brand.equalsIgnoreCase("BodyFirm")) {
+							List<String> combo_brand_campaign = check_ppid_in_combo(brand, campaign, offer_list.get(i), category);	
+							upsell_brand = combo_brand_campaign.get(0);
+							upsell_campaign = combo_brand_campaign.get(1);
+						}
+						else {
+							upsell_brand = brand;
+							upsell_campaign = campaign;
+						}	
+						String isproduct = db_obj.isProduct(upsell_brand, offer_list.get(i));
+						if(isproduct.equalsIgnoreCase("Yes")) {
+							System.out.println(list_size-1);
+							System.out.println(offer_list.get(list_size-1));
+							kit_ppid = kit_ppid.replace("," + offer_list.get(i), "");
+						}
+						else {
+							break;
+						}
 					}
 					
-					String isproduct = db_obj.isProduct(upsell_brand, offer_list.get(list_size-1));
-					if(isproduct.equalsIgnoreCase("Yes")) {
-						offer_list.remove(list_size-1);
-						kit_ppid = kit_ppid.replace("," + offer_list.get(list_size-1), "");
-						list_size = offer_list.size();
-					}
-					else {
-						break;
-					}
+					String upsell_offer = kit_ppid;
+					if(kit_ppid.contains(",")) {
+						upsell_offer = check_deluxe_kit(brand, campaign, kit_ppid, category);
+					}				
+					Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, upsell_brand, upsell_campaign, category);
+					upsell = offerdata.get("UPGRADE").toString();
 				}
-				String upsell_offer = kit_ppid;
-				if(kit_ppid.contains(",")) {
-					upsell_offer = check_deluxe_kit(brand, campaign, kit_ppid, category);
-				}				
-				Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, brand, campaign, category);
-				upsell = offerdata.get("UPGRADE").toString();
+				else {
+					Map<String, Object> offerdata = DBUtilities.get_offerdata(offer_array[0], brand, campaign, category);
+					upsell = offerdata.get("UPGRADE").toString();
+				}
 			}
 			else {
 				if(brand.equalsIgnoreCase("BodyFirm")) {
@@ -502,7 +510,8 @@ public class BuyflowUtilities {
 			String num = RandomStringUtils.randomNumeric(4);
 //			String email = alpha + "-" + num + "@yopmail.com";
 //			String email = alpha + "-" + num + "@rm2rf.com";
-			String email = alpha + "-" + num + "@guerrillamail.com";
+//			String email = alpha + "-" + num + "@guerrillamail.com";
+			String email = alpha + "-" + num + "@mailnesia.com";
 			
 			fill_form_field(driver, realm, "Email", email.toLowerCase());
 			fill_form_field(driver, realm, "PhoneNumber", "8887878787");		

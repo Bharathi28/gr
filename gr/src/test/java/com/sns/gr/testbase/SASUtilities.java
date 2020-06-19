@@ -22,7 +22,6 @@ public class SASUtilities {
 	DBUtilities db_obj = new DBUtilities();	
 		
 	public List<String> fetch_random_singles(String brand, String campaign, int count) throws ClassNotFoundException, SQLException {
-		System.out.println(count);
 		String realm = DBUtilities.get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";		
 		
@@ -33,10 +32,6 @@ public class SASUtilities {
 		List<Map<String, Object>> randsingles = new ArrayList<Map<String, Object>>();
 		Random rand = new Random(); 
 		for(int i=0; i<count; i++) {
-			System.out.println(i);
-			System.out.println(singles.size());
-			System.out.println(rand.nextInt(singles.size()));
-			System.out.println(singles.get(rand.nextInt(singles.size())));
 			randsingles.add(singles.get(rand.nextInt(singles.size())));
 		}
 		
@@ -611,7 +606,7 @@ public class SASUtilities {
 			prod_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
 			Thread.sleep(2000);	
 		}		
-		else if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) {
+		else if(((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("SpotFade")) && (campaign.equalsIgnoreCase("Core")))){
 			Actions act = new Actions(driver);
 			act.moveToElement(prod_elmt).perform();
 			Thread.sleep(1000);
@@ -646,7 +641,7 @@ public class SASUtilities {
 			prod_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
 			Thread.sleep(2000);
 		}		
-		else if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) {
+		else if(((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("SpotFade")) && (campaign.equalsIgnoreCase("Core")))){
 			Actions act = new Actions(driver);
 			act.moveToElement(prod_elmt).perform();
 			Thread.sleep(1000);

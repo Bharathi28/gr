@@ -101,6 +101,24 @@ public class DBUtilities {
 		}
 		return isproduct;
 	}
+	
+	public String isShopKit(String brand, String ppid) throws ClassNotFoundException, SQLException {
+		String realm = get_realm(brand);
+		String tableName = realm.toLowerCase() + "offers";	
+		String isshopkit = "No";
+		
+		String query = "select * from " + tableName + " where brand='" + brand + "' and ppid='" + ppid + "'";
+		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
+		
+		for(Map<String, Object> map : offerdata) {
+			String category = map.get("CATEGORY").toString();
+			if(category.equalsIgnoreCase("ShopKit")) {
+				isshopkit = "Yes";
+				break;
+			}
+		}		
+		return isshopkit;
+	}
 		
 	public List<Map<String, Object>> fetch_all_by_category(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
