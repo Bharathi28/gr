@@ -252,15 +252,15 @@ public class SASUtilities {
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
 
-		else if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
-			jse.executeScript("window.scrollBy(0,400)", 0);
-			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
-				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
-			}
-			else {
-				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
-			}
-		}			
+//		else if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
+//			jse.executeScript("window.scrollBy(0,400)", 0);
+//			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
+//				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
+//			}
+//			else {
+//				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
+//			}
+//		}			
 
 		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
 			jse.executeScript("window.scrollBy(0,400)", 0);

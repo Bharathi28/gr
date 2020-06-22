@@ -187,7 +187,8 @@ public class BuyflowUtilities {
 			
 		}
 		else {			
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("product"))){
+//			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("product"))){
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase"))){
 				campaign = "crepeerase";
 			}
 			List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "MoveToCheckout", category);
@@ -211,8 +212,6 @@ public class BuyflowUtilities {
 		String upsell_campaign = "";
 		String kit_ppid = ppid;
 		String[] offer_array = ppid.split(",");
-		System.out.println(brand + kit_ppid);
-		System.out.println(brand + offer_array.length);
 		
 		String ppuPresent = db_obj.checkPPUPresent(brand, campaign, category);
 		
@@ -234,8 +233,6 @@ public class BuyflowUtilities {
 						}	
 						String isproduct = db_obj.isProduct(upsell_brand, offer_list.get(i));
 						if(isproduct.equalsIgnoreCase("Yes")) {
-							System.out.println(list_size-1);
-							System.out.println(offer_list.get(list_size-1));
 							kit_ppid = kit_ppid.replace("," + offer_list.get(i), "");
 						}
 						else {

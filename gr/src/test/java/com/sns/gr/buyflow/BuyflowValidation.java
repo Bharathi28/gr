@@ -105,7 +105,6 @@ public class BuyflowValidation {
 		if(last_char.equalsIgnoreCase(",")) {
 			ppid = ppid.substring(0, ppid.length() - 1);
 		}
-		System.out.println(ppid);
 		
 		String tempCategory = "";
 		String tempCampaign = campaign;
@@ -127,14 +126,18 @@ public class BuyflowValidation {
 					tempCategory = "Product";
 				}
 				else {
-					if(isShopKit.equalsIgnoreCase("yes")) {
-						tempCategory = "ShopKit";
-					}
-					else {
+					if(categoryy.equalsIgnoreCase("Kit")) {
 						tempCategory = "Kit";
 					}
+					else {
+						if(isShopKit.equalsIgnoreCase("yes")) {
+							tempCategory = "ShopKit";
+						}
+//						else {
+//							tempCategory = "Kit";
+//						}
+					}
 				}
-				System.out.println("tempcategory " + tempCategory);
 				if(nav.equalsIgnoreCase("brands-nav")) {
 					bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, offer_brand, offer_campaign, nav, tempCategory);
 				}
@@ -154,11 +157,16 @@ public class BuyflowValidation {
 					tempCategory = "Product";
 				}
 				else {
-					if(isShopKit.equalsIgnoreCase("yes")) {
-						tempCategory = "ShopKit";
+					if(categoryy.equalsIgnoreCase("Kit")) {
+						tempCategory = "Kit";
 					}
 					else {
-						tempCategory = "Kit";
+						if(isShopKit.equalsIgnoreCase("yes")) {
+							tempCategory = "ShopKit";
+						}
+//						else {
+//							tempCategory = "Kit";
+//						}
 					}
 				}
 				bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
@@ -169,8 +177,7 @@ public class BuyflowValidation {
 			
 			tempCategory = camp_cat_val_arr[0];
 			campaign = camp_cat_val_arr[1];
-			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);
-			System.out.println(tempCategory);					
+			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);					
 			
 			sas_obj.get_offer(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, subscribe, nav);
 			if(i == ((offer_array.length)-1)) {
