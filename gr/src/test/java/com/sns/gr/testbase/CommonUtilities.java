@@ -35,7 +35,23 @@ public class CommonUtilities {
 			Sheet dataSheet = testData.getSheet(sheetName);
 			
 			int totalNoOfCols = dataSheet.getRow(0).getLastCellNum();
-			int totalNoOfRows = dataSheet.getLastRowNum() +1;
+//			int totalNoOfRows = dataSheet.getLastRowNum() +1;
+//			int totalNoOfRows = dataSheet.getLastRowNum();
+			
+			int end = 0;		
+			
+			//////////////////////////////////////
+			int k = 1;
+			String rowdata = dataSheet.getRow(k).getCell(0).getStringCellValue();
+			while(!(rowdata.equalsIgnoreCase("End"))) {
+				k++;
+				rowdata =  dataSheet.getRow(k).getCell(0).getStringCellValue();
+				
+			}
+			int totalNoOfRows = k;
+//			System.out.println("Total rows:" + totalNoOfRows);
+			
+			//////////////////////////////////////
 						
 			arrayExcelData = new String[totalNoOfRows-1][totalNoOfCols];
 			
@@ -44,12 +60,19 @@ public class CommonUtilities {
 					String cellType = dataSheet.getRow(i).getCell(j).getCellTypeEnum().toString();
 					if(cellType.equalsIgnoreCase("STRING")) {
 						arrayExcelData[i-1][j] = dataSheet.getRow(i).getCell(j).getStringCellValue();
+						if(arrayExcelData[i-1][j].equalsIgnoreCase("End")) {
+							end = 1;
+							break;
+						}
 					}
 					else if(cellType.equalsIgnoreCase("NUMERIC")) {
 						Double value = dataSheet.getRow(i).getCell(j).getNumericCellValue();
 						arrayExcelData[i-1][j] = Double.toString(value);
 					}
 //					System.out.println(arrayExcelData[i-1][j]);
+				}
+				if(end == 1) {
+					break;
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -191,6 +214,7 @@ public class CommonUtilities {
 			header_list.add("Brand");
 			header_list.add("Campaign");
 			header_list.add("Category");
+			header_list.add("Navigation");
 			header_list.add("e-mail");
 			header_list.add("Expected PPID");
 			header_list.add("Actual PPID");

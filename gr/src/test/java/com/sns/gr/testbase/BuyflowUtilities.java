@@ -89,13 +89,7 @@ public class BuyflowUtilities {
 				campaign="Core";
 			}
 		}
-		else if(categoryy.equalsIgnoreCase("ShopKit")) {
-			tempCategory = categoryy;
-			if(!(campaign.equals("Core"))) {
-				campaign="Core";
-			}
-		}
-		else if(categoryy.equalsIgnoreCase("Kit")) {
+		else if((categoryy.equalsIgnoreCase("ShopKit")) || (categoryy.equalsIgnoreCase("Kit"))){
 			String isproduct = db_obj.isProduct(brand, ppid);
 			if(isproduct.equalsIgnoreCase("Yes")) {
 				tempCategory = "Product";
@@ -107,7 +101,7 @@ public class BuyflowUtilities {
 				tempCategory = categoryy;
 			}
 		}
-		return tempCategory + "-" + campaign + "-" + subscribe;
+		return tempCategory + "/" + campaign + "/" + subscribe;
 	}
 	
 	public List<String> check_ppid_in_combo(String brand, String campaign, String ppid, String category) throws ClassNotFoundException, SQLException {
@@ -196,12 +190,20 @@ public class BuyflowUtilities {
 			String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
 			String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 			
-			WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
-//			WebDriverWait wait = new WebDriverWait(driver,50);
-//			wait.until(ExpectedConditions.elementToBeClickable(element));	
-			Thread.sleep(2000);
-			element.click();
-			Thread.sleep(2000);
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) {
+				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() != 0) {
+					driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
+				}
+				else if(driver.findElements(By.xpath("//i[@class='fa fa-shopping-bag']")).size() != 0) {
+					driver.findElement(By.xpath("//i[@class='fa fa-shopping-bag']")).click();
+				}
+			}
+			else {
+				WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);	
+				Thread.sleep(3000);
+				element.click();
+				Thread.sleep(2000);
+			}			
 		}	
 	}
 	
@@ -241,8 +243,13 @@ public class BuyflowUtilities {
 					}
 					
 					String upsell_offer = kit_ppid;
-					if(kit_ppid.contains(",")) {
-						upsell_offer = check_deluxe_kit(brand, campaign, kit_ppid, category);
+					if(kit_ppid.contains(",")) {			
+						if(brand.equalsIgnoreCase("BodyFirm")) {
+							upsell_offer = offer_array[1];
+						}
+						else {
+							upsell_offer = check_deluxe_kit(upsell_brand, upsell_campaign, kit_ppid, category);
+						}
 					}				
 					Map<String, Object> offerdata = DBUtilities.get_offerdata(upsell_offer, upsell_brand, upsell_campaign, category);
 					upsell = offerdata.get("UPGRADE").toString();

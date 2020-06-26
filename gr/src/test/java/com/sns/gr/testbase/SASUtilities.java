@@ -135,7 +135,7 @@ public class SASUtilities {
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")) || (category.equalsIgnoreCase("SubscribeandSave"))) {
 			if((brand.equalsIgnoreCase("BodyFirm")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
 				if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
-					Thread.sleep(1000);
+					Thread.sleep(3000);
 					driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
 				}
 			}
@@ -627,7 +627,7 @@ public class SASUtilities {
 		List<Map<String, Object>> prod_loc = comm_obj.get_element_locator(brand, campaign, "ShopKit", product_name);			
 		
 		while(comm_obj.find_mulwebelement(driver, prod_loc.get(0).get("ELEMENTLOCATOR").toString(), prod_loc.get(0).get("ELEMENTVALUE").toString()).size() == 0){
-			jse.executeScript("window.scrollBy(0,1000)", 0);
+			jse.executeScript("window.scrollBy(0,400)", 0);
 		}
 		WebElement prod_elmt = comm_obj.find_webelement(driver, prod_loc.get(0).get("ELEMENTLOCATOR").toString(), prod_loc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(2000);

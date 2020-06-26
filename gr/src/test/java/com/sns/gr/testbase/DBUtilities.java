@@ -50,6 +50,7 @@ public class DBUtilities {
 	
 	public String getUrl(String brand, String campaign, String env) throws ClassNotFoundException, SQLException {
 		String query = "select * from brand where brandname='" + brand + "' and campaign='" + campaign + "'";
+		System.out.println(query);
 		List<Map<String, Object>> branddata = DBLibrary.dbAction("fetch", query);		
 		String url = "";
 		if(env.toLowerCase().contains("dev")) {
@@ -94,6 +95,7 @@ public class DBUtilities {
 		String isproduct = "No";
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and ppid='" + ppid + "'";
+//		System.out.println(query);
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
 		String category = offerdata.get(0).get("CATEGORY").toString();
 		if(category.equalsIgnoreCase("Product")) {
@@ -174,12 +176,14 @@ public class DBUtilities {
 	}
 	
 	public String checkPPUPresent(String brand, String campaign, String category) throws ClassNotFoundException, SQLException {
+//		System.out.println(brand + campaign + category);
 		String origcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
 		}
 		
 		String campQuery = "select * from campaign_pages where brand='" + brand + "' and campaign='" + campaign + "'";		
+//		System.out.println(campQuery);
 		List<Map<String, Object>> camplist = DBLibrary.dbAction("fetch", campQuery);
 		Map<String, Object> map = camplist.get(0);
 		String ppupresent = null;

@@ -120,18 +120,26 @@ public class PixelParallel {
 		output.add(header_list);
 	    
 	    DBUtilities db_obj = new DBUtilities();
-		PixelUtilities pixel_obj = new PixelUtilities();		
+		PixelUtilities pixel_obj = new PixelUtilities();	
 		
-		String realm = DBUtilities.get_realm(brand);
+		String urlbrand = "";
+		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+			urlbrand = "BodyFirm";
+		}
+		else {
+			urlbrand = brand;
+		}
+		
+		String realm = DBUtilities.get_realm(urlbrand);
 		
 		HashMap<Integer, HashMap> overallOutput = new LinkedHashMap<Integer, HashMap>();
 								
 		String url = "";
-		url = db_obj.getUrl(brand, campaign, env);
-		System.out.println(url);
+		url = db_obj.getUrl(urlbrand, campaign, env);
+		System.out.println(url);		
 		
 		if(!((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg")))) {
-			url = db_obj.getUrl(brand, campaign, "stg");
+			url = db_obj.getUrl(urlbrand, campaign, "stg");
 			url = url.replace("stg", env.toLowerCase());
 		}
 		
@@ -189,7 +197,12 @@ public class PixelParallel {
 		}
 	        
 	    String[] pixelArr = pixelStr.split(",");		
-			
+	    
+	    String tempbrand = brand;
+	    if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+			brand = "BodyFirm";
+		}
+	    					
 		int j=1;
 		for(String pixel : pixelArr) {	
 				
@@ -243,7 +256,7 @@ public class PixelParallel {
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + tempbrand + "\\" + tempbrand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
 						
 						WebElement searchElmt = driver.findElement(By.id("search"));
 						wait.until(ExpectedConditions.visibilityOf(searchElmt));
@@ -307,11 +320,11 @@ public class PixelParallel {
 			} // end of events
 			pixelMap.put(pixel, eventmapList);
 			campaignMap.put(campaign, pixelMap);
-			brandMap.put(brand, campaignMap);
+			brandMap.put(tempbrand, campaignMap);
 			envMap.put(env, brandMap);		
 			overallOutput.put(j++, envMap);
 		} // end of pixels
-		writeToSheet(overallOutput, brand, campaign, flow);
+		writeToSheet(overallOutput, tempbrand, campaign, flow);
 		driver.close();
 	} // end of main
 	
@@ -503,7 +516,7 @@ public class PixelParallel {
 			        				pixelTotalSize = pixelTotalSize + eventTotalSize;
 			        			}
 			        		}
-			        		System.out.println(((row_num-1)-(pixelTotalSize-1)) + "," + (row_num-1) + ",2,2");
+//			        		System.out.println(((row_num-1)-(pixelTotalSize-1)) + "," + (row_num-1) + ",2,2");
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 3, resultSheet);
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 2, resultSheet);
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 1, resultSheet);			

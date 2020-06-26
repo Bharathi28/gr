@@ -134,9 +134,17 @@ public class PricingUtilities {
 		String text = "";
 		for(Map<String,Object> loc : locator) {
 			String elementvalue = loc.get("ELEMENTVALUE").toString();
-			if((pricing.contains("Checkout")) && campaign.equalsIgnoreCase("crepeerase")) {
+			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("crepeerase"))){
 				elementvalue = "(" + elementvalue + ")[2]";
-			}						
+			}
+			if((pricing.contains("Checkout")) && (brand.equalsIgnoreCase("BodyFirm"))){
+				if(pricing.contains("Shipping")) {
+					elementvalue = "(" + elementvalue + ")[3]";
+				}
+				else {
+					elementvalue = "(" + elementvalue + ")[2]";
+				}
+			}					
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				text = driver.findElement(By.xpath(elementvalue)).getText();
  				break;

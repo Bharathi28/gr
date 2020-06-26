@@ -85,6 +85,15 @@ public class PixelUtilities {
 		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
+		else if(brand.equalsIgnoreCase("BodyFirm")) {
+			query = "select * from r4offers where brand in ('CrepeErase','SpotFade') and campaign='" + campaign + "' and category='ShopKit' and status='Active'";
+		}
+		else if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
+			query = "select * from r4offers where brand='CrepeErase' and campaign='" + campaign + "' and category='Kit' and status='Active'";
+		}
+		else if(brand.equalsIgnoreCase("BodyFirm-SpotFade")) {
+			query = "select * from r4offers where brand='SpotFade' and campaign='" + campaign + "' and category='Kit' and status='Active'";
+		}
 		else {
 			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}	
@@ -210,6 +219,17 @@ public class PixelUtilities {
 			defineNewHar(proxy, brand + "HomePage");		 
 		    driver.get(url);	   
 		    
+		    if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
+		    	driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+				Thread.sleep(1000);
+				driver.findElement(By.xpath("//img[@alt='Crepe Erase']")).click();
+		    }
+		    if(brand.equalsIgnoreCase("BodyFirm-SpotFade")) {
+		    	driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+				Thread.sleep(1000);
+				driver.findElement(By.xpath("//img[@alt='Spot Fade']")).click();
+		    }
+		    
 		    if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@id='details-button']")).click();
 				driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
@@ -228,9 +248,7 @@ public class PixelUtilities {
 	    
 	    //////////////////////////////////////////////////////////
         // SAS Page
-	    defineNewHar(proxy, brand + "SASPage");
-	        
-	    
+	    defineNewHar(proxy, brand + "SASPage");	    
 		
 	    // Navigate to SAS Page
 	    if(((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19"))) || ((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b")))){
@@ -239,8 +257,7 @@ public class PixelUtilities {
 	    	if(driver.findElements(By.xpath("//button[@id='details-button']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@id='details-button']")).click();
 				driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
-			} 
-	    	
+			} 	    	
 		    Thread.sleep(10000);
 	    }	    	
 	    else if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
@@ -250,6 +267,15 @@ public class PixelUtilities {
 	    else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
 	    	bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
 	    	sas_obj.select_kit(driver, offerdata, brand, campaign);
+	    }
+	    else if((brand.equalsIgnoreCase("BodyFirm")) && (campaign.equalsIgnoreCase("Core"))) {
+	    	bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
+	    	sas_obj.select_shopkit(driver, offerdata, offerdata.get("BRAND").toString(), offerdata.get("CAMPAIGN").toString());
+	    	Thread.sleep(3000);
+			driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+	    }
+	    else if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+	    	 bf_obj.click_cta(driver, env, offerdata.get("BRAND").toString(), origcampaign, "Kit");
 	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, origcampaign, "Kit");
@@ -267,12 +293,38 @@ public class PixelUtilities {
         }
         else if((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("Core"))) {
         }
+        else if(brand.equalsIgnoreCase("BodyFirm")) {
+	    }
+        else if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+	    	 sas_obj.select_offer(driver, env, offerdata.get("BRAND").toString(), offerdata.get("CAMPAIGN").toString(), offerdata, "Kit", 0);
+	    }
         else {
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Kit", 0);
         }
-        if(!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) {
-        	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
-        }        
+        Thread.sleep(2000);
+        if(brand.equalsIgnoreCase("BodyFirm")) {
+        	bf_obj.move_to_checkout(driver, brand, campaign, "ShopKit");
+        }
+        else if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
+        	bf_obj.move_to_checkout(driver, "CrepeErase", "Core", "Kit");
+	    }
+        else if(brand.equalsIgnoreCase("BodyFirm-SpotFade")) {
+        	bf_obj.move_to_checkout(driver, "SpotFade", "Core", "Kit");
+	    }
+        else {
+        	if(!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) {
+            	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
+            } 
+        }               
+        
+        String harbrand = brand;
+        String harcampaign = campaign;
+        if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+        	harbrand = brand;
+        	harcampaign = campaign;
+        	brand = "BodyFirm";
+        	campaign = "Core";
+        }
         String email = "";
                 
         if(flow.equalsIgnoreCase("CCFlow")) {
@@ -286,15 +338,15 @@ public class PixelUtilities {
             email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
         }
         else if(flow.equalsIgnoreCase("PaypalFlow")) {
-        	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
+        	getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_checkoutpage_" + pattern + "_" + flow +".har");
         	defineNewHar(proxy, brand + "PaypalReviewPage");
         	email = bf_obj.fill_out_form(driver, brand, campaign, "Paypal", "Same", "30");
             System.out.println("Email : " + email);
             Thread.sleep(2000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_paypalreviewpage_" + pattern + "_" + flow +".har");
         }
         
         
@@ -314,7 +366,7 @@ public class PixelUtilities {
         	// Navigate to Confirmation Page	        
         	bf_obj.complete_order(driver, brand, cc);          
             Thread.sleep(10000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
 		}
 		else {
 			// Upsell Page
@@ -322,7 +374,7 @@ public class PixelUtilities {
             // Navigate to Upsell Page	        
             bf_obj.complete_order(driver, brand, cc);
             Thread.sleep(20000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_upsellpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_upsellpage_" + pattern + "_" + flow +".har");
             
             //////////////////////////////////////////////////////////
             // Confirmation Page	        
@@ -334,7 +386,7 @@ public class PixelUtilities {
             // Navigate to Confirmation Page
             bf_obj.upsell_confirmation(driver, brand, campaign, upsell_value);
             Thread.sleep(20000);
-            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
+            getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + harbrand + "\\" + harbrand + "_" + origcampaign + "_confirmationpage_" + pattern + "_" + flow +".har");
             Thread.sleep(3000);
 		}        
 	
@@ -358,7 +410,7 @@ public class PixelUtilities {
 		
         // Save Order Screenshots        
 		Screenshot confpage = new AShot().takeScreenshot(driver);			
-        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
+        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + harbrand + "\\" + offerdata.get("PPID").toString() +".png"));	
         
         driver.close();
         return output_row;

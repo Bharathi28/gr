@@ -457,8 +457,8 @@ public class CXTUtilities {
 		
 		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
 		while(prodelmts.size() == 0){
-			jse.executeScript("window.scrollBy(0,250)", 0);
-			Thread.sleep(2000);
+			jse.executeScript("window.scrollBy(0,150)", 0);
+			Thread.sleep(4000);
 		}
 		Thread.sleep(1000);
 		WebElement product = driver.findElement(By.xpath(productLocator));

@@ -76,7 +76,13 @@ public class BuyflowValidation {
 		String[] offer_array = ppid.split(",");	
 		
 		if(offer_array[offer_array.length-1].contains("single")) {
-			categoryy = "Kit";
+			if((brand.equalsIgnoreCase("BodyFirm")) && (nav.equalsIgnoreCase("main-nav"))){
+				categoryy = "ShopKit";
+			}
+			else {
+				categoryy = "Kit";
+			}
+			
 			String[] single_array = offer_array[offer_array.length-1].split(" ");
 			String no_of_singles_str = single_array[0];
 			int no_of_singles = Integer.parseInt(no_of_singles_str);
@@ -116,11 +122,12 @@ public class BuyflowValidation {
 			String offer_campaign = "";			
 			
 			if(brand.equalsIgnoreCase("BodyFirm")){
+				
 				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);	
 				offer_brand = combo_brand_campaign.get(0);
-				offer_campaign = combo_brand_campaign.get(1);
+				offer_campaign = combo_brand_campaign.get(1);				
 				
-				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);
+				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);				
 				String isShopKit = db_obj.isShopKit(offer_brand, offer_array[i]);
 				if(isProduct.equalsIgnoreCase("yes")) {
 					tempCategory = "Product";
@@ -133,18 +140,12 @@ public class BuyflowValidation {
 						if(isShopKit.equalsIgnoreCase("yes")) {
 							tempCategory = "ShopKit";
 						}
-//						else {
-//							tempCategory = "Kit";
-//						}
 					}
 				}
 				if(nav.equalsIgnoreCase("brands-nav")) {
 					bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, offer_brand, offer_campaign, nav, tempCategory);
 				}
 				else {
-					if(tempCategory.equalsIgnoreCase("Kit")) {
-						tempCategory = "ShopKit";
-					}
 					bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
 				}
 			}
@@ -164,16 +165,13 @@ public class BuyflowValidation {
 						if(isShopKit.equalsIgnoreCase("yes")) {
 							tempCategory = "ShopKit";
 						}
-//						else {
-//							tempCategory = "Kit";
-//						}
 					}
 				}
 				bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
 			}
 			
 			String camp_cat_val = bf_obj.campaign_repeat_validation(categoryy, offer_brand, offer_campaign, offer_array[i]);
-			String[] camp_cat_val_arr = camp_cat_val.split("-");
+			String[] camp_cat_val_arr = camp_cat_val.split("/");
 			
 			tempCategory = camp_cat_val_arr[0];
 			campaign = camp_cat_val_arr[1];
@@ -272,6 +270,7 @@ public class BuyflowValidation {
 		output_row.add(brand);
 		output_row.add(campaign);
 		output_row.add(categoryy);
+		output_row.add(nav);
 		output_row.add(email);
 		output_row.add(ppid);
 		output_row.add(conf_offercode);
