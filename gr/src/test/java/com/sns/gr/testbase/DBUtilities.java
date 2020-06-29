@@ -26,7 +26,7 @@ public class DBUtilities {
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-//		System.out.println(query);
+		System.out.println(query);
 		return offerdata.get(0);		
 	}
 	

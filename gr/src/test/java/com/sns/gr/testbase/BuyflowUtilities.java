@@ -190,7 +190,7 @@ public class BuyflowUtilities {
 			String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
 			String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 			
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))) {
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")) && (category.equalsIgnoreCase("product"))) {
 				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() != 0) {
 					driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
 				}
