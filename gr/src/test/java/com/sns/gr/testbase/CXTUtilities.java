@@ -26,6 +26,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
@@ -263,12 +264,14 @@ public class CXTUtilities {
 	public String removeProductfromCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
 		if(realm.equals("R4")) {
-			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
+//			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
+			driver.findElement(By.xpath("//div[contains(@class,'product-card')]//div//div//ul//li[3]//div//a")).click();
 			Thread.sleep(3000);
-			if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-				Thread.sleep(3000);
-				driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
-			}					
+			driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
+//			if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
+//				Thread.sleep(5000);
+//				driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+//			}					
 			Thread.sleep(2000);
 		}
 		else {
@@ -281,6 +284,7 @@ public class CXTUtilities {
 	}
 	
 	public void removeAllProductsfromCart(WebDriver driver, String brand, String campaign) throws InterruptedException, ClassNotFoundException, SQLException {
+		
 		Thread.sleep(1000);
 		String realm = db_obj.get_realm(brand);
 		
@@ -292,18 +296,27 @@ public class CXTUtilities {
 			WebElement mcelmt = comm_obj.find_webelement(driver, mcloc.get(0).get("ELEMENTLOCATOR").toString(), mcloc.get(0).get("ELEMENTVALUE").toString());
 			if(realm.equals("R4")) {
 				mcelmt.click();
-				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
-					if(driver.findElements(By.xpath("(//a[@class='removeproduct'])[1]")).size() != 0) {
-						Thread.sleep(3000);
-						driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
-					}
-					Thread.sleep(3000);
-					if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-						Thread.sleep(3000);
-						driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
-					}					
+				List<WebElement> products = driver.findElements(By.xpath("//div[contains(@class,'product-card')]//div//div//ul//li[3]//div//a"));
+				for(WebElement prod : products) {
 					Thread.sleep(2000);
+					prod.click();
+					Thread.sleep(3000);
+					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
 				}
+						
+//				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
+//					if(driver.findElements(By.xpath("(//a[@class='removeproduct'])[1]")).size() != 0) {
+//						Thread.sleep(2000);
+//						driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
+//					}
+//					Thread.sleep(3000);
+//					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
+////					if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
+////						Thread.sleep(5000);
+////						driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
+////					}					
+//					Thread.sleep(2000);
+//				}
 				checkShoppingCartEmpty(driver, realm);
 			}
 			else {
