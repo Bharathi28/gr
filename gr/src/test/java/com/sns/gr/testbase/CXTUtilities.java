@@ -196,7 +196,7 @@ public class CXTUtilities {
 		if(realm.equals("R4")) {
 			if(!(brand.equalsIgnoreCase("SeaCalmSkin"))) {
 				if(checkAddToKitOption(brand, campaign, prodPPID)) {
-					driver.findElement(By.xpath("//li[contains(@class,'one-time ')]//span[@class='pdp-radio']//input")).click();
+					driver.findElement(By.xpath("//li[contains(@class,'one-time ')]//label//span[@class='pdp-radio pixels_pdp-radio']//input")).click();
 				}
 			}				
 		}			
@@ -204,6 +204,7 @@ public class CXTUtilities {
 		
 		List<Map<String, Object>> buynowloc = get_cxt_locator(realm, "BuyNow", "");		
 		WebElement buynowelmt = comm_obj.find_webelement(driver, buynowloc.get(0).get("ELEMENTLOCATOR").toString(), buynowloc.get(0).get("ELEMENTVALUE").toString());
+		Thread.sleep(2000);
 		buynowelmt.click();
 		Thread.sleep(2000);
 		String addtocartresult = "";
@@ -262,16 +263,14 @@ public class CXTUtilities {
 	}
 	
 	public String removeProductfromCart(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = db_obj.get_realm(brand);
 		if(realm.equals("R4")) {
-//			driver.findElement(By.xpath("//div[@id='cart-table']//a[@class='removeproduct']")).click();
+			jse.executeScript("window.scrollBy(0,150)", 0);
+			Thread.sleep(2000);
 			driver.findElement(By.xpath("//div[contains(@class,'product-card')]//div//div//ul//li[3]//div//a")).click();
-			Thread.sleep(3000);
-			driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
-//			if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-//				Thread.sleep(5000);
-//				driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
-//			}					
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();					
 			Thread.sleep(2000);
 		}
 		else {
@@ -284,7 +283,7 @@ public class CXTUtilities {
 	}
 	
 	public void removeAllProductsfromCart(WebDriver driver, String brand, String campaign) throws InterruptedException, ClassNotFoundException, SQLException {
-		
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		Thread.sleep(1000);
 		String realm = db_obj.get_realm(brand);
 		
@@ -296,27 +295,16 @@ public class CXTUtilities {
 			WebElement mcelmt = comm_obj.find_webelement(driver, mcloc.get(0).get("ELEMENTLOCATOR").toString(), mcloc.get(0).get("ELEMENTVALUE").toString());
 			if(realm.equals("R4")) {
 				mcelmt.click();
-				List<WebElement> products = driver.findElements(By.xpath("//div[contains(@class,'product-card')]//div//div//ul//li[3]//div//a"));
+				List<WebElement> products = driver.findElements(By.xpath("//div[@id='cart-table']//div[contains(@class,'product-card')]"));
 				for(WebElement prod : products) {
+					jse.executeScript("window.scrollBy(0,150)", 0);
 					Thread.sleep(2000);
-					prod.click();
-					Thread.sleep(3000);
+					driver.findElement(By.xpath("//div[@id='cart-table']//div[contains(@class,'product-card')]//div//div//ul//li[3]//div//a")).click();
+
+					Thread.sleep(2000);
 					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
+					Thread.sleep(2000);
 				}
-						
-//				while(driver.findElements(By.xpath("//a[@class='removeproduct']")).size() != 0) {
-//					if(driver.findElements(By.xpath("(//a[@class='removeproduct'])[1]")).size() != 0) {
-//						Thread.sleep(2000);
-//						driver.findElement(By.xpath("(//a[@class='removeproduct'])[1]")).click();
-//					}
-//					Thread.sleep(3000);
-//					driver.findElement(By.xpath("//div[@id='removeConfirmationModal']//div//div//button[2]")).click();
-////					if(driver.findElements(By.xpath("//button[@class='button remove-product']")).size() != 0) {
-////						Thread.sleep(5000);
-////						driver.findElement(By.xpath("//button[@class='button remove-product']")).click();
-////					}					
-//					Thread.sleep(2000);
-//				}
 				checkShoppingCartEmpty(driver, realm);
 			}
 			else {
@@ -345,8 +333,6 @@ public class CXTUtilities {
 			actual = driver.findElement(By.xpath("//div[@class='cart-empty']//h1")).getText();
 			expected = "Your Shopping Cart Is Empty";
 		}		
-		System.out.println(actual);
-		System.out.println(expected);
 		String rmfromcartresult = "";
 		if(actual.contains(expected)) {
 			System.out.println("Shopping Cart is empty");
@@ -427,7 +413,7 @@ public class CXTUtilities {
 		}
 		else {
 			driver.findElement(By.xpath("//button[@class='addBtn cxt-button secondary-button-small']")).click();
-			Thread.sleep(1000);
+			Thread.sleep(3000);
 			driver.findElement(By.xpath("//div[@id='confirmKitPopupAdd']//div//div//div[3]//div[2]//a//span")).click();
 			while(driver.findElements(By.xpath("//div[@class='spinner_container']")).size() != 0) {
 				// Wait until spinner disappears
@@ -452,37 +438,42 @@ public class CXTUtilities {
 	
 	public void select_cxt_product(WebDriver driver, Map<String, Object> cxtoffer, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;	
+		String brand = cxtoffer.get("BRAND").toString();
 		String prodName = cxtoffer.get("DESCRIPTION").toString();
 		String productLocator = "";		
 		if(realm.equals("R4")) {
 			if(prodName.contains("-2A")) {
 				prodName = prodName.replace("-2A", "");
-				productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
+				productLocator = "//*[@aria-label='" + prodName + "']//a";
 				productLocator = "(" + productLocator + ")[2]";
 			}
 			else {
-				productLocator = "//*[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
+				if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
+					productLocator = "//*[@aria-label='" + prodName + "']";
+				}
+				else {
+					productLocator = "//*[@aria-label='" + prodName + "']//a";
+				}
 			}
 		}
 		else {
-			productLocator = "//div[@class='product-name']//h2//a[contains(text(),'" + prodName + "')]";
+				productLocator = "//div[@class='product-name']//h2//a[@title='" + prodName + "']";
 		}
-		
-		List<WebElement> prodelmts = driver.findElements(By.xpath(productLocator));							
-		while(prodelmts.size() == 0){
-			jse.executeScript("window.scrollBy(0,150)", 0);
-			Thread.sleep(4000);
+							
+		while(driver.findElements(By.xpath(productLocator)).size() == 0){
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			Thread.sleep(2000);
 		}
-		Thread.sleep(1000);
+		System.out.println("productlocator: " + productLocator);
+		Thread.sleep(3000);
 		WebElement product = driver.findElement(By.xpath(productLocator));
+		Thread.sleep(2000);
 		product.click();
 		Thread.sleep(2000);	
 	}
 	
-	public void select_cxt_fragrance(WebDriver driver, Map<String, Object> cxtoffer, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
-		JavascriptExecutor jse = (JavascriptExecutor) driver;	
+	public void select_cxt_fragrance(WebDriver driver, Map<String, Object> cxtoffer, String realm) throws ClassNotFoundException, SQLException, InterruptedException {	
 		String brand = cxtoffer.get("BRAND").toString();
-		String fragrance = cxtoffer.get("FRAGRANCE").toString();
 		String ppid = cxtoffer.get("PPID").toString();
 		
 		String fragLocator = "";		
@@ -495,6 +486,7 @@ public class CXTUtilities {
 			}
 		}
 		WebElement product = driver.findElement(By.xpath(fragLocator));
+		Thread.sleep(2000);	
 		product.click();
 		Thread.sleep(2000);	
 	}
@@ -553,7 +545,7 @@ public class CXTUtilities {
 		Thread.sleep(1000);
 		confirmelmt.click();
 		Thread.sleep(1000);
-		System.out.println(rescheduleresult);
+		System.out.println(brand + " " + rescheduleresult);
 		if(rescheduleresult.equals("PASS")) {			
 			
 			if(realm.equals("R4")) {

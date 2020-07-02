@@ -140,14 +140,23 @@ public class BuyflowUtilities {
 	}
 	
 	public void combo_navigation_to_sas(WebDriver driver, String env, String combobrand, String combocampaign, String brand, String campaign, String nav, String category) throws ClassNotFoundException, SQLException, InterruptedException {
+//		System.out.println(brand+campaign+nav+category);
+		Thread.sleep(4000);
 		List<Map<String, Object>> brand_logo = comm_obj.get_element_locator(combobrand, combocampaign, "BrandLogo", brand);
 		driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+		Thread.sleep(2000);
+		if(driver.findElements(By.xpath("//li[@class='nav-brand-spotfade nav-mainmenu']//a")).size() != 0) {
+			
+			driver.findElement(By.xpath("//li[@class='nav-brand-spotfade nav-mainmenu']//a")).click();
+			Thread.sleep(3000);
+			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
+		}
 		Thread.sleep(1000);
 		
 		WebElement elmt = comm_obj.find_webelement(driver, brand_logo.get(0).get("ELEMENTLOCATOR").toString(), brand_logo.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(1000);
 		elmt.click();
-			
+		
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit"))) {
 			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 		}
@@ -169,7 +178,8 @@ public class BuyflowUtilities {
 	}
 	
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String category) throws InterruptedException, ClassNotFoundException, SQLException {
-		System.out.println("Moving to Checkout Page...");				
+		System.out.println("Moving to Checkout Page...");	
+//		System.out.println(brand + campaign + category);	
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				
 		Thread.sleep(2000);
@@ -181,8 +191,8 @@ public class BuyflowUtilities {
 			
 		}
 		else {			
-//			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("product"))){
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase"))){
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("product"))){
+//			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase"))){
 				campaign = "crepeerase";
 			}
 			List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "MoveToCheckout", category);
@@ -190,7 +200,7 @@ public class BuyflowUtilities {
 			String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
 			String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 			
-			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")) && (category.equalsIgnoreCase("product"))) {
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")) && ((category.equalsIgnoreCase("product")) || (category.equalsIgnoreCase("shopkit")))) {
 				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() != 0) {
 					driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
 				}
@@ -522,7 +532,7 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "FirstName", firstName());
 			fill_form_field(driver, realm, "LastName", lastName());
 			fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
-//			fill_form_field(driver, realm, "AddressLine1", "123 Anywhere street");
+//			fill_form_field(driver, realm, "AddressLine1", "8223 Belford Ave");
 			if(campaign.equalsIgnoreCase("ca")) {
 				fill_form_field(driver, realm, "City", "Anywhere");
 				fill_form_field(driver, realm, "State", "NB");		

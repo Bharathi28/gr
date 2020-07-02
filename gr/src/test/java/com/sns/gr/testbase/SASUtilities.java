@@ -234,22 +234,23 @@ public class SASUtilities {
 //			Thread.sleep(1000);
 //		}
 		
-		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core"))){
-			jse.executeScript("window.scrollBy(0,900)", 0);
-			if(gift.equalsIgnoreCase("Protect and Renew Skin Trio")) {
-				Thread.sleep(3000);
-				driver.findElement(By.xpath("//ul[@class='slick-dots']//li[2]//button")).click();
-			}
+		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("crepeerase")))){
+			jse.executeScript("window.scrollBy(0,600)", 0);
+//			jse.executeScript("window.scrollBy(0,900)", 0);
+//			if(gift.equalsIgnoreCase("Protect and Renew Skin Trio")) {
+//				Thread.sleep(3000);
+//				driver.findElement(By.xpath("//ul[@class='slick-dots']//li[2]//button")).click();
+//			}
 			Thread.sleep(3000);
 		}
-		System.out.println(gift);
+//		System.out.println(gift);
 		if(!(gift.equalsIgnoreCase("n/a"))) {
 			List<Map<String, Object>> gift_loc = comm_obj.get_element_locator(brand, campaign, "Gift", gift);
-			System.out.println(gift_loc.get(0).get("ELEMENTLOCATOR").toString());
-			System.out.println(gift_loc.get(0).get("ELEMENTVALUE").toString());
+//			System.out.println(gift_loc.get(0).get("ELEMENTLOCATOR").toString());
+//			System.out.println(gift_loc.get(0).get("ELEMENTVALUE").toString());
 			WebElement gift_elmt = comm_obj.find_webelement(driver, gift_loc.get(0).get("ELEMENTLOCATOR").toString(), gift_loc.get(0).get("ELEMENTVALUE").toString());
 			Thread.sleep(2000);
-			System.out.println(gift_elmt.isDisplayed());
+//			System.out.println(gift_elmt.isDisplayed());
 			gift_elmt.click();
 			Thread.sleep(1000);								
 		}		
@@ -259,7 +260,7 @@ public class SASUtilities {
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase"))&&((campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
@@ -276,7 +277,7 @@ public class SASUtilities {
 
 		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
 			jse.executeScript("window.scrollBy(0,400)", 0);
-			driver.findElement(By.xpath("//h3[contains(text(),'" + kit +"')]/../..//div[@class='checkout-button sas-kit-sticky-checkout hide-section']//button")).click();
+//			driver.findElement(By.xpath("//h3[contains(text(),'" + kit +"')]/../..//div[@class='checkout-button sas-kit-sticky-checkout hide-section']//button")).click();
 
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
@@ -288,6 +289,9 @@ public class SASUtilities {
 		}	
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("pnlsys"))) {
 			driver.findElement(By.xpath("//button[@class = 'button checkout']")).click();
+		}
+		else if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("bht"))) {
+			driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
 		}
 		else if(driver.findElements(By.cssSelector("#gift ~ .market a.buttons-next")).size() != 0) {
 			driver.findElement(By.cssSelector("#gift ~ .market a.buttons-next")).click();
@@ -400,7 +404,7 @@ public class SASUtilities {
 		String duo = offerdata.get("DUO").toString();
 		
 		if(!(duo.equalsIgnoreCase("n/a"))) {
-			List<Map<String, Object>> duo_loc;
+			List<Map<String, Object>> duo_loc = null;
 			if(brand.equalsIgnoreCase("Dr.Denese")) {
 				duo_loc = comm_obj.get_element_locator(brand, campaign, "Duo", duo + " " + kitname);
 			}
@@ -513,7 +517,7 @@ public class SASUtilities {
 			
 			List<Map<String, Object>> frag_loc = null;
 			if(category.equalsIgnoreCase("Kit")) {
-				frag_loc = comm_obj.get_element_locator(brand, campaign, "Fragrance", fragrance + " " + kitname);
+				frag_loc = comm_obj.get_element_locator(brand, campaign, "Fragrance", fragrance + " " + kitname);						
 			}
 			else if(category.equalsIgnoreCase("Product")) {
 				
@@ -545,6 +549,12 @@ public class SASUtilities {
 			else if((brand.equalsIgnoreCase("CrepeErase")) && ((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")))){
 				Select sel_element = new Select(driver.findElement(By.xpath("//ul[@class='variations-section clearfix']//li//div[3]//select")));
 				sel_element.selectByVisibleText(offerdata.get("FRAGRANCE").toString());
+			}
+			else if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("crepeerase")) && (category.equalsIgnoreCase("Kit"))){
+				Select sel_element = new Select(driver.findElement(By.id("Fragrance-citrus-Selection")));
+				sel_element.selectByVisibleText(offerdata.get("FRAGRANCE").toString());
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//a[@class='cta']")).click();
 			}
 			else {
 				frag_elmt.click();
