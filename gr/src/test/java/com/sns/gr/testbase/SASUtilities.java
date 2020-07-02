@@ -235,7 +235,7 @@ public class SASUtilities {
 //		}
 		
 		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("crepeerase")))){
-			jse.executeScript("window.scrollBy(0,600)", 0);
+			jse.executeScript("window.scrollBy(0,700)", 0);
 //			jse.executeScript("window.scrollBy(0,900)", 0);
 //			if(gift.equalsIgnoreCase("Protect and Renew Skin Trio")) {
 //				Thread.sleep(3000);
@@ -249,7 +249,7 @@ public class SASUtilities {
 //			System.out.println(gift_loc.get(0).get("ELEMENTLOCATOR").toString());
 //			System.out.println(gift_loc.get(0).get("ELEMENTVALUE").toString());
 			WebElement gift_elmt = comm_obj.find_webelement(driver, gift_loc.get(0).get("ELEMENTLOCATOR").toString(), gift_loc.get(0).get("ELEMENTVALUE").toString());
-			Thread.sleep(2000);
+			Thread.sleep(4000);
 //			System.out.println(gift_elmt.isDisplayed());
 			gift_elmt.click();
 			Thread.sleep(1000);								
