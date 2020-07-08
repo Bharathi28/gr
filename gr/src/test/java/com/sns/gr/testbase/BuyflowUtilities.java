@@ -489,8 +489,10 @@ public class BuyflowUtilities {
 			}			
 
 			Thread.sleep(5000);
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
-			driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
+			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+			}			
 			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
 			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");

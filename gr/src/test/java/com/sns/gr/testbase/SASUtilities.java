@@ -350,7 +350,7 @@ public class SASUtilities {
 		}
 		
 		WebElement elmt = comm_obj.find_webelement(driver, locator.get(0).get("ELEMENTLOCATOR").toString(), locator.get(0).get("ELEMENTVALUE").toString());
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		elmt.click();
 		Thread.sleep(2000);
 		if((brand.equalsIgnoreCase("Mally")) && ((campaign.equalsIgnoreCase("Core"))||(campaign.equalsIgnoreCase("save10")))) {

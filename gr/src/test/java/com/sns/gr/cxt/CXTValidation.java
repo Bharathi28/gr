@@ -185,53 +185,54 @@ public class CXTValidation {
 		jse.executeScript("window.scrollTo(0, 0)", 0);
 		Thread.sleep(2000);
 		
-//		//Step 5 - Reschedule Shipment
-//		output_row = new ArrayList<String>();
-//		output_row.add(env);
-//		output_row.add(brand);
-//		output_row.add(campaign);
-//		output_row.add("Reschedule Shipment");	
-//		String format = "";
-//		if(realm.equals("R4")) {
-//			format = "MMM dd, yyyy";
-//		}
-//		else {
-//			format = "E MMM dd yyyy";
-//		}
-//		
-//		Calendar now = Calendar.getInstance();		
-//		SimpleDateFormat sdf = new SimpleDateFormat(format);
-//		now.add(Calendar.DAY_OF_MONTH, 30); 
-//		String expecteddate = sdf.format(now.getTime()); 	
-//		
-//		String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
-//		if(actualdate.equals("FAIL")) {
-//			System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
-//			output_row.add("FAIL");
-//			cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
-//		}
-//		else {
-//			if (realm.equals("R4")) {
-//				actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
-//			}		
-//			else {
-//				actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
-//			}
-//			expected = "Success! Your next shipment has been rescheduled.";			
-//					System.out.println(brand + " --"+actualdate+"--");
-//					System.out.println(brand + " --"+expecteddate+"--");
-//			if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
-//				System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
-//				output_row.add("PASS");
-//				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
-//			}
-//			else {
-//				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
-//				output_row.add("FAIL");
-//				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
-//			}
-//		}		
-//		output.add(output_row);
+		//Step 5 - Reschedule Shipment
+		output_row = new ArrayList<String>();
+		output_row.add(env);
+		output_row.add(brand);
+		output_row.add(campaign);
+		output_row.add("Reschedule Shipment");	
+		String format = "";
+		if(realm.equals("R4")) {
+			format = "MMM dd, yyyy";
+		}
+		else {
+			format = "E MMM dd yyyy";
+		}
+		
+		Calendar now = Calendar.getInstance();		
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		now.add(Calendar.DAY_OF_MONTH, 12); 
+//		now.add(Calendar.DAY_OF_MONTH, 31); 
+		String expecteddate = sdf.format(now.getTime()); 	
+		
+		String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
+		if(actualdate.equals("FAIL")) {
+			System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
+			output_row.add("FAIL");
+			cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
+		}
+		else {
+			if (realm.equals("R4")) {
+				actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
+			}		
+			else {
+				actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
+			}
+			expected = "Success! Your next shipment has been rescheduled.";			
+					System.out.println(brand + " --"+actualdate+"--");
+					System.out.println(brand + " --"+expecteddate+"--");
+			if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
+				System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
+				output_row.add("FAIL");
+				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
+			}
+		}		
+		output.add(output_row);
 				
 		//Step 6
 		output_row = new ArrayList<String>();

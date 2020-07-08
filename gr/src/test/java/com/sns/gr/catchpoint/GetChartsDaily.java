@@ -59,14 +59,14 @@ public class GetChartsDaily {
 //			"SeaCalm- Desktop", "SeaCalm-Mobile", "SeaCalm Transactional Test - Desktop", "SeaCalm Transactional Test - Mobile",
 //			"FixMDSkin - Desktop", "FixMDSkin - Mobile");		
 		
-//		List<String> brandlistfor1day = Arrays.asList("Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile",
-//				"Mally Core[Desktop]", "Mally Core[Mobile]", "SubD [Chrome]", "SubD[Mobie-Web test]");
+		List<String> brandlistfor1day = Arrays.asList("Mally Core[Desktop]", "Mally Core[Mobile]", "SubD [Chrome]", "SubD[Mobie-Web test]",
+				 "Volaire ACQ Desktop", "Volaire ACQ MOBILE", "trydermaflash Desktop[Chrome]","trydermaflash Mobile", "VP [Chrome]");	
 		
-//		List<String> brandlistfor1day = Arrays.asList("SeaCalm- Desktop", "SeaCalm-Mobile", "SB Desktop", "SB Mobile",
-//				"Volaire ACQ Desktop", "Volaire ACQ MOBILE","VP [Chrome]","trydermaflash Desktop[Chrome]","trydermaflash Mobile");	
+//		List<String> brandlistfor1day = Arrays.asList("Smileactives Brand.com-Desktop", "Smileactives Brand.com-Mobile", "SB Desktop", "SB Mobile",
+//				"SeaCalm- Desktop", "SeaCalm-Mobile");
 		
-		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]",
-				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]","Westmore ACQ- Desktop", "Westmore ACQ-Mobile");		
+//		List<String> brandlistfor1day = Arrays.asList("Meaningful Beauty [Chrome]", "MB[Mobie-Web test]",
+//				"Crepe Erase [Chrome]", "CE[Mobile-Web Test]","Westmore ACQ- Desktop", "Westmore ACQ-Mobile");		
 		
 		List<String> brandlistfor7days = Arrays.asList("Crepe Erase [Chrome]", "Meaningful Beauty [Chrome]",
 				"Westmore ACQ- Desktop","Smileactives Brand.com-Desktop",
@@ -177,8 +177,8 @@ public class GetChartsDaily {
 //			int eleWidth = chart.getSize().getWidth();
 //			int eleHeight = chart.getSize().getHeight();
 		
-			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
-//			BufferedImage eleScreenshot= fullImg.getSubimage(400, 0, 1200, 670);
+//			BufferedImage eleScreenshot= fullImg.getSubimage(point.getX(), 0, 950, 540);
+			BufferedImage eleScreenshot= fullImg.getSubimage(400, 0, 1200, 670);
 			ImageIO.write(eleScreenshot, "png", screenshot);
 				
 			File screenshotLocation = new File(System.getProperty("user.dir") + "\\Input_Output\\Catchpoint\\" + brand +".png");

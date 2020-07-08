@@ -204,7 +204,7 @@ public class CXTUtilities {
 		
 		List<Map<String, Object>> buynowloc = get_cxt_locator(realm, "BuyNow", "");		
 		WebElement buynowelmt = comm_obj.find_webelement(driver, buynowloc.get(0).get("ELEMENTLOCATOR").toString(), buynowloc.get(0).get("ELEMENTVALUE").toString());
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		buynowelmt.click();
 		Thread.sleep(2000);
 		String addtocartresult = "";
@@ -451,6 +451,10 @@ public class CXTUtilities {
 				if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
 					productLocator = "//*[@aria-label='" + prodName + "']";
 				}
+				else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
+					productLocator = "//h3[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
+					//h3[@class='product-name text-center']//a[contains(text(),'Soothing')]
+				}
 				else {
 					productLocator = "//*[@aria-label='" + prodName + "']//a";
 				}
@@ -464,11 +468,9 @@ public class CXTUtilities {
 			jse.executeScript("window.scrollBy(0,300)", 0);
 			Thread.sleep(2000);
 		}
-		System.out.println("productlocator: " + productLocator);
-		Thread.sleep(3000);
-		WebElement product = driver.findElement(By.xpath(productLocator));
-		Thread.sleep(2000);
-		product.click();
+		WebElement prod_elmt = driver.findElement(By.xpath(productLocator));
+		Thread.sleep(4000);		
+		prod_elmt.click();
 		Thread.sleep(2000);	
 	}
 	
