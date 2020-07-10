@@ -34,6 +34,7 @@ public class BuyflowUtilities {
 		}
 				
 		String query = "select * from cta_locators where brand='" + brand + "' and campaign='" + campaign + "' and step='" + step + "'";
+		System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		String elementlocator = "";
 		String elementvalue = "";
@@ -60,10 +61,10 @@ public class BuyflowUtilities {
 	}
 	
 	public void click_logo(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException {
-		
+		System.out.println("Clicking Logo");
 		List<Map<String, Object>> logo_locators = comm_obj.get_element_locator(brand, campaign, "Logo", null);
 		for(Map<String,Object> logo : logo_locators) {
-			
+			System.out.println(logo.get("ELEMENTVALUE").toString());
 			String elementvalue = logo.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				driver.findElement(By.xpath(elementvalue)).click();

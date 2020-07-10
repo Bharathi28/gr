@@ -453,7 +453,6 @@ public class CXTUtilities {
 				}
 				else if(brand.equalsIgnoreCase("SeaCalmSkin")) {
 					productLocator = "//h3[@class='product-name text-center']//a[contains(text(),'" + prodName + "')]";
-					//h3[@class='product-name text-center']//a[contains(text(),'Soothing')]
 				}
 				else {
 					productLocator = "//*[@aria-label='" + prodName + "']//a";
@@ -465,11 +464,13 @@ public class CXTUtilities {
 		}
 							
 		while(driver.findElements(By.xpath(productLocator)).size() == 0){
-			jse.executeScript("window.scrollBy(0,150)", 0);
+			jse.executeScript("window.scrollBy(0,180)", 0);
 			Thread.sleep(2000);
 		}
 		WebElement prod_elmt = driver.findElement(By.xpath(productLocator));
-		Thread.sleep(4000);		
+		Thread.sleep(3000);		
+//		jse.executeScript("arguments[0].scrollIntoView(true);", prod_elmt);
+		Thread.sleep(2000);	
 		prod_elmt.click();
 		Thread.sleep(2000);	
 	}

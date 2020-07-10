@@ -201,7 +201,7 @@ public class CXTValidation {
 		
 		Calendar now = Calendar.getInstance();		
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		now.add(Calendar.DAY_OF_MONTH, 12); 
+		now.add(Calendar.DAY_OF_MONTH, 10); 
 //		now.add(Calendar.DAY_OF_MONTH, 31); 
 		String expecteddate = sdf.format(now.getTime()); 	
 		

@@ -26,7 +26,7 @@ public class SASUtilities {
 		String tableName = realm.toLowerCase() + "offers";		
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status='Active'";
-		
+//		System.out.println(query);
 		List<Map<String, Object>> singles = DBLibrary.dbAction("fetch",query);
 		
 		List<Map<String, Object>> randsingles = new ArrayList<Map<String, Object>>();
@@ -234,7 +234,7 @@ public class SASUtilities {
 //			Thread.sleep(1000);
 //		}
 		
-		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("crepeerase")))){
+		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("crepeerase")))){
 			jse.executeScript("window.scrollBy(0,700)", 0);
 //			jse.executeScript("window.scrollBy(0,900)", 0);
 //			if(gift.equalsIgnoreCase("Protect and Renew Skin Trio")) {
@@ -260,7 +260,7 @@ public class SASUtilities {
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}

@@ -97,6 +97,10 @@ public class BuyflowValidation {
 			else {
 				single_brand = brand;
 				single_campaign = campaign;
+				
+				if(!(single_campaign.equals("Core"))) {
+					single_campaign="Core";
+				}
 			}
 			List<String> single_offers = sas_obj.fetch_random_singles(single_brand, single_campaign, no_of_singles);
 					
