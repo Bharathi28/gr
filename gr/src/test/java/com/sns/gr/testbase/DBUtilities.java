@@ -95,7 +95,7 @@ public class DBUtilities {
 		String isproduct = "No";
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and ppid='" + ppid + "'";
-//		System.out.println(query);
+		System.out.println(query);
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
 		String category = offerdata.get(0).get("CATEGORY").toString();
 		if(category.equalsIgnoreCase("Product")) {

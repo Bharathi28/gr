@@ -472,6 +472,13 @@ public class CXTUtilities {
 //		jse.executeScript("arguments[0].scrollIntoView(true);", prod_elmt);
 		Thread.sleep(2000);	
 		prod_elmt.click();
+		Thread.sleep(1000);	
+		
+		String inshop = inShop(driver, brand);
+		if(inshop.equalsIgnoreCase("yes")) {
+			prod_elmt.click();
+		}	
+		
 		Thread.sleep(2000);	
 	}
 	
@@ -678,6 +685,29 @@ public class CXTUtilities {
 		String[] arr = actualTitle.split(" ");		
 		actualTitle = arr[0];
 		return actualTitle;
+	}
+	
+	public String inShop(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
+		String realm = db_obj.get_realm(brand);
+		String inshop = "no";
+		if (realm.equals("R4")) {
+			if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("Mally"))) {
+				if(getPageTitle(driver).equalsIgnoreCase("Shop")) {
+					inshop = "yes";
+				}
+			}
+			else {
+				if(driver.findElements(By.xpath("//h1[@class='page-title text-center']")).size() != 0) {
+					inshop = "yes";
+				}
+			}			
+		}
+		else if(realm.equalsIgnoreCase("R2")) {
+			if(driver.findElements(By.xpath("//h2[contains(text(),'Shop')]")).size() != 0) {
+				inshop = "yes";
+			}
+		}
+		return inshop;
 	}
 	
 	public void LoginintoCXT(WebDriver driver, String brand, String campaign, String env) throws ClassNotFoundException, SQLException, InterruptedException {
