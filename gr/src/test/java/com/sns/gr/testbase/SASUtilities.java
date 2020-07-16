@@ -145,84 +145,95 @@ public class SASUtilities {
 	public void select_kit(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		
 		String kit = offerdata.get("DESCRIPTION").toString();
-		JavascriptExecutor jse = (JavascriptExecutor) driver;
-//		WebDriverWait wait = new WebDriverWait(driver, 10);
+		JavascriptExecutor jse = (JavascriptExecutor) driver;		
 		
-		List<Map<String, Object>> kit_loc = comm_obj.get_element_locator(brand, campaign, "Kit", kit);
-		Thread.sleep(2000);
-		WebElement kit_elmt = comm_obj.find_webelement(driver, kit_loc.get(0).get("ELEMENTLOCATOR").toString(), kit_loc.get(0).get("ELEMENTVALUE").toString());
-		Thread.sleep(3000);
-//		wait.until(ExpectedConditions.elementToBeClickable(kit_elmt));
-		
-		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
-			Actions act = new Actions(driver);
-			act.moveToElement(kit_elmt).perform();
-			Thread.sleep(1000);
+		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core")) && (kit.equalsIgnoreCase("Matte-Moisture Makeup Kit"))) {
 			
-			String shop_loc = kit_loc.get(0).get("ELEMENTVALUE").toString() + "//div//div[@class='product-wrap']//div[3]//div//a";
-			kit_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
+			driver.findElement(By.xpath("//img[@alt='mally']")).click();
+			while(driver.findElements(By.xpath("(//a[@class='cta-button button'])[2]")).size() == 0) {
+				jse.executeScript("window.scrollBy(0,250)", 0);
+				Thread.sleep(2000);
+			}
+			driver.findElement(By.xpath("(//a[@class='cta-button button'])[2]")).click();
+		}
+		else {
+			List<Map<String, Object>> kit_loc = comm_obj.get_element_locator(brand, campaign, "Kit", kit);
 			Thread.sleep(2000);
-		}
-
-		if(brand.equalsIgnoreCase("FixMDSkin")){
-			jse.executeScript("window.scrollBy(0,250)", 0);
-			Thread.sleep(2000);
-		}
-		kit_elmt.click();	
-		Thread.sleep(2000);
-		if((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) {
-			jse.executeScript("window.scrollBy(0,700)", 0);
-			driver.findElement(By.xpath("(//button[@class='button primary next-section'])[1]")).click();
-		}
-		if(((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("newcc"))) || ((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("fb")))){
-			jse.executeScript("window.scrollBy(0,1000)", 0);
-			Thread.sleep(2000);
-			driver.findElement(By.id("valuePack-next-btn")).click();
-		}
-		
-		if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
-			jse.executeScript("window.scrollBy(0,800)", 0);
-			driver.findElement(By.id("valuePack-next-btn")).click();
-		}
-		if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("advancedone"))||(campaign.equalsIgnoreCase("prehctPanelb"))||(campaign.equalsIgnoreCase("prehct")))) {
-			jse.executeScript("window.scrollBy(0,200)", 0);
-			driver.findElement(By.xpath("//button[@class = 'button checkout special-offer']")).click();
-		}
-		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("10off"))) {
-			jse.executeScript("window.scrollBy(0,200)", 0);
-			driver.findElement(By.xpath("//button[@class = 'button checkout']")).click();
-		}
-
-		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("core_full_15neck"))) {
-			jse.executeScript("window.scrollBy(0,200)", 0);
-			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
-		}
-		if(brand.equalsIgnoreCase("SpotFade")) {
-			jse.executeScript("window.scrollBy(0,300)", 0);
-			Thread.sleep(1000);
-			driver.findElement(By.xpath("//a[@class='cta']")).click();
-		}
-
-		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
-			jse.executeScript("window.scrollBy(0,200)",0);
-			driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
-		}
-		
-		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {	
-			if(brand.equalsIgnoreCase("Sheercover")) {
-				jse.executeScript("window.scrollBy(0,200)",0);
+			WebElement kit_elmt = comm_obj.find_webelement(driver, kit_loc.get(0).get("ELEMENTLOCATOR").toString(), kit_loc.get(0).get("ELEMENTVALUE").toString());
+			Thread.sleep(3000);
+			
+			if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("Core"))) {
+				Actions act = new Actions(driver);
+				act.moveToElement(kit_elmt).perform();
 				Thread.sleep(1000);
-				if(driver.findElements(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).size() != 0) {
-					driver.findElement(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).click();
+					
+				String shop_loc = kit_loc.get(0).get("ELEMENTVALUE").toString() + "//div//div[@class='product-wrap']//div[3]//div//a";
+				kit_elmt = comm_obj.find_webelement(driver, "xpath", shop_loc);
+				Thread.sleep(2000);
+			}
+			if(brand.equalsIgnoreCase("FixMDSkin")){
+				jse.executeScript("window.scrollBy(0,250)", 0);
+				Thread.sleep(2000);
+			}
+			kit_elmt.click();	
+			Thread.sleep(2000);
+			if((brand.equalsIgnoreCase("Smileactives")) && (campaign.equalsIgnoreCase("Core"))) {
+				jse.executeScript("window.scrollBy(0,700)", 0);
+				driver.findElement(By.xpath("(//button[@class='button primary next-section'])[1]")).click();
+			}
+			if(((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("Core"))) || ((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("newcc"))) || ((brand.equalsIgnoreCase("Dr.Denese")) && (campaign.equalsIgnoreCase("fb")))){
+				jse.executeScript("window.scrollBy(0,1000)", 0);
+				Thread.sleep(2000);
+				driver.findElement(By.id("valuePack-next-btn")).click();
+			}
+			if((brand.equalsIgnoreCase("Volaire")) && (campaign.equalsIgnoreCase("pnlb"))) {
+				jse.executeScript("window.scrollBy(0,600)", 0);
+			}
+			
+			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("specialCore"))) {
+				jse.executeScript("window.scrollBy(0,800)", 0);
+				driver.findElement(By.id("valuePack-next-btn")).click();
+			}
+			if((brand.equalsIgnoreCase("CrepeErase"))  && ((campaign.equalsIgnoreCase("advancedone"))||(campaign.equalsIgnoreCase("prehctPanelb"))||(campaign.equalsIgnoreCase("prehct")))) {
+				jse.executeScript("window.scrollBy(0,200)", 0);
+				driver.findElement(By.xpath("//button[@class = 'button checkout special-offer']")).click();
+			}
+			if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("10off"))) {
+				jse.executeScript("window.scrollBy(0,200)", 0);
+				driver.findElement(By.xpath("//button[@class = 'button checkout']")).click();
+			}
+
+			if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("core_full_15neck"))) {
+				jse.executeScript("window.scrollBy(0,200)", 0);
+				driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
+			}
+			if(brand.equalsIgnoreCase("SpotFade")) {
+				jse.executeScript("window.scrollBy(0,300)", 0);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath("//a[@class='cta']")).click();
+			}
+
+			if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
+				jse.executeScript("window.scrollBy(0,200)",0);
+				driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
+			}
+			
+			if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {	
+				if(brand.equalsIgnoreCase("Sheercover")) {
+					jse.executeScript("window.scrollBy(0,200)",0);
+					Thread.sleep(1000);
+					if(driver.findElements(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).size() != 0) {
+						driver.findElement(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).click();
+					}
+				}
+				else {
+					if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
+						driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
+					}
 				}
 			}
-			else {
-				if(driver.findElements(By.cssSelector("#kit ~ .market a.buttons-next")).size() != 0) {
-					driver.findElement(By.cssSelector("#kit ~ .market a.buttons-next")).click();
-				}
-			}
+			Thread.sleep(1000);
 		}
-		Thread.sleep(1000);
 	}
 	
 	public void select_gift(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
@@ -234,16 +245,16 @@ public class SASUtilities {
 //			Thread.sleep(1000);
 //		}
 		
-		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("crepeerase")))){
-			jse.executeScript("window.scrollBy(0,700)", 0);
-//			jse.executeScript("window.scrollBy(0,900)", 0);
-//			if(gift.equalsIgnoreCase("Protect and Renew Skin Trio")) {
-//				Thread.sleep(3000);
-//				driver.findElement(By.xpath("//ul[@class='slick-dots']//li[2]//button")).click();
-//			}
+		if(brand.equalsIgnoreCase("CrepeErase")){
+			if((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("core_full_10neck"))) {
+				jse.executeScript("window.scrollBy(0,700)", 0);
+			}
+			else if(campaign.equalsIgnoreCase("crepeerase")) {
+				jse.executeScript("window.scrollBy(0,1800)", 0);
+			}
 			Thread.sleep(3000);
 		}
-//		System.out.println(gift);
+
 		if(!(gift.equalsIgnoreCase("n/a"))) {
 			List<Map<String, Object>> gift_loc = comm_obj.get_element_locator(brand, campaign, "Gift", gift);
 //			System.out.println(gift_loc.get(0).get("ELEMENTLOCATOR").toString());
@@ -260,24 +271,15 @@ public class SASUtilities {
 			driver.findElement(By.id("valuePack-next-btn")).click();
 		}
 
-		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("core")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
+		if((brand.equalsIgnoreCase("CrepeErase")) && ((campaign.equalsIgnoreCase("Core")) || (campaign.equalsIgnoreCase("core_full_10neck")) || (campaign.equalsIgnoreCase("core_full_10sfwand")) || (campaign.equalsIgnoreCase("deluxe20offtv")) || (campaign.equalsIgnoreCase("20offDeluxeSpring")))) {
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			driver.findElement(By.xpath("//div[@class = 'sas-sticky-footer']//a[contains(text(),'Proceed to Checkout')]")).click();
 		}
 
-//		else if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
-//			jse.executeScript("window.scrollBy(0,400)", 0);
-//			if(kit.equalsIgnoreCase("Advanced 5-Piece Body + Face System")) {
-//				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[1]")).click();
-//			}
-//			else {
-//				driver.findElement(By.xpath("(//div[@class = 'checkout-button sas-kit-sticky-checkout hide-section']//button[@class = 'button checkout'])[2]")).click();
-//			}
-//		}			
-
 		if((brand.equalsIgnoreCase("CrepeErase"))&&(campaign.equalsIgnoreCase("crepeerase"))) {
-			jse.executeScript("window.scrollBy(0,400)", 0);
-//			driver.findElement(By.xpath("//h3[contains(text(),'" + kit +"')]/../..//div[@class='checkout-button sas-kit-sticky-checkout hide-section']//button")).click();
+			jse.executeScript("window.scrollBy(0,200)", 0);
+			Thread.sleep(2000);
+//			driver.findElement(By.xpath("//a[contains(text(),'Proceed to Checkout')]")).click();
 
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
@@ -555,6 +557,7 @@ public class SASUtilities {
 				sel_element.selectByVisibleText(offerdata.get("FRAGRANCE").toString());
 				Thread.sleep(2000);
 				driver.findElement(By.xpath("//a[@class='cta']")).click();
+				Thread.sleep(2000);
 			}
 			else {
 				frag_elmt.click();

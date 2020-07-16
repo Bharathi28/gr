@@ -173,7 +173,7 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 			Thread.sleep(1000);				
 		}
-		
+		System.out.println(brand + campaign + category + offercode);
 		click_cta(driver,env,brand,campaign,category);
 		Thread.sleep(2000);
 	}
@@ -202,10 +202,11 @@ public class BuyflowUtilities {
 			String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
 			
 			if((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("Core")) && ((category.equalsIgnoreCase("product")) || (category.equalsIgnoreCase("shopkit")))) {
-				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() != 0) {
-					driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
-				}
-				else if(driver.findElements(By.xpath("//i[@class='fa fa-shopping-bag']")).size() != 0) {
+//				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() != 0) {
+//					driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
+//				}
+//				else if(driver.findElements(By.xpath("//i[@class='fa fa-shopping-bag']")).size() != 0) {
+				if(driver.findElements(By.xpath("//i[@class='fa fa-shopping-bag']")).size() != 0) {
 					driver.findElement(By.xpath("//i[@class='fa fa-shopping-bag']")).click();
 				}
 			}

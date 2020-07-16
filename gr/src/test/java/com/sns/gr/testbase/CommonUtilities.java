@@ -46,7 +46,6 @@ public class CommonUtilities {
 			while(!(rowdata.equalsIgnoreCase("End"))) {
 				k++;
 				rowdata =  dataSheet.getRow(k).getCell(0).getStringCellValue();
-				
 			}
 			int totalNoOfRows = k;
 //			System.out.println("Total rows:" + totalNoOfRows);
