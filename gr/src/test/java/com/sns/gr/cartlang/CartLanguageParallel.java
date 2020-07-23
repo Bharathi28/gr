@@ -95,12 +95,12 @@ public class CartLanguageParallel {
 					driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 				}
 					
-//				if(category.equalsIgnoreCase("Kit")) {
-					bf_obj.click_cta(driver, env, brand, campaign, category);
-//				}
-//				else {
-//					bf_obj.click_cta(driver, env, brand, campaign, "Shop");
-//				}
+				if(category.equalsIgnoreCase("Kit")) {
+					bf_obj.click_cta(driver, env, brand, campaign, "Ordernow");
+				}
+				else {
+					bf_obj.click_cta(driver, env, brand, campaign, "Shop");
+				}
 				
 				
 				int subscribe = 0;
@@ -128,7 +128,7 @@ public class CartLanguageParallel {
 //					sas_obj.select_subscribe(driver, offer, brand, campaign);
 //				}			
 				
-				sas_obj.select_offer(driver, env, brand, campaign, offer, category, subscribe);
+				sas_obj.select_offer(driver, env, brand, campaign, offer, category, 0);
 				
 //				bf_obj.move_to_checkout(driver, brand, campaign, offer.get("PPID").toString(), 0);
 				bf_obj.move_to_checkout(driver, brand, campaign, tempCategory);

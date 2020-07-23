@@ -213,7 +213,6 @@ public class CommonUtilities {
 			header_list.add("Brand");
 			header_list.add("Campaign");
 			header_list.add("Category");
-			header_list.add("Navigation");
 			header_list.add("e-mail");
 			header_list.add("Expected PPID");
 			header_list.add("Actual PPID");

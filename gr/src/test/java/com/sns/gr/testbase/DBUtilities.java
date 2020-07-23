@@ -26,7 +26,7 @@ public class DBUtilities {
 		
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
-//		System.out.println(query);
+		System.out.println(query);
 		return offerdata.get(0);		
 	}
 	
@@ -42,6 +42,9 @@ public class DBUtilities {
 	}
 	
 	public static String get_realm(String brand) throws ClassNotFoundException, SQLException {
+		if(brand.contains("BodyFirm")) {
+			brand = "BodyFirm";
+		}
 		String realmQuery = "select * from brand_realm where brand ='" + brand + "'";
 		List<Map<String, Object>> realmResult = DBLibrary.dbAction("fetch", realmQuery);
 		String realm = realmResult.get(0).get("REALM").toString();

@@ -215,7 +215,7 @@ public class CXTUtilities {
 			else {
 				driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
 			}
-			
+			Thread.sleep(2000);
 			String addedproduct = driver.findElement(By.xpath("//div[@id='cart-table']//div")).getAttribute("class");
 			System.out.println(addedproduct);
 			

@@ -205,9 +205,9 @@ public class CXTValidation {
 //		now.add(Calendar.DAY_OF_MONTH, 6); 
 		
 		//SB and MB
-//		now.add(Calendar.DAY_OF_MONTH, 27);
+		now.add(Calendar.DAY_OF_MONTH, 25);
 		
-		now.add(Calendar.DAY_OF_MONTH, 31); 
+//		now.add(Calendar.DAY_OF_MONTH, 31); 
 		String expecteddate = sdf.format(now.getTime()); 	
 		
 		String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		

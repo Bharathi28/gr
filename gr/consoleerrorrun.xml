@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<suite name="ConcolseErrorSuite" data-provider-thread-count="2">
+    <test name="ConsoleError">	
+		<classes>
+	  		<class name="com.sns.gr.console.ConsoleError" />
+		</classes>	
+    </test>
+</suite>

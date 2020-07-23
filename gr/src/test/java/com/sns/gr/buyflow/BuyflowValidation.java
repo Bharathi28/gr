@@ -59,7 +59,7 @@ public class BuyflowValidation {
 	}
 	
 	@Test(dataProvider="buyflowInput")
-	public void buyflow(String env, String brand, String campaign, String categoryy, String nav, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
+	public void buyflow(String env, String brand, String campaign, String category, String supply, String ppid, String url, String shipbill, String cc, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException {		
 									
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
@@ -71,38 +71,17 @@ public class BuyflowValidation {
 			driver.findElement(By.xpath("//button[@id='details-button']")).click();
 			driver.findElement(By.xpath("//a[@id='proceed-link']")).click();
 		}
-		int subscribe =  0;
-		String str = "";
+		
 		String[] offer_array = ppid.split(",");	
+		String[] category_array = category.split(",");
 		
 		if(offer_array[offer_array.length-1].contains("single")) {
-			if((brand.equalsIgnoreCase("BodyFirm")) && (nav.equalsIgnoreCase("main-nav"))){
-				categoryy = "ShopKit";
-			}
-			else {
-				categoryy = "Kit";
-			}
-			
+		
 			String[] single_array = offer_array[offer_array.length-1].split(" ");
 			String no_of_singles_str = single_array[0];
 			int no_of_singles = Integer.parseInt(no_of_singles_str);
 				
-			String single_brand = "";
-			String single_campaign = "";
-			if(brand.equalsIgnoreCase("BodyFirm")) {
-				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[0], categoryy);
-				single_brand = combo_brand_campaign.get(0);
-				single_campaign = combo_brand_campaign.get(1);
-			}
-			else {
-				single_brand = brand;
-				single_campaign = campaign;
-				
-				if(!(single_campaign.equals("Core"))) {
-					single_campaign="Core";
-				}
-			}
-			List<String> single_offers = sas_obj.fetch_random_singles(single_brand, single_campaign, no_of_singles);
+			List<String> single_offers = sas_obj.fetch_random_singles(brand, "Core", no_of_singles);
 					
 			ppid = offer_array[0];
 				
@@ -116,81 +95,23 @@ public class BuyflowValidation {
 			ppid = ppid.substring(0, ppid.length() - 1);
 		}
 		
-		String tempCategory = "";
-		String tempCampaign = campaign;
 		offer_array = ppid.split(",");		
 				
 		for(int i = 0; i < offer_array.length; i++) {	
-			
-			String offer_brand = "";
-			String offer_campaign = "";			
-			
-			if(brand.equalsIgnoreCase("BodyFirm")){
 				
-				List<String> combo_brand_campaign = bf_obj.check_ppid_in_combo(brand, campaign, offer_array[i], categoryy);	
-				offer_brand = combo_brand_campaign.get(0);
-				offer_campaign = combo_brand_campaign.get(1);				
-				
-				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);				
-				String isShopKit = db_obj.isShopKit(offer_brand, offer_array[i]);
-				if(isProduct.equalsIgnoreCase("yes")) {
-					tempCategory = "Product";
-				}
-				else {
-					if(categoryy.equalsIgnoreCase("Kit")) {
-						tempCategory = "Kit";
-					}
-					else {
-						if(isShopKit.equalsIgnoreCase("yes")) {
-							tempCategory = "ShopKit";
-						}
-					}
-				}
-				if(nav.equalsIgnoreCase("brands-nav")) {
-					bf_obj.combo_navigation_to_sas(driver, env, brand, campaign, offer_brand, offer_campaign, nav, tempCategory);
-				}
-				else {
-					bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
-				}
-			}
-			else {
-				offer_brand = brand;
-				offer_campaign = campaign;
-				String isProduct = db_obj.isProduct(offer_brand, offer_array[i]);
-				String isShopKit = db_obj.isShopKit(offer_brand, offer_array[i]);
-				if(isProduct.equalsIgnoreCase("yes")) {
-					tempCategory = "Product";
-				}
-				else {
-					if(categoryy.equalsIgnoreCase("Kit")) {
-						tempCategory = "Kit";
-					}
-					else {
-						if(isShopKit.equalsIgnoreCase("yes")) {
-							tempCategory = "ShopKit";
-						}
-					}
-				}
-				bf_obj.move_to_sas(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, nav);
-			}
+			String current_category = category_array[i];
+			System.out.println(current_category);
 			
-			String camp_cat_val = bf_obj.campaign_repeat_validation(categoryy, offer_brand, offer_campaign, offer_array[i]);
-			String[] camp_cat_val_arr = camp_cat_val.split("/");
-			
-			tempCategory = camp_cat_val_arr[0];
-			campaign = camp_cat_val_arr[1];
-			subscribe =  Integer.parseInt(camp_cat_val_arr[2]);					
-			
-			sas_obj.get_offer(driver, env, offer_brand, offer_campaign, offer_array[i], tempCategory, subscribe, nav);
+			bf_obj.move_to_sas(driver, env, brand, campaign, offer_array[i], current_category);
+			sas_obj.get_offer(driver, env, brand, campaign, offer_array[i], current_category);
 			if(i == ((offer_array.length)-1)) {
-				bf_obj.move_to_checkout(driver, offer_brand, offer_campaign, tempCategory);
+				bf_obj.move_to_checkout(driver, brand, campaign, current_category);
 			}
 			else {
-				bf_obj.move_to_checkout(driver, offer_brand, offer_campaign, tempCategory);
+				bf_obj.move_to_checkout(driver, brand, campaign, current_category);
 				bf_obj.click_logo(driver, brand, campaign);
 			}
 		}		
-		campaign = tempCampaign;
 		
 		if(driver.findElements(By.xpath("//a[@id='creditCardPath']")).size() != 0) {
 			if(driver.findElement(By.xpath("//a[@id='creditCardPath']")).isDisplayed()){
@@ -235,10 +156,10 @@ public class BuyflowValidation {
 		bf_obj.complete_order(driver, brand, cc);
 		Thread.sleep(2000);			
 		
-		String ppuPresent = db_obj.checkPPUPresent(brand, campaign, categoryy);
+		String ppuPresent = db_obj.checkPPUPresent(brand, campaign, category_array[0]);
 		
-		if(categoryy.contains("Kit")) {
-			String upsell = bf_obj.check_upsell_select(brand, campaign, ppid, categoryy, nav);
+		if(category.contains("Kit")) {
+			String upsell = bf_obj.check_upsell_select(brand, campaign, ppid, category);
 			if(ppuPresent.equalsIgnoreCase("Yes")) {
 				bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 				Thread.sleep(2000);
@@ -273,8 +194,7 @@ public class BuyflowValidation {
 		output_row.add(env);
 		output_row.add(brand);
 		output_row.add(campaign);
-		output_row.add(categoryy);
-		output_row.add(nav);
+		output_row.add(category);
 		output_row.add(email);
 		output_row.add(ppid);
 		output_row.add(conf_offercode);
