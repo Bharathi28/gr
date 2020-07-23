@@ -190,10 +190,10 @@ public class PixelParallel {
 	        
 	    String[] pixelArr = pixelStr.split(",");		
 	    
-//	    String tempbrand = brand;
-//	    if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
-//			brand = "BodyFirm";
-//		}
+	    String tempbrand = brand;
+	    if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
+			tempbrand = "BodyFirm";
+		}
 	    					
 		int j=1;
 		for(String pixel : pixelArr) {	
@@ -230,7 +230,7 @@ public class PixelParallel {
 				System.out.println();
 				System.out.println(event);
 									
-				int compatible = db_obj.checkBrandPixelCompatibility(brand, event);					
+				int compatible = db_obj.checkBrandPixelCompatibility(tempbrand, event);					
 				if(compatible == 1) {
 					String origcampaign = campaign;
 					String tempcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
@@ -239,8 +239,8 @@ public class PixelParallel {
 					}
 					List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 					campaign = origcampaign;
-					String pattern = db_obj.getSearchPattern(brand, event);
-					String pixelbrandid = db_obj.getPixelBrandId(brand, event);
+					String pattern = db_obj.getSearchPattern(tempbrand, event);
+					String pixelbrandid = db_obj.getPixelBrandId(tempbrand, event);
 						
 					String[] pixelIdArr = pixelbrandid.split(",");						
 						
