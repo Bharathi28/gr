@@ -137,7 +137,7 @@ public class PricingUtilities {
 			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("crepeerase"))){
 				elementvalue = "(" + elementvalue + ")[2]";
 			}
-			if((pricing.contains("Checkout")) && (brand.equalsIgnoreCase("BodyFirm"))){
+			if((pricing.contains("Checkout")) && (brand.contains("BodyFirm"))){
 				if(pricing.contains("Shipping")) {
 					elementvalue = "(" + elementvalue + ")[3]";
 				}
@@ -145,6 +145,7 @@ public class PricingUtilities {
 					elementvalue = "(" + elementvalue + ")[2]";
 				}
 			}					
+//			System.out.println("pricing: " + elementvalue);
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				text = driver.findElement(By.xpath(elementvalue)).getText();
  				break;

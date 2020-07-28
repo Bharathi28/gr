@@ -270,11 +270,11 @@ public class CartLangUtilities {
 	}
 	
 	public String[] parse_cart_language(String language) {
-		System.out.println("1 " + language);
+//		System.out.println("1 " + language);
 		language = language.replaceAll("[^0-9.$]+", "");
-		System.out.println("2 " + language);
+//		System.out.println("2 " + language);
 		language = language.substring(language.indexOf("$"));
-		System.out.println("3 " + language);
+//		System.out.println("3 " + language);
 		while(language.endsWith(".")) {
 			language = language.substring(0, language.length() - 1);
 		}		

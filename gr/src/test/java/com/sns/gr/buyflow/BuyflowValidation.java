@@ -166,7 +166,7 @@ public class BuyflowValidation {
 			}
 		}	
 		
-		conf_offercode = bf_obj.fetch_confoffercode(driver, brand, ppid.contains("single"));
+		conf_offercode = bf_obj.fetch_confoffercode(driver, brand);
 			
 		System.out.println("Expected Offercode : " + ppid);
 		System.out.println("Actual Offercode : " + conf_offercode);

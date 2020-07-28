@@ -25,16 +25,9 @@ public class BuyflowUtilities {
 	
 	public void click_cta(WebDriver driver, String env, String brand, String campaign, String step) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
-//		String step = "";
-//		if(category.equalsIgnoreCase("Kit")) {
-//			step = "Ordernow";
-//		}
-//		else {
-//			step = "Shop";
-//		}
 				
 		String query = "select * from cta_locators where brand='" + brand + "' and campaign='" + campaign + "' and step='" + step + "'";
-		System.out.println(query);
+//		System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		String elementlocator = "";
 		String elementvalue = "";
@@ -373,7 +366,7 @@ public class BuyflowUtilities {
 		return offercode;
 	}
 	
-	public String fetch_confoffercode(WebDriver driver, String brand, boolean single) throws ClassNotFoundException, SQLException {
+	public String fetch_confoffercode(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		String offercode = "";
@@ -434,7 +427,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void complete_order(WebDriver driver, String brand, String cc) throws ClassNotFoundException, SQLException, InterruptedException {
-		System.out.println("Completing Order");
+//		System.out.println("Completing Order");
 		WebDriverWait wait = new WebDriverWait(driver,50);
 		String realm = DBUtilities.get_realm(brand);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -513,7 +506,7 @@ public class BuyflowUtilities {
 			}			
 			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
-			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
+			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
 			
 			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
@@ -537,7 +530,7 @@ public class BuyflowUtilities {
 			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 			driver.switchTo().window(winHandleBefore);
 			fill_form_field(driver, realm, "Agree", "");
-			return "testbuyer1@guthy-renker.com";
+			return "testbuyer2@guthy-renker.com";
 		}
 		else {
 			String alpha = RandomStringUtils.randomAlphabetic(9);

@@ -29,6 +29,7 @@ import com.sns.gr.setup.BaseTest;
 import com.sns.gr.testbase.BuyflowUtilities;
 import com.sns.gr.testbase.CommonUtilities;
 import com.sns.gr.testbase.ConsoleUtilities;
+import com.sns.gr.testbase.DBLibrary;
 import com.sns.gr.testbase.DBUtilities;
 import com.sns.gr.testbase.MailUtilities;
 import com.sns.gr.testbase.PricingUtilities;
@@ -67,17 +68,19 @@ public class ConsoleError {
 	}
 	@DataProvider(name="ConsoleErrorInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"SeaCalmSkin"},{"Volaire"},{"SmileActives"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
+//		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"SeaCalmSkin"},{"Volaire"},{"SmileActives"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
+		Object[][] arrayObject = {{"MeaningfulBeauty"}};
 		return arrayObject;
 	}
 	
 	@Test(dataProvider="ConsoleErrorInput")
 	public void console(String brand) throws ClassNotFoundException, SQLException, MalformedURLException, InterruptedException {
 			String url = "";
-			url = db_obj.getUrl(brand, "core", "PROD");
+			url = db_obj.getUrl(brand, "Core", "PROD");
 			System.out.println(url);
-			List<Map<String, Object>> offers = db_obj.getprodurl(brand);
+			List<Map<String, Object>> offers = getprodurl(brand);			
+			
 			List<Map<String, Object>> offerdata = new ArrayList<Map<String, Object>>();
 			//offerdata.add(offers.get(rand.nextInt(1)));
 			offerdata.add(offers.get(0));						
@@ -95,7 +98,7 @@ public class ConsoleError {
 				campaign = origcampaign;
 			}
 			System.out.println(campaign);
-			bf_obj.click_cta(driver, "Prod", brand, campaign, "kit");
+			bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			System.out.println("SASpage Console Error Details:");
 			Thread.sleep(3000);
@@ -109,6 +112,9 @@ public class ConsoleError {
 			driver.close();
 		}
 		
-				
-	
+	public List<Map<String, Object>> getprodurl(String brand) throws ClassNotFoundException, SQLException {
+		String query = "select * from brand where brandname = '"+brand+"' and campaign = 'core'";
+		List<Map<String,Object>> joinlist = DBLibrary.dbAction("fetch", query);
+		return joinlist;
+	}	
 }

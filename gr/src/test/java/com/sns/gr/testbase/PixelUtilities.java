@@ -390,7 +390,7 @@ public class PixelUtilities {
 		String expected_ppid = offerdata.get("PPID").toString();
 		System.out.println("Expcted PPID : " + expected_ppid);
 		
-        String actual_conf_ppid = bf_obj.fetch_confoffercode(driver, brand, false);
+        String actual_conf_ppid = bf_obj.fetch_confoffercode(driver, brand);
 		System.out.println("Actual PPID : " + actual_conf_ppid);
         
         String conf_num = bf_obj.fetch_conf_num(driver, brand);

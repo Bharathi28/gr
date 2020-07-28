@@ -222,6 +222,20 @@ public class CommonUtilities {
 			header_list.add("Shipping Billing");
 			header_list.add("Card");
 			header_list.add("Browser");
+			
+//			header_list.add("Environment");
+//			header_list.add("Brand");
+//			header_list.add("Campaign");
+//			header_list.add("Category");
+//			header_list.add("e-mail");
+//			header_list.add("PPID");			
+//			header_list.add("Confirmation Number");
+//			header_list.add("Entry Pricing");	
+//			header_list.add("Continuity Pricing");
+//			header_list.add("Shipping Billing");
+//			header_list.add("Payment Method");
+//			header_list.add("Browser");
+//			header_list.add("Remarks");
 		}	
 		else if(header.toLowerCase().contains("pixel")) {
 			header_list.add("Environment");
