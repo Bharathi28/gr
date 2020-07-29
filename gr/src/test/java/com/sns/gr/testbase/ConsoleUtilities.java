@@ -32,17 +32,13 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
-public class ConsoleUtilities {
-	
-	
+public class ConsoleUtilities {	
 	DBUtilities db_obj = new DBUtilities();
 	BuyflowUtilities bf_obj = new BuyflowUtilities();
 	SASUtilities sas_obj = new SASUtilities();
 	PricingUtilities pr_obj = new PricingUtilities();
 	CommonUtilities comm_obj = new CommonUtilities();
-	MailUtilities mailObj = new MailUtilities();
-	StringBuilder str = new StringBuilder("");
-	
+	MailUtilities mailObj = new MailUtilities();	
 	public void sendEmail(String subject, String to,StringBuilder str,String brand) {
     	Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
@@ -82,7 +78,7 @@ public class ConsoleUtilities {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.addRecipients(Message.RecipientType.CC, 
-	                InternetAddress.parse("manibharathi@searchnscore.com, banuchitra@searchnscore.com"));
+	                InternetAddress.parse("banuchitra@searchnscore.com"));
 //			message.addRecipients(Message.RecipientType.CC, 
 //	                InternetAddress.parse("manibharathi@searchnscore.com"));
 			message.setSubject("ConsolError in PROD - "+subject);
@@ -140,12 +136,10 @@ public class ConsoleUtilities {
 	}
 	
 	
-	public void analyzeLog(WebDriver driver,String brand,String page) {
+	public StringBuilder analyzeLog(WebDriver driver,String brand,String page,StringBuilder str) {
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
         SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         String message1 = null;
-        
-        
         for (LogEntry entry : logEntries) {
         	if((entry.getLevel().equals(Level.SEVERE))||(entry.getMessage().contains("404"))) {
         		message1 = brand+" - "+page+" - "+format.format(new Date(entry.getTimestamp())) + " " + entry.getLevel() + " " + entry.getMessage();     		
@@ -154,13 +148,11 @@ public class ConsoleUtilities {
                 str.append(message1);
         	}      	
         	}
-        if(page.equalsIgnoreCase("Checkoutpage")&&(str.length()>0)) {
-        	System.out.println("StringBuilder"+str);
+        return str;
+        /*if(page.equalsIgnoreCase("Checkoutpage")&&(str.length()>0)) {
         	sendEmail(brand, "banuchitra@searchnscore.com",str,brand);
-        	str = new StringBuilder("");
-        	
-        	
-    	}
+        	str = new StringBuilder("");  	
+    	}*/
     }
 	public void selectoffercodekit(WebDriver driver,String brand,String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String query = "";

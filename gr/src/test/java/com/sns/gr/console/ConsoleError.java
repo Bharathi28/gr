@@ -66,11 +66,11 @@ public class ConsoleError {
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
         //driver = new ChromeDriver(capabilities);
 	}
-	@DataProvider(name="ConsoleErrorInput", parallel=true)
+	@DataProvider(name="ConsoleErrorInput", parallel=false)
 	public Object[][] testData() {
 		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"SeaCalmSkin"},{"Volaire"},{"SmileActives"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
-		//Object[][] arrayObject = {{"MeaningfulBeauty"}};
+		//Object[][] arrayObject = {{"Mally"},{"SpecificBeauty"}};
 		return arrayObject;
 	}
 	
@@ -78,12 +78,7 @@ public class ConsoleError {
 	public void console(String brand) throws ClassNotFoundException, SQLException, MalformedURLException, InterruptedException {
 			String url = "";
 			url = db_obj.getUrl(brand, "Core", "PROD");
-			System.out.println(url);
-			List<Map<String, Object>> offers = getprodurl(brand);			
-			
-			List<Map<String, Object>> offerdata = new ArrayList<Map<String, Object>>();
-			//offerdata.add(offers.get(rand.nextInt(1)));
-			offerdata.add(offers.get(0));						
+			System.out.println(url);					
 			BaseTest base_obj = new BaseTest();			
 			WebDriver driver = base_obj.setUp("Chrome", "Local");
 			driver.get(url);
@@ -91,30 +86,27 @@ public class ConsoleError {
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 			System.out.println("Homepage Console Error Details:");
 			Thread.sleep(3000);
-			co_obj.analyzeLog(driver,brand,"Homepage");
+			StringBuilder str = new StringBuilder("");
+			str = co_obj.analyzeLog(driver,brand,"Homepage",str);
 			String campaign = co_obj.getcampaigndetails(driver, brand);
 			String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
 			if(!(origcampaign.equals("n/a"))){
 				campaign = origcampaign;
 			}
-			System.out.println(campaign);
+			System.out.println(campaign+" campaign is loading for the brand "+brand);
 			bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			System.out.println("SASpage Console Error Details:");
 			Thread.sleep(3000);
-			co_obj.analyzeLog(driver,brand,"SASpage");
+			str = co_obj.analyzeLog(driver,brand,"SASpage",str);
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			co_obj.selectoffercodekit(driver,brand,campaign);
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			System.out.println("Checkoutpage Console Error Details:");
-			
-			co_obj.analyzeLog(driver,brand,"Checkoutpage");	
+			System.out.println("Checkoutpage Console Error Details:");		
+			str = co_obj.analyzeLog(driver,brand,"Checkoutpage",str);
+			if(str.length()>0) {
+				co_obj.sendEmail(brand, "banuchitra@searchnscore.com",str,brand);
+			}
 			driver.close();
-		}
-		
-	public List<Map<String, Object>> getprodurl(String brand) throws ClassNotFoundException, SQLException {
-		String query = "select * from brand where brandname = '"+brand+"' and campaign = 'core'";
-		List<Map<String,Object>> joinlist = DBLibrary.dbAction("fetch", query);
-		return joinlist;
-	}	
+		}	
 }
