@@ -159,6 +159,11 @@ public class PixelParallel {
 			pixelslist.add("StarMobile");
 			temp = temp.replace("starmobile", "");
 		}
+		if(pixelStr.toLowerCase().contains("rakuten")) {			
+			noOfTestRuns++;
+			pixelslist.add("Rakuten");
+			temp = temp.replace("rakuten", "");
+		}
 		if(pixelStr.toLowerCase().contains("data+math")) {			
 			noOfTestRuns++;
 			pixelslist.add("Data+Math");
@@ -217,6 +222,9 @@ public class PixelParallel {
 			}
 			else if(pixel.toLowerCase().contains("starmobile")) {
 				urlpattern = "StarMobile";
+			}
+			else if(pixel.toLowerCase().contains("rakuten")) {
+				urlpattern = "Rakuten";
 			}
 			else if(pixel.toLowerCase().contains("data+math")) {
 				urlpattern = "Data+Math";
