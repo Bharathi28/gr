@@ -82,7 +82,7 @@ public class PixelUtilities {
 //		else {
 //			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
 //		}		
-		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("Theraworx")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("Theraworx")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
 		else if(brand.equalsIgnoreCase("BodyFirm")) {
@@ -140,6 +140,11 @@ public class PixelUtilities {
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"StarMobile", offerdata.get(i));
 				overallOutput.add(buyflowOutput);
 			}
+			if(pixel.equalsIgnoreCase("rakuten")) {	
+				String appendurl = url + joinChar + "LSSITEID=test";
+				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"Rakuten", offerdata.get(i));
+				overallOutput.add(buyflowOutput);
+			}
 			if(pixel.equalsIgnoreCase("data+math")) {	
 				String appendurl = url + joinChar + "uci=hellohi";
 				buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, appendurl,"Data+Math", offerdata.get(i));
@@ -193,6 +198,9 @@ public class PixelUtilities {
 	    }
 	    else if(url.contains("sessionid")) {
 	    	pattern = "StarMobile";
+	    }
+	    else if(url.contains("LSSITEID")) {
+	    	pattern = "Rakuten";
 	    }
 	    else if(url.contains("uci=hellohi")) {
 	    	pattern = "Data+Math";
