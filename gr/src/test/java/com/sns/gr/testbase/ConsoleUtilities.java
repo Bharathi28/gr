@@ -39,7 +39,7 @@ public class ConsoleUtilities {
 	PricingUtilities pr_obj = new PricingUtilities();
 	CommonUtilities comm_obj = new CommonUtilities();
 	MailUtilities mailObj = new MailUtilities();	
-	public void sendEmail(String subject, String to,StringBuilder str,String brand) {
+	public void sendEmail(String subject, String to,StringBuilder strfull) {
     	Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.starttls.enable", "true");
@@ -54,9 +54,10 @@ public class ConsoleUtilities {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("Hi Team,").append(System.lineSeparator());
-		sb.append("Please find the console error details for the brand "+brand+" below:");
 		
-		sb.append(str);
+		sb.append("Please find the console errors for the brands in PROD:");
+		sb.append(System.lineSeparator());
+		sb.append(strfull);
 		
 		//sb.append("PFA.").append(System.lineSeparator());
 		sb.append(System.lineSeparator());
@@ -78,10 +79,10 @@ public class ConsoleUtilities {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.addRecipients(Message.RecipientType.CC, 
-	                InternetAddress.parse("banuchitra@searchnscore.com"));
+	                InternetAddress.parse("banuchitra@searchnscore.com,manibharathi@searchnscore.com,yzewdie@guthy-renker.com"));
 //			message.addRecipients(Message.RecipientType.CC, 
 //	                InternetAddress.parse("manibharathi@searchnscore.com"));
-			message.setSubject("ConsolError in PROD - "+subject);
+			message.setSubject(subject);
 
 			BodyPart messageBodyPart = new MimeBodyPart(); 
 			messageBodyPart.setText(sb.toString());

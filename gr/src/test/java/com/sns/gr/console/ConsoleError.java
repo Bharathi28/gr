@@ -45,6 +45,7 @@ public class ConsoleError {
 	MailUtilities mailObj = new MailUtilities();
 	ConsoleUtilities co_obj = new ConsoleUtilities();
 	Scanner in = new Scanner(System.in);
+	StringBuilder strfull = new StringBuilder();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
 	String sendReportTo = "";
@@ -70,7 +71,7 @@ public class ConsoleError {
 	public Object[][] testData() {
 		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"SeaCalmSkin"},{"Volaire"},{"SmileActives"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
-		//Object[][] arrayObject = {{"Mally"},{"SpecificBeauty"}};
+		//Object[][] arrayObject = {{"Mally"},{"SpecificBeauty"},{"ReclaimBotanical"},{"SmileActives"}};
 		return arrayObject;
 	}
 	
@@ -105,8 +106,16 @@ public class ConsoleError {
 			System.out.println("Checkoutpage Console Error Details:");		
 			str = co_obj.analyzeLog(driver,brand,"Checkoutpage",str);
 			if(str.length()>0) {
-				co_obj.sendEmail(brand, "banuchitra@searchnscore.com",str,brand);
+				strfull.append("\n");
+				strfull.append(brand+"\n");
+				strfull.append(str);	
+				System.out.println("Stringbuilder"+strfull);
+				//co_obj.sendEmail(brand, "banuchitra@searchnscore.com",str,brand);
 			}
 			driver.close();
 		}	
+	@Test
+	public void sendmail() {
+		co_obj.sendEmail("Console Errors for the brands in PROD", "banuchitra@searchnscore.com", strfull);
+	}
 }
