@@ -65,7 +65,7 @@ public class CXTUtilities {
 		}		
 	}
 	
-	public void openMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
+	public void openMyNextKit(WebDriver driver, String realm, String brand) throws ClassNotFoundException, SQLException, InterruptedException {
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "OpenKC", "");		
 		WebElement openkc = comm_obj.find_webelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		String drawerstatus = "";
@@ -76,14 +76,20 @@ public class CXTUtilities {
 			drawerstatus = driver.findElement(By.xpath("//div[@id='openCloseKitDrawer']//a//div//span[2]//span")).getAttribute("class");
 		}
 		if((drawerstatus.contains("Show")) || (drawerstatus.contains("closed"))){
-			Thread.sleep(4000);
-			openkc.click();
+			if(brand.equalsIgnoreCase("CrepeErase")) {
+				Thread.sleep(4000);
+				driver.findElement(By.xpath("//span[@class='kc-drawer-show']/..//i")).click();
+				Thread.sleep(3000);
+			}
+			else {
+				openkc.click();
+			}			
 			Thread.sleep(1000);
 		}
 	}
 	
-	public int getNumberofProductsinKC(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
-		openMyNextKit(driver, realm);
+	public int getNumberofProductsinKC(WebDriver driver, String realm, String brand) throws ClassNotFoundException, SQLException, InterruptedException {
+		openMyNextKit(driver, realm, brand);
 		
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
@@ -92,10 +98,10 @@ public class CXTUtilities {
 		return kcproducts.size();
 	}
 	
-	public HashMap<String,Integer> checkMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException{
+	public HashMap<String,Integer> checkMyNextKit(WebDriver driver, String realm, String brand) throws ClassNotFoundException, SQLException, InterruptedException{
 				
 		HashMap<String, Integer> products = new HashMap<String, Integer>();
-		openMyNextKit(driver, realm);
+		openMyNextKit(driver, realm, brand);
 		
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
@@ -349,12 +355,12 @@ public class CXTUtilities {
 	
 	public void addProductToKC(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
-		HashMap<String,Integer> kcproducts = checkMyNextKit(driver, realm);
+		HashMap<String,Integer> kcproducts = checkMyNextKit(driver, realm, brand);
 						
 		int temp = 1;
 		while(temp == 1) 
 		{
-			boolean addtokc = validateProdLimitinKC(brand, campaign, getNumberofProductsinKC(driver, realm));
+			boolean addtokc = validateProdLimitinKC(brand, campaign, getNumberofProductsinKC(driver, realm, brand));
 			if(addtokc) {			
 				Map<String, Object> randProd = pickRandomProduct(brand,campaign);
 				String prodPPID = randProd.get("PPID").toString();		
@@ -505,7 +511,7 @@ public class CXTUtilities {
 	
 	public void removeProductFromKC(WebDriver driver, String brand) throws InterruptedException, ClassNotFoundException, SQLException {		
 		String realm = db_obj.get_realm(brand);
-		openMyNextKit(driver, realm);
+		openMyNextKit(driver, realm, brand);
 		
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		

@@ -373,12 +373,12 @@ public class CXTValidation {
 		output_row.add(brand);
 		output_row.add(campaign);
 		output_row.add("Remove Product from KC");
-		int number_before = cxt_obj.getNumberofProductsinKC(driver, realm);
+		int number_before = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
 		Thread.sleep(2000);
 		cxt_obj.removeProductFromKC(driver, brand);
 		if(realm.equals("R4")) {			
 			
-			int number_after = cxt_obj.getNumberofProductsinKC(driver, realm);
+			int number_after = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
 			if(number_before == (number_after + 1)) {
 				actual = expected = "PASS";
 			}
