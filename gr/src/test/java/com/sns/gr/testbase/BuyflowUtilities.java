@@ -536,15 +536,22 @@ public class BuyflowUtilities {
 			String alpha = RandomStringUtils.randomAlphabetic(9);
 			String num = RandomStringUtils.randomNumeric(4);
 //			String email = alpha + "-" + num + "@yopmail.com";
-//			String email = alpha + "-" + num + "@rm2rf.com";
-//			String email = alpha + "-" + num + "@guerrillamail.com";
 			String email = alpha + "-" + num + "@mailnesia.com";
 			
 			fill_form_field(driver, realm, "Email", email.toLowerCase());
-			fill_form_field(driver, realm, "PhoneNumber", "8887878787");		
-			fill_form_field(driver, realm, "FirstName", firstName());
-			fill_form_field(driver, realm, "LastName", lastName());
-			fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
+			fill_form_field(driver, realm, "PhoneNumber", "8887878787");
+						
+//			if(brand.equalsIgnoreCase("Volaire")) {
+//				fill_form_field(driver, realm, "FirstName", "John");
+//				fill_form_field(driver, realm, "LastName", "Smith");
+//				fill_form_field(driver, realm, "AddressLine1", "1 Main St.");
+//			}
+//			else {
+				fill_form_field(driver, realm, "FirstName", firstName());
+				fill_form_field(driver, realm, "LastName", lastName());
+				fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
+//			}
+			
 //			fill_form_field(driver, realm, "AddressLine1", "8223 Belford Ave");
 			if(campaign.equalsIgnoreCase("ca")) {
 				fill_form_field(driver, realm, "City", "Anywhere");
@@ -552,11 +559,22 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "Zip", "E3B7K6");
 			}
 			else {
-				fill_form_field(driver, realm, "City", "El Segundo");
-				fill_form_field(driver, realm, "State", "CA");		
+//				if(brand.equalsIgnoreCase("Volaire")) {
+//					fill_form_field(driver, realm, "City", "Burlington");
+//					fill_form_field(driver, realm, "State", "MA");	
+//				}
+//				else {
+					fill_form_field(driver, realm, "City", "El Segundo");
+					fill_form_field(driver, realm, "State", "CA");	
+//				}					
 				
-				if(supply.equalsIgnoreCase("30")) {			
-					fill_form_field(driver, realm, "Zip", "90245");
+				if(supply.equalsIgnoreCase("30")) {		
+//					if(brand.equalsIgnoreCase("Volaire")) {
+//						fill_form_field(driver, realm, "Zip", "01803");
+//					}
+//					else {
+						fill_form_field(driver, realm, "Zip", "90245");
+//					}					
 				}
 				else if(supply.equalsIgnoreCase("90")) {
 					fill_form_field(driver, realm, "Zip", "81002");
@@ -598,10 +616,19 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "CardNumber", "4111111111111111");
 			}
 			else {
-				fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
+//				if(brand.equalsIgnoreCase("Volaire")) {
+//					fill_form_field(driver, realm, "CardNumber", "4457010000000009");
+//				}
+//				else {
+					fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
+//				}				
 			}		
 			fill_form_field(driver, realm, "Month", "12");
 			fill_form_field(driver, realm, "Year", "2020");	
+			
+			if(brand.equalsIgnoreCase("Volaire")) {
+				fill_form_field(driver, realm, "CVV", "349");	
+			}
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			Thread.sleep(2000);
 			fill_form_field(driver, realm, "Agree", "");

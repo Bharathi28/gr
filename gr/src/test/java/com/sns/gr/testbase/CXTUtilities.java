@@ -65,7 +65,7 @@ public class CXTUtilities {
 		}		
 	}
 	
-	public void openMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException {
+	public void openMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "OpenKC", "");		
 		WebElement openkc = comm_obj.find_webelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		String drawerstatus = "";
@@ -76,11 +76,13 @@ public class CXTUtilities {
 			drawerstatus = driver.findElement(By.xpath("//div[@id='openCloseKitDrawer']//a//div//span[2]//span")).getAttribute("class");
 		}
 		if((drawerstatus.contains("Show")) || (drawerstatus.contains("closed"))){
+			Thread.sleep(4000);
 			openkc.click();
+			Thread.sleep(1000);
 		}
 	}
 	
-	public int getNumberofProductsinKC(WebDriver driver, String realm) throws ClassNotFoundException, SQLException {
+	public int getNumberofProductsinKC(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
 		openMyNextKit(driver, realm);
 		
 		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
@@ -90,7 +92,7 @@ public class CXTUtilities {
 		return kcproducts.size();
 	}
 	
-	public HashMap<String,Integer> checkMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException{
+	public HashMap<String,Integer> checkMyNextKit(WebDriver driver, String realm) throws ClassNotFoundException, SQLException, InterruptedException{
 				
 		HashMap<String, Integer> products = new HashMap<String, Integer>();
 		openMyNextKit(driver, realm);

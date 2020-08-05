@@ -201,11 +201,11 @@ public class CXTValidation {
 		
 		Calendar now = Calendar.getInstance();		
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		//SeaCalmSkin
-//		now.add(Calendar.DAY_OF_MONTH, 6); 
+		//SB and MB - Aug 13
+		now.add(Calendar.DAY_OF_MONTH, 5);
 		
-		//SB and MB
-		now.add(Calendar.DAY_OF_MONTH, 25);
+		//ITCosmetics - Aug-21
+//		now.add(Calendar.DAY_OF_MONTH, 13);
 		
 //		now.add(Calendar.DAY_OF_MONTH, 31); 
 		String expecteddate = sdf.format(now.getTime()); 	
