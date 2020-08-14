@@ -231,7 +231,7 @@ public class ContinuityValidationOptimised {
 						remarks = remarks + "Checkout Shipping does not match with the expected shipping price, Expected - " + expectedEntryShipping + " , Actual - " + checkout_shipping;
 					}
 					
-					String result = "";
+					String result = "PASS";
 					if((ContinuityPriceResult.equals("FAIL")) || (ContinuityShipResult.equals("FAIL")) || (EntryPriceResult.equals("FAIL")) || (EntryShipResult.equals("FAIL"))) {
 						result = "FAIL";
 					}

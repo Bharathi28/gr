@@ -499,7 +499,7 @@ public class BuyflowUtilities {
 			   Thread.sleep(2000);
 			}			
 
-			Thread.sleep(5000);
+			Thread.sleep(7000);
 //			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
 			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
 				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
@@ -626,9 +626,9 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "Month", "12");
 			fill_form_field(driver, realm, "Year", "2020");	
 			
-			if(brand.equalsIgnoreCase("Volaire")) {
-				fill_form_field(driver, realm, "CVV", "349");	
-			}
+//			if(brand.equalsIgnoreCase("Volaire")) {
+//				fill_form_field(driver, realm, "CVV", "349");	
+//			}
 			jse.executeScript("window.scrollBy(0,200)", 0);
 			Thread.sleep(2000);
 			fill_form_field(driver, realm, "Agree", "");

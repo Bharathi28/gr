@@ -60,7 +60,7 @@ public class CXTValidation {
 	}
 	
 	@Test(dataProvider="cxtInput")
-	public void cxtvalidation(String env, String brand, String campaign, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException, ParseException {		
+	public void cxtvalidation(String env, String brand, String campaign, String postponedays, String browser) throws IOException, ClassNotFoundException, SQLException, InterruptedException, ParseException {		
 									
 		BaseTest base_obj = new BaseTest();			
 		WebDriver driver = base_obj.setUp(browser, "Local");
@@ -201,13 +201,10 @@ public class CXTValidation {
 		
 		Calendar now = Calendar.getInstance();		
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		//SB and MB - Aug 13
-		now.add(Calendar.DAY_OF_MONTH, 5);
 		
-		//ITCosmetics - Aug-21
-//		now.add(Calendar.DAY_OF_MONTH, 13);
-		
-//		now.add(Calendar.DAY_OF_MONTH, 31); 
+		double ddays = Double.parseDouble(postponedays);
+		int days = (int) ddays;
+		now.add(Calendar.DAY_OF_MONTH, days); 
 		String expecteddate = sdf.format(now.getTime()); 	
 		
 		String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
