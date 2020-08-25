@@ -23,7 +23,7 @@ public class DBUtilities {
 		
 		String realm = get_realm(brand);
 		String tableName = realm.toLowerCase() + "offers";	
-		
+			
 		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and ppid='" + ppid + "' and category='" + category + "' and status ='Active'";	
 		List<Map<String, Object>> offerdata = DBLibrary.dbAction("fetch", query);
 		System.out.println(query);

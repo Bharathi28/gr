@@ -160,6 +160,14 @@ public class BuyflowValidation {
 		
 		if(category.contains("Kit")) {
 			String upsell = bf_obj.check_upsell_select(brand, campaign, ppid, category);
+			if((brand.equalsIgnoreCase("PrincipalSecret")) && (ppid.equalsIgnoreCase("BL6R33"))) {
+				ppuPresent = "Yes";
+				upsell = "No";
+			}
+			if((brand.equalsIgnoreCase("PrincipalSecret")) && (ppid.equalsIgnoreCase("BL6R34"))) {
+				ppuPresent = "Yes";
+				upsell = "Yes";
+			}
 			if(ppuPresent.equalsIgnoreCase("Yes")) {
 				bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 				Thread.sleep(2000);

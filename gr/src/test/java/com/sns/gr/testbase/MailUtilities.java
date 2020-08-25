@@ -55,7 +55,7 @@ public class MailUtilities {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.addRecipients(Message.RecipientType.CC, 
-	                InternetAddress.parse("manibharathi@searchnscore.com, banuchitra@searchnscore.com"));
+	                InternetAddress.parse("manibharathi@searchnscore.com, banuchitra@searchnscore.com, aaqil@searchnscore.com"));
 //			message.addRecipients(Message.RecipientType.CC, 
 //	                InternetAddress.parse("manibharathi@searchnscore.com"));
 			message.setSubject(subject + " - " + dateStr);

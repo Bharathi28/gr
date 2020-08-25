@@ -209,33 +209,33 @@ public class CommonUtilities {
 		List<String> header_list = new ArrayList<String>();
 		
 		if(header.toLowerCase().contains("buyflow")) {
-			header_list.add("Environment");
-			header_list.add("Brand");
-			header_list.add("Campaign");
-			header_list.add("Category");
-			header_list.add("e-mail");
-			header_list.add("Expected PPID");
-			header_list.add("Actual PPID");
-			header_list.add("Confirmation Number");
-			header_list.add("Checkout Pricing");		
-			header_list.add("Confirmation Pricing");
-			header_list.add("Shipping Billing");
-			header_list.add("Card");
-			header_list.add("Browser");
-			
 //			header_list.add("Environment");
 //			header_list.add("Brand");
 //			header_list.add("Campaign");
 //			header_list.add("Category");
 //			header_list.add("e-mail");
-//			header_list.add("PPID");			
+//			header_list.add("Expected PPID");
+//			header_list.add("Actual PPID");
 //			header_list.add("Confirmation Number");
-//			header_list.add("Entry Pricing");	
-//			header_list.add("Continuity Pricing");
+//			header_list.add("Checkout Pricing");		
+//			header_list.add("Confirmation Pricing");
 //			header_list.add("Shipping Billing");
-//			header_list.add("Payment Method");
+//			header_list.add("Card");
 //			header_list.add("Browser");
-//			header_list.add("Remarks");
+			
+			header_list.add("Environment");
+			header_list.add("Brand");
+			header_list.add("Campaign");
+			header_list.add("Category");
+			header_list.add("e-mail");
+			header_list.add("PPID");			
+			header_list.add("Confirmation Number");
+			header_list.add("Entry Pricing");	
+			header_list.add("Continuity Pricing");
+			header_list.add("Shipping Billing");
+			header_list.add("Payment Method");
+			header_list.add("Browser");
+			header_list.add("Remarks");
 		}	
 		else if(header.toLowerCase().contains("pixel")) {
 			header_list.add("Environment");
@@ -301,7 +301,7 @@ public class CommonUtilities {
 		String origcampaign = campaign_repeat(brand, campaign, "locators");
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
-		}
+		}	
 		
 		String query = "select * from locators_new where ";
 		String include_brand = "brand='" + brand + "'";
@@ -331,7 +331,7 @@ public class CommonUtilities {
 			query = query + include_offer;
 		}
 //		query = query + ";";
-//			System.out.println(query);
+			System.out.println(query);
 		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch",query);
 		return locator;		
 	}

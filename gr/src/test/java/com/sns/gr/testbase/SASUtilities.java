@@ -49,12 +49,14 @@ public class SASUtilities {
 		if(!(origcampaign.equals("n/a"))){
 			campaign = origcampaign;
 		}		
-		
+		System.out.println("campaign " + campaign);
 		if(!(campaign.equalsIgnoreCase("Core"))) {
+			System.out.println("Inside loop "+ category);
 			if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")) || (category.equalsIgnoreCase("SubscribeandSave"))) {
 				campaign = "Core";
 			}
 		}		
+		System.out.println("campaign " + campaign);
 		int subscribe = 0;
 		if(category.equalsIgnoreCase("SubscribeandSave")) {
 			category = "Product";
@@ -345,6 +347,12 @@ public class SASUtilities {
 			if((campaign.equalsIgnoreCase("hybrid")) || (campaign.equalsIgnoreCase("bodycoverage"))){
 				jse.executeScript("window.scrollBy(0,400)", 0);
 				Thread.sleep(2000);
+			}
+		}
+		if(brand.equalsIgnoreCase("Mally")) {
+			if(campaign.equalsIgnoreCase("pnls")){
+				jse.executeScript("window.scrollBy(0,400)", 0);
+				Thread.sleep(3000);
 			}
 		}
 		
