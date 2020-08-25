@@ -137,6 +137,9 @@ public class PricingUtilities {
 			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("crepeerase"))){
 				elementvalue = "(" + elementvalue + ")[2]";
 			}
+			if((pricing.contains("Checkout")) && (brand.equalsIgnoreCase("spotfade"))){
+				elementvalue = "(" + elementvalue + ")[2]";
+			}
 			if((pricing.contains("Checkout")) && (brand.contains("BodyFirm"))){
 				if(pricing.contains("Shipping")) {
 					elementvalue = "(" + elementvalue + ")[3]";
