@@ -214,9 +214,7 @@ public class BuyflowOptimized {
 				
 				// Move to Checkout
 				
-				// Fill out form
-				String email = bf_obj.fill_out_form(driver, brand, campaign, cc, shipbill, "30");
-				System.out.println("Email : " + email);	
+				
 				
 				// Checkout Page Validation
 				// Validate Added Kit
@@ -249,6 +247,20 @@ public class BuyflowOptimized {
 					remarks = remarks + "Entry Kit Price on Checkout Page is wrong, Expected - " + expectedEntryPrice + " , Actual - " + checkoutentrykitprice;
 				}				
 				
+				// Fill out form
+				String email = "";
+				
+				// Fall-back scenario
+				if(offerpostpu.equalsIgnoreCase("Yes")) {
+					email = bf_obj.fill_out_form(driver, brand, campaign, "VISA", "same", "90");
+					bf_obj.complete_order(driver, brand, "VISA");
+					bf_obj.upsell_confirmation(driver, brand, campaign, offerpostpu);
+				}
+				else {
+					email = bf_obj.fill_out_form(driver, brand, campaign, cc, shipbill, "30");
+					System.out.println("Email : " + email);
+				}				
+				
 				// Validate Continuity pricing
 				String cart_lang = lang_obj.get_cart_language(driver, brand);						
 				String[] lang_price_arr = lang_obj.parse_cart_language(cart_lang);		
@@ -270,7 +282,7 @@ public class BuyflowOptimized {
 				else {
 					ContinuityPriceResult = "FAIL";
 					remarks = remarks + "Continuity Shipping is wrong, Expected - " + continuityshipping + " , Actual - " + cart_lang_shipping;
-				}				
+				}								
 				
 				// Validate Checkout pricing
 				String checkout_subtotal = "";
@@ -301,12 +313,24 @@ public class BuyflowOptimized {
 					remarks = remarks + "Checkout Subtotal does not match with the expected price, Expected - " + expectedEntryPrice + " , Actual - " + checkout_subtotal;
 				}
 				
-				if(expectedEntryShipping.equalsIgnoreCase(checkout_shipping)) {
+				if((expectedEntryShipping.equalsIgnoreCase("$0.00")) || (expectedEntryShipping.equalsIgnoreCase("FREE"))) {
+					if((checkout_shipping.equalsIgnoreCase("$0.00")) || (checkout_shipping.equalsIgnoreCase("FREE"))) {
+						EntryPriceResult = "PASS";
+					}
+				}				
+				else if(expectedEntryShipping.equalsIgnoreCase(checkout_shipping)) {
 					EntryPriceResult = "PASS";
 				}
 				else {
 					EntryPriceResult = "FAIL";
 					remarks = remarks + "Checkout Shipping does not match with the expected shipping price, Expected - " + expectedEntryShipping + " , Actual - " + checkout_shipping;
+				}
+				
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				if(offerpostpu.equalsIgnoreCase("Yes")) {
+					jse.executeScript("window.scrollBy(0,600)", 0);
+					bf_obj.clear_form_field(driver, realm, "Zip");
+					bf_obj.fill_form_field(driver, realm, "Zip", "90245");
 				}
 				
 				bf_obj.complete_order(driver, brand, cc);
@@ -315,7 +339,9 @@ public class BuyflowOptimized {
 //				// Upsell page validations
 //				driver.findElement(By.xpath("//i[@class='fa fa-plus']")).click();				
 				
-				upsell_confirmation(driver, brand, campaign, offerpostpu);
+				if(supplysize == 30) {
+					upsell_confirmation(driver, brand, campaign, offerpostpu);
+				}				
 				
 				// Confirmation page validations
 				String conf_offercode = bf_obj.fetch_confoffercode(driver, brand);
@@ -402,8 +428,8 @@ public class BuyflowOptimized {
 				System.out.println("Expected Renewal Plan Id : " + expectedrenewalplanid);	
 				System.out.println("Actual Renewal Plan Id : " + actualrenewalplanid);	
 				
-				if(offerpostpu.equalsIgnoreCase("Yes")) {
-					String actualinstallmentplanid = getFromVariableMap(driver, "paymentPlanId");
+				String actualinstallmentplanid = getFromVariableMap(driver, "paymentPlanId");
+				if(offerpostpu.equalsIgnoreCase("Yes")) {					
 					if(!(actualinstallmentplanid.contains(expectedinstallmentplanid))) {
 						remarks = remarks + "Installment Plan Id does not match, Expected - " + expectedinstallmentplanid + " , Actual - " + actualinstallmentplanid + ",";
 					}
@@ -421,6 +447,8 @@ public class BuyflowOptimized {
 				output_row.add(conf_num);
 				output_row.add(conf_pricing + " - " + EntryPriceResult);
 				output_row.add(cartlang_pricing + " - " + ContinuityPriceResult);
+				output_row.add(actualrenewalplanid);
+				output_row.add(actualinstallmentplanid);
 				output_row.add(shipbill);	
 				output_row.add(cc);	
 				output_row.add(browser);	

@@ -232,6 +232,8 @@ public class CommonUtilities {
 			header_list.add("Confirmation Number");
 			header_list.add("Entry Pricing");	
 			header_list.add("Continuity Pricing");
+			header_list.add("Renewal Plan");	
+			header_list.add("Installment Plan");
 			header_list.add("Shipping Billing");
 			header_list.add("Payment Method");
 			header_list.add("Browser");

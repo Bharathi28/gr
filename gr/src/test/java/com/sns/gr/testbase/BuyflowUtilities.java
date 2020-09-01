@@ -457,6 +457,17 @@ public class BuyflowUtilities {
 		jse.executeScript("arguments[0].click();", comp_order_element);	
 	}
 	
+	public void clear_form_field(WebDriver driver, String realm, String field) throws ClassNotFoundException, SQLException {
+		String query = "select * from form_fields_locators where realm='" + realm + "' and form='Checkout' and field='" + field + "'";
+		List<Map<String, Object>> locator = DBLibrary.dbAction("fetch", query);
+		
+		String elementlocator = locator.get(0).get("ELEMENTLOCATOR").toString();
+		String elementvalue = locator.get(0).get("ELEMENTVALUE").toString();
+		
+		WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
+		element.clear();
+	}
+	
 	public void fill_form_field(WebDriver driver, String realm, String field, String value) throws ClassNotFoundException, SQLException {
 		
 		String query = "select * from form_fields_locators where realm='" + realm + "' and form='Checkout' and field='" + field + "'";
@@ -518,14 +529,19 @@ public class BuyflowUtilities {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
+//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
 			
-			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
-			wait.until(ExpectedConditions.elementToBeClickable(select_cc_continue));
-			jse.executeScript("arguments[0].click();", select_cc_continue);		
+			jse.executeScript("window.scrollBy(0,400)", 0);
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='payment-submit-btn']")));
+			driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
 			
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='confirmButtonTop']")));	
-			jse.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@id='confirmButtonTop']")));
+			
+//			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
+//			wait.until(ExpectedConditions.elementToBeClickable(select_cc_continue));
+//			jse.executeScript("arguments[0].click();", select_cc_continue);		
+//			
+//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='confirmButtonTop']")));	
+//			jse.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@id='confirmButtonTop']")));
 			
 			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 			driver.switchTo().window(winHandleBefore);
@@ -539,6 +555,9 @@ public class BuyflowUtilities {
 			String email = alpha + "-" + num + "@mailnesia.com";
 			
 			fill_form_field(driver, realm, "Email", email.toLowerCase());
+			if((brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
+				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
+			}
 			fill_form_field(driver, realm, "PhoneNumber", "8887878787");
 						
 //			if(brand.equalsIgnoreCase("Volaire")) {
@@ -608,10 +627,7 @@ public class BuyflowUtilities {
 				fill_form_field(driver, realm, "ShippingZip", "35801");
 			}				
 
-			if((brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
-
-				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
-			}
+			
 			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
 				fill_form_field(driver, realm, "CardNumber", "4111111111111111");
 			}
