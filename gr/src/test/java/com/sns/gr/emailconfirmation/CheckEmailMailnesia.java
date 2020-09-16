@@ -55,7 +55,7 @@ public class CheckEmailMailnesia {
 
 		for (String brand : brands) {
 			File input_file = new File(System.getProperty("user.dir")
-					+ "\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_8312020.xlsx");// BuyflowResults_572020BuyflowResults_8212020
+					+ "\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_9152020.xlsx");// BuyflowResults_572020BuyflowResults_8212020
 			// File input_file = new
 			// File("F:\\Automation\\Buyflow\\DailyOrders\\Run
 			// Output\\BuyflowResults_10232019.xlsx");
@@ -76,6 +76,10 @@ public class CheckEmailMailnesia {
 				// String email = row.getCell(3).getStringCellValue();
 				String email = row.getCell(4).getStringCellValue();
 				String offercode = row.getCell(5).getStringCellValue();
+				
+				if(email.contains("testbuyer")) {
+					continue;
+				}
 				By mail_input = By.xpath("//input[@id='mailbox']");
 				By go = By.xpath("//input[@id='sm']");
 				By mail_rec = By.xpath("//table[@class='email']//tbody//tr[1]//td[2]");

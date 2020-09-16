@@ -331,6 +331,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void upsell_confirmation(WebDriver driver, String brand, String campaign, String upsell) throws InterruptedException, ClassNotFoundException, SQLException {
+		
 		Thread.sleep(4000);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				
@@ -510,12 +511,13 @@ public class BuyflowUtilities {
 			   Thread.sleep(2000);
 			}			
 
-			Thread.sleep(7000);
+			Thread.sleep(10000);
 //			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
 			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
 				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			}			
 			
+			Thread.sleep(3000);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
 			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
 			
@@ -530,8 +532,9 @@ public class BuyflowUtilities {
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 			
 //			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
-			
+			Thread.sleep(3000);
 			jse.executeScript("window.scrollBy(0,400)", 0);
+			Thread.sleep(5000);
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='payment-submit-btn']")));
 			driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
 			
@@ -555,7 +558,7 @@ public class BuyflowUtilities {
 			String email = alpha + "-" + num + "@mailnesia.com";
 			
 			fill_form_field(driver, realm, "Email", email.toLowerCase());
-			if((brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
+			if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
 				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 			}
 			fill_form_field(driver, realm, "PhoneNumber", "8887878787");
@@ -643,6 +646,7 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "Year", "2020");	
 			
 			if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+//			if(brand.equalsIgnoreCase("Volaire")) {
 				fill_form_field(driver, realm, "CVV", "349");	
 			}
 			jse.executeScript("window.scrollBy(0,200)", 0);

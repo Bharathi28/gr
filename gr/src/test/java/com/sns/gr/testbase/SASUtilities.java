@@ -142,7 +142,7 @@ public class SASUtilities {
 		Thread.sleep(2000);
 		System.out.println("Adding product to cart");
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")) || (category.equalsIgnoreCase("SubscribeandSave"))) {
-			if((brand.contains("BodyFirm")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
+			if((brand.contains("BodyFirm")) || (brand.equalsIgnoreCase("AllKind")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
 				if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
 					Thread.sleep(3000);
 					driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
@@ -211,14 +211,22 @@ public class SASUtilities {
 		if((brand.equalsIgnoreCase("MeaningfulBeauty"))&&(campaign.equalsIgnoreCase("mb7deluxe20offb"))) {
 			jse.executeScript("window.scrollBy(0,200)",0);
 			driver.findElement(By.xpath("//button[@class = 'button checkout-special-offer']")).click();
+		}	
+		if((brand.equalsIgnoreCase("WestmoreBeauty"))&&(campaign.equalsIgnoreCase("pnlfcp"))) {
+			jse.executeScript("window.scrollBy(0,300)",0);
+			Thread.sleep(2000);
 		}
-			
 		if(!(brand.equalsIgnoreCase("SpecificBeauty"))) {	
 			if(brand.equalsIgnoreCase("Sheercover")) {
 				jse.executeScript("window.scrollBy(0,200)",0);
 				Thread.sleep(1000);
 				if(driver.findElements(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).size() != 0) {
 					driver.findElement(By.xpath("//div[@id='kit']/..//div[@class='market']//a[@class='buttons-next button-gift']")).click();
+				}
+			}
+			else if((brand.equalsIgnoreCase("Sub-D")) && (campaign.equalsIgnoreCase("deluxe25offp2"))) {
+				if(driver.findElements(By.xpath("//button[@class='button buy-now deluxekit']")).size() != 0) {
+					driver.findElement(By.xpath("//button[@class='button buy-now deluxekit']")).click();
 				}
 			}
 			else {
@@ -344,7 +352,7 @@ public class SASUtilities {
 		List<Map<String, Object>> locator = comm_obj.get_element_locator(brand, campaign, "KitShade", kitshade + " " + kitname);
 		
 		if(brand.equalsIgnoreCase("WestmoreBeauty")) {
-			if((campaign.equalsIgnoreCase("hybrid")) || (campaign.equalsIgnoreCase("bodycoverage"))){
+			if((campaign.equalsIgnoreCase("hybrid")) || (campaign.equalsIgnoreCase("bodycoverage")) || (campaign.equalsIgnoreCase("trywestmore2"))){
 				jse.executeScript("window.scrollBy(0,400)", 0);
 				Thread.sleep(2000);
 			}
@@ -365,6 +373,10 @@ public class SASUtilities {
 			if(campaign.equalsIgnoreCase("hybrid")) {
 				jse.executeScript("window.scrollBy(0,500)", 0);
 				Thread.sleep(2000);
+			}
+			if(campaign.equalsIgnoreCase("pnlfcp")) {
+				jse.executeScript("window.scrollBy(0,500)",0);
+				driver.findElement(By.xpath("//a[@class='cta']")).click();
 			}
 		}
 		if((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("save10"))) {
@@ -593,18 +605,18 @@ public class SASUtilities {
 		Thread.sleep(1000);
 	}
 	
-	public void select_frequency(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
-		
-		String product_name = offerdata.get("DESCRIPTION").toString();
-		String frequency = offerdata.get("FREQUENCY").toString();
-		if(!(frequency.equalsIgnoreCase("n/a"))) {
-			List<Map<String, Object>> freq_loc = comm_obj.get_element_locator(brand, campaign, "Frequency", product_name);
-			WebElement freq_elmt = comm_obj.find_webelement(driver, freq_loc.get(0).get("ELEMENTLOCATOR").toString(), freq_loc.get(0).get("ELEMENTVALUE").toString());
-			Select freq = new Select(freq_elmt);
-			freq.selectByVisibleText(frequency);
-		}	
-		Thread.sleep(1000);
-	}
+//	public void select_frequency(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+//		
+//		String product_name = offerdata.get("DESCRIPTION").toString();
+//		String frequency = offerdata.get("FREQUENCY").toString();
+//		if(!(frequency.equalsIgnoreCase("n/a"))) {
+//			List<Map<String, Object>> freq_loc = comm_obj.get_element_locator(brand, campaign, "Frequency", product_name);
+//			WebElement freq_elmt = comm_obj.find_webelement(driver, freq_loc.get(0).get("ELEMENTLOCATOR").toString(), freq_loc.get(0).get("ELEMENTVALUE").toString());
+//			Select freq = new Select(freq_elmt);
+//			freq.selectByVisibleText(frequency);
+//		}	
+//		Thread.sleep(1000);
+//	}
 	
 	public void select_product(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -676,16 +688,66 @@ public class SASUtilities {
 	}
 	
 	public void select_onetime(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		
 		String PPID = offerdata.get("PPID").toString();
-		Thread.sleep(1000);
-		driver.findElement(By.xpath("//input[@id='dwopt_" + PPID + "_entryKit-one-pay']")).click();
-		Thread.sleep(1000);
+		String category = offerdata.get("CATEGORY").toString();
+				
+		if((brand.equalsIgnoreCase("AllKind")) && (category.equalsIgnoreCase("Kit"))) {
+			jse.executeScript("window.scrollBy(0,300)", 0);
+			Thread.sleep(3000);
+			
+			driver.findElement(By.xpath("//input[@id='dwopt_EL2A0008_entryKit-one-pay']")).click();
+			Thread.sleep(1000);
+			
+			if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
+				Thread.sleep(3000);
+				driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+				Thread.sleep(3000);
+				driver.findElement(By.xpath("//a[@title='Checkout']")).click();
+			}
+		}
+		else {
+			Thread.sleep(1000);
+			driver.findElement(By.xpath("//input[@id='dwopt_" + PPID + "_entryKit-one-pay']")).click();
+			Thread.sleep(1000);
+		}
 	}
 	
 	public void select_subscribe(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String PPID = offerdata.get("PPID").toString();
+		String category = offerdata.get("CATEGORY").toString();
+		System.out.println(brand + campaign + category);
+		if((brand.equalsIgnoreCase("AllKind")) && (category.equalsIgnoreCase("Kit"))) {
+			Thread.sleep(1000);			
+			driver.findElement(By.xpath("//input[@id='dwopt_EL2A0008_entryKit-auto-renew']")).click();
+			Thread.sleep(1000);
+		}
+		else {
+			Thread.sleep(1000);
+			driver.findElement(By.xpath("//input[@id='dwopt_" + PPID + "_entryKit-auto-renew']")).click();
+			Thread.sleep(1000);
+		}		
+	}
+	
+	public void select_frequency(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//input[@id='dwopt_" + PPID + "_entryKit-auto-renew']")).click();
+		Select sel_element = new Select(driver.findElement(By.id("shippingFrequencySelector")));
+		sel_element.selectByVisibleText(offerdata.get("FREQUENCY").toString());
 		Thread.sleep(1000);
+		
+		jse.executeScript("window.scrollBy(0,300)", 0);
+		Thread.sleep(1000);
+		
+		if(brand.equalsIgnoreCase("AllKind")) {
+			if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
+				Thread.sleep(3000);
+				driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+				Thread.sleep(3000);
+				driver.findElement(By.xpath("//a[@title='Checkout']")).click();
+			}
+		}
 	}
 }

@@ -82,7 +82,7 @@ public class PixelUtilities {
 //		else {
 //			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
 //		}		
-		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("Theraworx")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("AllKind")) || (brand.equalsIgnoreCase("Theraworx")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
 		else if(brand.equalsIgnoreCase("BodyFirm")) {
@@ -304,6 +304,7 @@ public class PixelUtilities {
 //	    }
 //        else {
         if(!(brand.equalsIgnoreCase("BodyFirm"))) {
+        	System.out.println(brand + campaign);
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Kit", 0);
         }
         Thread.sleep(2000);
@@ -317,7 +318,7 @@ public class PixelUtilities {
 //        	bf_obj.move_to_checkout(driver, "SpotFade", "Core", "Kit");
 //	    }
         else {
-        	if(!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) {
+        	if((!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) ||  (!((brand.equalsIgnoreCase("AllKind"))&&campaign.equalsIgnoreCase("core")))){
             	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
             } 
         }               
@@ -359,6 +360,7 @@ public class PixelUtilities {
        
 		// Upsell and Confirmation Page Navigation
 		String ppu = db_obj.checkPPUPresent(brand, campaign, "Kit");
+		
 		String cc = "";
 		if(flow.equalsIgnoreCase("CCFlow")) {
 			cc = "VISA";

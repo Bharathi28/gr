@@ -100,6 +100,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 1 - Login Unsuccessful");			
 			output_row.add("FAIL");
+			output_row.add("Login Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "login", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -122,6 +123,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 2 - Navigating away is Unsuccessful");		
 			output_row.add("FAIL");
+			output_row.add("Navigating away is Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "googlenavigation", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -153,6 +155,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 3 - "+ message +" Unsuccessful");	
 			output_row.add("FAIL");
+			output_row.add(message + " Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "softlogin", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -179,6 +182,7 @@ public class CXTValidation {
 			else {
 				System.out.println(brand + "- Step 4 - Navigation To MyNextKit is Unsuccessful");		
 				output_row.add("FAIL");
+				output_row.add("Navigation To MyNextKit is Unsuccessful");
 				cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Failure", "fullpage");
 			}
 			output.add(output_row);
@@ -195,6 +199,7 @@ public class CXTValidation {
 		if(postponedays.equalsIgnoreCase("0.0")) {		
 			System.out.println(brand + "- Step 5 - Reschedule Shipment - Could not verify");		
 			output_row.add("FAIL");
+			output_row.add("Could not validate Reschedule Shipment");
 		}		
 		else {				
 			String format = "";
@@ -217,6 +222,7 @@ public class CXTValidation {
 			if(actualdate.equals("FAIL")) {
 				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
 				output_row.add("FAIL");
+				output_row.add("Reschedule Shipment Unsuccessful");
 				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
 			}
 			else {
@@ -237,6 +243,7 @@ public class CXTValidation {
 				else {
 					System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
 					output_row.add("FAIL");
+					output_row.add("Reschedule Shipment Unsuccessful");
 					cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
 				}
 			}		
@@ -269,6 +276,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 6 - Navigation To OrderHistory is Unsuccessful");
 			output_row.add("FAIL");
+			output_row.add("Navigation To OrderHistory is Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "orderhistory", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -299,6 +307,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 7 - Navigation To MyProfile is Unsuccessful");	
 			output_row.add("FAIL");
+			output_row.add("Navigation To MyProfile is Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "myprofile", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -331,6 +340,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 8 - Navigation To Shop is Unsuccessful");
 			output_row.add("FAIL");
+			output_row.add("Navigation To Shop is Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "shop", "Failure", "fullpage");
 		}
 		jse.executeScript("window.scrollTo(0, 0)", 0);
@@ -345,13 +355,21 @@ public class CXTValidation {
 		output_row.add("Add Product to KC");	
 		cxt_obj.addProductToKC(driver, brand, campaign);
 		if(realm.equals("R4")) {			
-			String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
 			
-			actual = successmsg.replace(" ", "");	
+			if(driver.findElements(By.xpath("//span[@class='sucess-msg']")).size() != 0) {
+				String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
+				actual = successmsg.replace(" ", "");
+			}
+			else if(driver.findElements(By.xpath("//p[@class='error']")).size() != 0){
+				String errormsg = driver.findElement(By.xpath("//p[@class='error']")).getText().trim();
+				actual = errormsg;
+			}
+				
 			expected = "Thankyouforloving" + brand;
 			if(brand.equals("Mally")) {
 				expected = expected+"Beauty";
 			}
+			
 			System.out.println(actual);
 			System.out.println(expected);
 		}
@@ -367,6 +385,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 9 - Adding Product to KC Unsuccessful");		
 			output_row.add("FAIL");
+			output_row.add(actual);
 			cxt_obj.takeScreenshot(driver, brand, "addtokc", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -402,6 +421,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 10 - Removing Product from KC Unsuccessful");		
 			output_row.add("FAIL");
+			output_row.add(actual);
 			cxt_obj.takeScreenshot(driver, brand, "removefromkc", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -423,6 +443,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 11 - Adding product to Cart Unsuccessful");		
 			output_row.add("FAIL");
+			output_row.add("Adding product to Cart Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "addtocart", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -442,6 +463,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 12 - Removing product from Cart Unsuccessful");		
 			output_row.add("FAIL");
+			output_row.add("Removing product from Cart Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "removefromcart", "Failure", "visiblepart");
 		}
 		output.add(output_row);
@@ -471,6 +493,7 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 13 - Logout Unsuccessful");	
 			output_row.add("FAIL");
+			output_row.add("Logout Unsuccessful");
 			cxt_obj.takeScreenshot(driver, brand, "logout", "Failure", "visiblepart");
 		}
 		output.add(output_row);

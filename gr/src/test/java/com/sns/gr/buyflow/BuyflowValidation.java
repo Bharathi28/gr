@@ -168,6 +168,9 @@ public class BuyflowValidation {
 				ppuPresent = "Yes";
 				upsell = "Yes";
 			}
+			if((brand.equalsIgnoreCase("AllKind")) && (ppid.equalsIgnoreCase("EL2A0008"))) {
+				ppuPresent = "No";
+			}
 			if(ppuPresent.equalsIgnoreCase("Yes")) {
 				bf_obj.upsell_confirmation(driver, brand, campaign, upsell);
 				Thread.sleep(2000);
