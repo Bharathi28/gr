@@ -55,7 +55,7 @@ public class CheckEmailMailnesia {
 
 		for (String brand : brands) {
 			File input_file = new File(System.getProperty("user.dir")
-					+ "\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_9152020.xlsx");// BuyflowResults_572020BuyflowResults_8212020
+					+ "\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_9182020.xlsx");// BuyflowResults_572020BuyflowResults_8212020
 			// File input_file = new
 			// File("F:\\Automation\\Buyflow\\DailyOrders\\Run
 			// Output\\BuyflowResults_10232019.xlsx");

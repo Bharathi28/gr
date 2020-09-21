@@ -557,15 +557,15 @@ public class CXTUtilities {
 		datepickerelmt.click();
 		Thread.sleep(1000);
 		
-		rescheduleresult = setDate(driver, now);	
+		rescheduleresult = setDate(driver, now);
+		Thread.sleep(1000);
 		
 		WebElement confirmelmt = comm_obj.find_webelement(driver, confirmloc.get(0).get("ELEMENTLOCATOR").toString(), confirmloc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(1000);
 		confirmelmt.click();
 		Thread.sleep(1000);
-		System.out.println(brand + " " + rescheduleresult);
-		if(rescheduleresult.equals("PASS")) {			
-			
+		
+		if(rescheduleresult.equals("PASS")) {						
 			if(realm.equals("R4")) {
 				String display = "block";
 				while(display.equals("block")) {
@@ -585,14 +585,30 @@ public class CXTUtilities {
 				}
 			}			
 			Thread.sleep(2000);
-			List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
-			WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
-			Thread.sleep(1000);
-			String actualdate = actualdateelmt.getText();
-			Thread.sleep(1000);
-			System.out.println("Actual Date : " + actualdate);
-			System.out.println("Expected Date : " + expecteddate);
-			rescheduleresult = actualdate;
+			
+			String errormsg = "";
+			if(realm.equals("R2")) {
+				if(driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText().contains("We're sorry")) {
+					rescheduleresult = "FAIL - " + driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText();;
+					errormsg = driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText();
+					Thread.sleep(1000);
+					driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='confirm']//span[text()='Confirm']")).click();
+				}
+			}		
+			else {
+				
+			}
+			
+			if(errormsg.equalsIgnoreCase("")) {
+				List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
+				WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
+				Thread.sleep(1000);
+				String actualdate = actualdateelmt.getText();
+				Thread.sleep(1000);
+				System.out.println("Actual Date : " + actualdate);
+				System.out.println("Expected Date : " + expecteddate);
+				rescheduleresult = actualdate;
+			}
 		}	
 		return rescheduleresult;
 	}

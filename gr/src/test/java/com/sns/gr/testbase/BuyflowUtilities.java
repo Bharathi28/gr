@@ -533,8 +533,8 @@ public class BuyflowUtilities {
 			
 //			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
 			Thread.sleep(3000);
-			jse.executeScript("window.scrollBy(0,400)", 0);
-			Thread.sleep(5000);
+			jse.executeScript("window.scrollBy(0,600)", 0);
+			Thread.sleep(8000);
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='payment-submit-btn']")));
 			driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
 			

@@ -219,10 +219,10 @@ public class CXTValidation {
 			String expecteddate = sdf.format(now.getTime()); 	
 			
 			String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
-			if(actualdate.equals("FAIL")) {
+			if(actualdate.contains("FAIL")) {
 				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
 				output_row.add("FAIL");
-				output_row.add("Reschedule Shipment Unsuccessful");
+				output_row.add(actualdate);
 				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
 			}
 			else {

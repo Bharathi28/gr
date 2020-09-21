@@ -165,6 +165,10 @@ public class SASUtilities {
 			jse.executeScript("window.scrollBy(0,250)", 0);
 			Thread.sleep(2000);
 		}
+		if((brand.equalsIgnoreCase("PrincipalSecret")) && (campaign.equalsIgnoreCase("Order30"))) {
+			jse.executeScript("window.scrollBy(0,250)", 0);
+			Thread.sleep(2000);
+		}
 		kit_elmt.click();	
 		Thread.sleep(2000);
 	

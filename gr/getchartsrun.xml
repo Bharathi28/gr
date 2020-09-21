@@ -2,9 +2,9 @@
 	<parameter name="daycount" value="1" />
 	<test name="CatchpointChartGenerationDaily">
 		<classes>
-			<class name="com.sns.gr.catchpoint.GetChartsDaily">
+			<class name="com.sns.gr.pingdom.GetCharts">
 				<methods>
-                    <include name="catchpointCharts" />
+                    <include name="pingdomCharts" />
                 </methods>
             </class>
 		</classes>
