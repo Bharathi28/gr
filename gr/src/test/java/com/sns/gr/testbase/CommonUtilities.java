@@ -401,4 +401,10 @@ public class CommonUtilities {
 	    }
 		return element;  
 	}
+	
+	public void waitUntilElementAppears(WebDriver driver, String xpath) {
+		while(driver.findElements(By.xpath(xpath)).size() == 0) {
+			// Do Nothing
+		}
+	}
 }

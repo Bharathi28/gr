@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sns.gr.testbase.DBLibrary;
+import com.sns.gr.testbase.DBUtilities;
 
 public class BuyflowUtilities {
 	
@@ -495,6 +496,7 @@ public class BuyflowUtilities {
 		WebDriverWait wait = new WebDriverWait(driver,50);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
+		String email = "";
 		
 		if(cc.equalsIgnoreCase("paypal")) {
 			if(realm.equalsIgnoreCase("R4")) {
@@ -509,153 +511,129 @@ public class BuyflowUtilities {
 			   driver.switchTo().window(winHandle);
 			   driver.manage().window().maximize();
 			   Thread.sleep(2000);
-			}			
-
-			Thread.sleep(10000);
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='loginSection']//div//div[2]//a")));	
-			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-			}			
+			}						
 			
-			Thread.sleep(3000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_emaildiv']//div//input")));			
-			driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
-			
-			if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
-				driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
+			if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
+				driver.close();
+//				driver.switchTo().window(winHandleBefore);
+				Thread.sleep(2000);
+				email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 			}
-			
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='login_passworddiv']//div//input")));	
-			driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
-			
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")));
-			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
-			
-//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[contains(text(),'Choose a way to pay')]")));
-			Thread.sleep(3000);
-			jse.executeScript("window.scrollBy(0,600)", 0);
-			Thread.sleep(8000);
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='payment-submit-btn']")));
-			driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
-			
-			
-//			WebElement select_cc_continue = driver.findElement(By.xpath("//div[@class='buttons reviewButton']//button"));
-//			wait.until(ExpectedConditions.elementToBeClickable(select_cc_continue));
-//			jse.executeScript("arguments[0].click();", select_cc_continue);		
-//			
-//			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='confirmButtonTop']")));	
-//			jse.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@id='confirmButtonTop']")));
-			
-			wait.until(ExpectedConditions.numberOfWindowsToBe(1));
-			driver.switchTo().window(winHandleBefore);
-			fill_form_field(driver, realm, "Agree", "");
-			return "testbuyer2@guthy-renker.com";
+			else {
+				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+			}			
 		}
 		else {
-			String alpha = RandomStringUtils.randomAlphabetic(9);
-			String num = RandomStringUtils.randomNumeric(4);
-//			String email = alpha + "-" + num + "@yopmail.com";
-			String email = alpha + "-" + num + "@mailnesia.com";
-			
-			fill_form_field(driver, realm, "Email", email.toLowerCase());
-			if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
-				driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
-			}
-			fill_form_field(driver, realm, "PhoneNumber", "8887878787");
-						
-//			if(brand.equalsIgnoreCase("Volaire")) {
-//				fill_form_field(driver, realm, "FirstName", "John");
-//				fill_form_field(driver, realm, "LastName", "Smith");
-//				fill_form_field(driver, realm, "AddressLine1", "1 Main St.");
-//			}
-//			else {
-				fill_form_field(driver, realm, "FirstName", firstName());
-				fill_form_field(driver, realm, "LastName", lastName());
-				fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
-//			}
-			
-//			fill_form_field(driver, realm, "AddressLine1", "8223 Belford Ave");
-			if(campaign.equalsIgnoreCase("ca")) {
-				fill_form_field(driver, realm, "City", "Anywhere");
-				fill_form_field(driver, realm, "State", "NB");		
-				fill_form_field(driver, realm, "Zip", "E3B7K6");
-			}
-			else {
-//				if(brand.equalsIgnoreCase("Volaire")) {
-//					fill_form_field(driver, realm, "City", "Burlington");
-//					fill_form_field(driver, realm, "State", "MA");	
-//				}
-//				else {
-					fill_form_field(driver, realm, "City", "El Segundo");
-					fill_form_field(driver, realm, "State", "CA");	
-//				}					
-				
-				if(supply.equalsIgnoreCase("30")) {		
-//					if(brand.equalsIgnoreCase("Volaire")) {
-//						fill_form_field(driver, realm, "Zip", "01803");
-//					}
-//					else {
-						fill_form_field(driver, realm, "Zip", "90245");
-//					}					
-				}
-				else if(supply.equalsIgnoreCase("90")) {
-					fill_form_field(driver, realm, "Zip", "81002");
-				}
-			}			
-							
-			Thread.sleep(2000);
-			WebElement shipbill_elmt = null;
-			if(driver.findElements(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']")).size() != 0) {
-				shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']"));
-			}
-			else if(driver.findElements(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']")).size() != 0) {
-				shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']"));
-			}
-			jse.executeScript("window.scrollBy(0,200)", 0);
-			if(shipbill.equalsIgnoreCase("same")) {
-				if(!(shipbill_elmt.isSelected())) {
-					shipbill_elmt.click();
-				}
-			}
-			else {
-				if(shipbill_elmt.isSelected()) {
-					shipbill_elmt.click();
-				}
-				
-				fill_form_field(driver, realm, "ShippingFirstName", firstName());
-				fill_form_field(driver, realm, "ShippingLastName", lastName());
-				fill_form_field(driver, realm, "ShippingAddressLine1", "123 Anywhere st");
-				fill_form_field(driver, realm, "ShippingCity", "Huntsville");
-				fill_form_field(driver, realm, "ShippingState", "AL");
-				fill_form_field(driver, realm, "ShippingZip", "35801");
-			}				
-
-			
-			if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
-				fill_form_field(driver, realm, "CardNumber", "4111111111111111");
-			}
-			else {
-//				if(brand.equalsIgnoreCase("Volaire")) {
-//					fill_form_field(driver, realm, "CardNumber", "4457010000000009");
-//				}
-//				else {
-					fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
-//				}				
-			}		
-			fill_form_field(driver, realm, "Month", "12");
-			fill_form_field(driver, realm, "Year", "2020");	
-			
-			if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
-//			if(brand.equalsIgnoreCase("Volaire")) {
-				fill_form_field(driver, realm, "CVV", "349");	
-			}
-			jse.executeScript("window.scrollBy(0,200)", 0);
-			Thread.sleep(2000);
-			fill_form_field(driver, realm, "Agree", "");
-			Thread.sleep(2000);
-			return (email.toLowerCase());
+			email = ccPayment(driver, jse, realm, brand, campaign, cc, shipbill, supply);
 		}
+		return email;
 	}	
+	
+	public String ccPayment(WebDriver driver, JavascriptExecutor jse, String realm, String brand, String campaign, String cc, String shipbill, String supply) throws ClassNotFoundException, SQLException, InterruptedException {
+		String alpha = RandomStringUtils.randomAlphabetic(9);
+		String num = RandomStringUtils.randomNumeric(4);
+		String email = alpha + "-" + num + "@mailnesia.com";
+		
+		fill_form_field(driver, realm, "Email", email.toLowerCase());
+		if((brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
+			driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
+		}
+		fill_form_field(driver, realm, "PhoneNumber", "8887878787");					
+		fill_form_field(driver, realm, "FirstName", firstName());
+		fill_form_field(driver, realm, "LastName", lastName());
+		fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
+
+		if(campaign.equalsIgnoreCase("ca")) {
+			fill_form_field(driver, realm, "City", "Anywhere");
+			fill_form_field(driver, realm, "State", "NB");		
+			fill_form_field(driver, realm, "Zip", "E3B7K6");
+		}
+		else {
+			fill_form_field(driver, realm, "City", "El Segundo");
+			fill_form_field(driver, realm, "State", "CA");					
+			
+			if(supply.equalsIgnoreCase("30")) {		
+				fill_form_field(driver, realm, "Zip", "90245");	
+			}
+			else if(supply.equalsIgnoreCase("90")) {
+				fill_form_field(driver, realm, "Zip", "81002");
+			}
+		}			
+						
+		Thread.sleep(2000);
+		WebElement shipbill_elmt = null;
+		if(driver.findElements(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']")).size() != 0) {
+			shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_personinf_useAsBillingAddress']"));
+		}
+		else if(driver.findElements(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']")).size() != 0) {
+			shipbill_elmt = driver.findElement(By.xpath("//input[@id='dwfrm_cart_billing_billingAddress_useAsShippingAddress']"));
+		}
+		jse.executeScript("window.scrollBy(0,200)", 0);
+		if(shipbill.equalsIgnoreCase("same")) {
+			if(!(shipbill_elmt.isSelected())) {
+				shipbill_elmt.click();
+			}
+		}
+		else {
+			if(shipbill_elmt.isSelected()) {
+				shipbill_elmt.click();
+			}
+			
+			fill_form_field(driver, realm, "ShippingFirstName", firstName());
+			fill_form_field(driver, realm, "ShippingLastName", lastName());
+			fill_form_field(driver, realm, "ShippingAddressLine1", "123 Anywhere st");
+			fill_form_field(driver, realm, "ShippingCity", "Huntsville");
+			fill_form_field(driver, realm, "ShippingState", "AL");
+			fill_form_field(driver, realm, "ShippingZip", "35801");
+		}		
+		
+		if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
+			fill_form_field(driver, realm, "CardNumber", "4111111111111111");
+		}
+		else {
+			fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
+		}		
+		fill_form_field(driver, realm, "Month", "12");
+		fill_form_field(driver, realm, "Year", "2020");	
+		
+		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+			fill_form_field(driver, realm, "CVV", "349");	
+		}
+		jse.executeScript("window.scrollBy(0,200)", 0);
+		Thread.sleep(2000);
+		fill_form_field(driver, realm, "Agree", "");
+		Thread.sleep(2000);
+		return (email.toLowerCase());
+	}
+	
+	public String paypalPayment(WebDriver driver, WebDriverWait wait, JavascriptExecutor jse, String winHandleBefore, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
+		comm_obj.waitUntilElementAppears(driver, "//div[@id='loginSection']//div//div[2]//a");
+		driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+			
+		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_emaildiv']//div//input");
+		driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
+		
+		if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
+			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
+		}
+			
+		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_passworddiv']//div//input");
+		driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
+		
+		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
+		
+		comm_obj.waitUntilElementAppears(driver, "//h2[@data-testid='paywith-title']");
+		jse.executeScript("window.scrollBy(0,500)", 0);
+		comm_obj.waitUntilElementAppears(driver, "//button[@id='payment-submit-btn']");
+
+		driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
+					
+		wait.until(ExpectedConditions.numberOfWindowsToBe(1));
+		driver.switchTo().window(winHandleBefore);
+		Thread.sleep(2000);
+		fill_form_field(driver, realm, "Agree", "");
+		return "testbuyer2@guthy-renker.com";
+	}
 	
 	public String getCCNumber(String cc) {
 		String ccnumber = "";
