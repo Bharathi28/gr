@@ -75,8 +75,10 @@ public class CXTValidation {
 		String realm = db_obj.get_realm(brand);
 		String actual = "";
 		String expected = "";
+		String remarks = "";
 				
 		//Step 1
+		int loginSuccess = 0;
 		List<String> output_row = new ArrayList<String>();
 		output_row.add(env);
 		output_row.add(brand);
@@ -88,11 +90,19 @@ public class CXTValidation {
 			expected = "Shop";
 		}
 		else if(realm.equalsIgnoreCase("R2")) {
-			actual = driver.findElement(By.xpath("//h2[@class='kit-section-header']")).getText();
+			if(driver.findElements(By.xpath("//h2[@class='kit-section-header']")).size() != 0) {
+				actual = driver.findElement(By.xpath("//h2[@class='kit-section-header']")).getText();
+			}
+			else {
+				if(driver.findElements(By.xpath("//div[@class='form-error errorCode errorContainer']")).size() != 0){
+					remarks = "Login Failed - " + driver.findElement(By.xpath("//div[@class='form-error errorCode errorContainer']")).getText();
+				}
+			}			
 			expected = "My Next Kit";
 		}
 		
 		if(actual.equals(expected)) {
+			loginSuccess = 1;
 			System.out.println(brand + "- Step 1 - Login Successful");		
 			output_row.add("PASS");
 			cxt_obj.takeScreenshot(driver, brand, "login", "Success", "visiblepart");
@@ -100,404 +110,428 @@ public class CXTValidation {
 		else {
 			System.out.println(brand + "- Step 1 - Login Unsuccessful");			
 			output_row.add("FAIL");
-			output_row.add("Login Unsuccessful");
+			output_row.add(remarks);
 			cxt_obj.takeScreenshot(driver, brand, "login", "Failure", "visiblepart");
 		}
 		output.add(output_row);
 		Thread.sleep(1000);
 		
-		//Step 2
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Navigate away - To Google");
-		driver.get("http://www.google.com/");
-		actual = cxt_obj.getPageTitle(driver);
-		expected = "Google";
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 2 - Navigating away is Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "googlenavigation", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 2 - Navigating away is Unsuccessful");		
-			output_row.add("FAIL");
-			output_row.add("Navigating away is Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "googlenavigation", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-				
-		//Step 3
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Soft Login");	
-		url = db_obj.getUrl(brand, campaign, env);
-		driver.get(url);
-		String message = "";
-		if (realm.equals("R4")) {
-			actual = cxt_obj.getPageTitle(driver);
-			expected = "Shop";
-			message = "Softlogin";
-		}
-		else if(realm.equalsIgnoreCase("R2")) {
-			actual = driver.findElement(By.xpath("//h2[@class='kit-section-header']")).getText();
-			expected = "My Next Kit";
-			message = "Softlogin/Navigation to My Next Kit";
-		}
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 3 - "+ message +" Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "softlogin", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 3 - "+ message +" Unsuccessful");	
-			output_row.add("FAIL");
-			output_row.add(message + " Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "softlogin", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-				
-		if(realm.equals("R4")) {
-			//Step 4
+		if(loginSuccess == 1) {
+			//Step 2
 			output_row = new ArrayList<String>();
 			output_row.add(env);
 			output_row.add(brand);
 			output_row.add(campaign);
-			output_row.add("Navigation to My Next kit Page");
-			cxt_obj.moveToMyNextKit(driver, brand, campaign);
-			actual = driver.findElement(By.xpath("//h1[@class='text-center']")).getText();
-			expected = "My Next Kit";
-			if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))){
-				expected = expected.toUpperCase();
-			}
-			
+			output_row.add("Navigate away - To Google");
+			driver.get("http://www.google.com/");
+			actual = cxt_obj.getPageTitle(driver);
+			expected = "Google";
 			if(actual.equals(expected)) {
-				System.out.println(brand + "- Step 4 - Navigation To MyNextKit is Successful");		
+				System.out.println(brand + "- Step 2 - Navigating away is Successful");	
 				output_row.add("PASS");
-				cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Success", "fullpage");
+				cxt_obj.takeScreenshot(driver, brand, "googlenavigation", "Success", "visiblepart");
 			}
 			else {
-				System.out.println(brand + "- Step 4 - Navigation To MyNextKit is Unsuccessful");		
+				System.out.println(brand + "- Step 2 - Navigating away is Unsuccessful");		
 				output_row.add("FAIL");
-				output_row.add("Navigation To MyNextKit is Unsuccessful");
-				cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Failure", "fullpage");
+				output_row.add("Navigating away is Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "googlenavigation", "Failure", "visiblepart");
 			}
 			output.add(output_row);
-		}		
-		jse.executeScript("window.scrollTo(0, 0)", 0);
-		Thread.sleep(2000);
-		
-		//Step 5 - Reschedule Shipment
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Reschedule Shipment");
-		if(postponedays.equalsIgnoreCase("0.0")) {		
-			System.out.println(brand + "- Step 5 - Reschedule Shipment - Could not verify");		
-			output_row.add("FAIL");
-			output_row.add("Could not validate Reschedule Shipment");
-		}		
-		else {				
-			String format = "";
-			if(realm.equals("R4")) {
-				format = "MMM dd, yyyy";
+					
+			//Step 3
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Soft Login");	
+			url = db_obj.getUrl(brand, campaign, env);
+			driver.get(url);
+			String message = "";
+			if (realm.equals("R4")) {
+				actual = cxt_obj.getPageTitle(driver);
+				expected = "Shop";
+				message = "Softlogin";
+			}
+			else if(realm.equalsIgnoreCase("R2")) {
+				actual = driver.findElement(By.xpath("//h2[@class='kit-section-header']")).getText();
+				expected = "My Next Kit";
+				message = "Softlogin/Navigation to My Next Kit";
+			}
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 3 - "+ message +" Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "softlogin", "Success", "visiblepart");
 			}
 			else {
-				format = "E MMM dd yyyy";
-			}
-			
-			Calendar now = Calendar.getInstance();		
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			
-			double ddays = Double.parseDouble(postponedays);
-			int days = (int) ddays;
-			now.add(Calendar.DAY_OF_MONTH, days); 
-			String expecteddate = sdf.format(now.getTime()); 	
-			
-			String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
-			if(actualdate.contains("FAIL")) {
-				System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
+				System.out.println(brand + "- Step 3 - "+ message +" Unsuccessful");	
 				output_row.add("FAIL");
-				output_row.add(actualdate);
-				cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
+				output_row.add(message + " Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "softlogin", "Failure", "visiblepart");
 			}
-			else {
-				if (realm.equals("R4")) {
-					actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
-				}		
-				else {
-					actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
+			output.add(output_row);
+					
+			if(realm.equals("R4")) {
+				//Step 4
+				output_row = new ArrayList<String>();
+				output_row.add(env);
+				output_row.add(brand);
+				output_row.add(campaign);
+				output_row.add("Navigation to My Next kit Page");
+				cxt_obj.moveToMyNextKit(driver, brand, campaign);
+				actual = driver.findElement(By.xpath("//h1[@class='text-center']")).getText();
+				expected = "My Next Kit";
+				if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))){
+					expected = expected.toUpperCase();
 				}
-				expected = "Success! Your next shipment has been rescheduled.";			
-						System.out.println(brand + " --"+actualdate+"--");
-						System.out.println(brand + " --"+expecteddate+"--");
-				if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
-					System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
+				
+				if(actual.equals(expected)) {
+					System.out.println(brand + "- Step 4 - Navigation To MyNextKit is Successful");		
 					output_row.add("PASS");
-					cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
+					cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Success", "fullpage");
 				}
 				else {
+					System.out.println(brand + "- Step 4 - Navigation To MyNextKit is Unsuccessful");		
+					output_row.add("FAIL");
+					output_row.add("Navigation To MyNextKit is Unsuccessful");
+					cxt_obj.takeScreenshot(driver, brand, "mynextkit", "Failure", "fullpage");
+				}
+				output.add(output_row);
+			}		
+			jse.executeScript("window.scrollTo(0, 0)", 0);
+			Thread.sleep(2000);
+			
+			//Step 5 - Reschedule Shipment
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Reschedule Shipment");
+			if(postponedays.equalsIgnoreCase("0.0")) {		
+				System.out.println(brand + "- Step 5 - Reschedule Shipment - Could not verify");		
+				output_row.add("FAIL");
+				output_row.add("Could not validate Reschedule Shipment");
+			}		
+			else {				
+				String format = "";
+				if(realm.equals("R4")) {
+					format = "MMM dd, yyyy";
+				}
+				else {
+					format = "E MMM dd yyyy";
+				}
+				
+				Calendar now = Calendar.getInstance();		
+				SimpleDateFormat sdf = new SimpleDateFormat(format);
+				
+				double ddays = Double.parseDouble(postponedays);
+				int days = (int) ddays;
+				now.add(Calendar.DAY_OF_MONTH, days); 
+				String expecteddate = sdf.format(now.getTime()); 	
+				
+				String actualdate = cxt_obj.rescheduleShipment(driver, brand, expecteddate, now);		
+				if(actualdate.contains("FAIL")) {
 					System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
 					output_row.add("FAIL");
-					output_row.add("Reschedule Shipment Unsuccessful");
+					output_row.add(actualdate);
 					cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
 				}
+				else {
+					if (realm.equals("R4")) {
+						actual = driver.findElement(By.xpath("//div[@class='success clearfix']")).getText();
+					}		
+					else {
+						actual = driver.findElement(By.xpath("//div[@class='message box-sucess']")).getText();
+					}
+					expected = "Success! Your next shipment has been rescheduled.";			
+							System.out.println(brand + " --"+actualdate+"--");
+							System.out.println(brand + " --"+expecteddate+"--");
+					if((actual.equals(expected)) && (actualdate.equalsIgnoreCase(expecteddate))){
+						System.out.println(brand + "- Step 5 - Reschedule Shipment Successful");	
+						output_row.add("PASS");
+						cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Success", "visiblepart");
+					}
+					else {
+						System.out.println(brand + "- Step 5 - Reschedule Shipment Unsuccessful");		
+						output_row.add("FAIL");
+						output_row.add("Reschedule Shipment Unsuccessful");
+						cxt_obj.takeScreenshot(driver, brand, "postponeshipment", "Failure", "visiblepart");
+					}
+				}		
+				output.add(output_row);
 			}		
-			output.add(output_row);
-		}		
-				
-		//Step 6
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Navigation to Order History Page");
-		cxt_obj.ShiftTabsCXT(driver, brand, campaign, "OrderHistory");		
-		
-		if (realm.equals("R4")) {
-			actual = driver.findElement(By.xpath("//h1[@class='page-title text-center']")).getText();
-		}
-		else if(realm.equalsIgnoreCase("R2")) {
-			actual = driver.findElement(By.xpath("//h1[contains(text(),'Order History')]")).getText();
-		}
-		expected = "Order History";
-		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
-			expected = expected.toUpperCase();
-		}
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 6 - Navigation To OrderHistory is Successful");
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "orderhistory", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 6 - Navigation To OrderHistory is Unsuccessful");
-			output_row.add("FAIL");
-			output_row.add("Navigation To OrderHistory is Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "orderhistory", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-				
-		//Step 7
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Navigation to My Profile Page");
-		cxt_obj.ShiftTabsCXT(driver, brand, campaign, "MyProfile");		
-		
-		if (realm.equals("R4")) {
-			actual = driver.findElement(By.xpath("//h1[@class='text-center']")).getText();
-		}
-		else if(realm.equalsIgnoreCase("R2")) {
-			actual = driver.findElement(By.xpath("//h1[contains(text(),'My Profile')]")).getText();
-		}
-		expected = "My Profile";
-		if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
-			expected = expected.toUpperCase();
-		}
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 7 - Navigation To MyProfile is Successful");
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "myprofile", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 7 - Navigation To MyProfile is Unsuccessful");	
-			output_row.add("FAIL");
-			output_row.add("Navigation To MyProfile is Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "myprofile", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-		
-		//Step 8
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Navigation to Shop Page");
-		cxt_obj.ShiftTabsCXT(driver, brand, campaign, "Shop");	
-		
-		if (realm.equals("R4")) {
-			if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("Mally"))) {
-				actual = cxt_obj.getPageTitle(driver);
+					
+			//Step 6
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Navigation to Order History Page");
+			cxt_obj.ShiftTabsCXT(driver, brand, campaign, "OrderHistory");		
+			
+			if (realm.equals("R4")) {
+				actual = driver.findElement(By.xpath("//h1[@class='page-title text-center']")).getText();
+			}
+			else if(realm.equalsIgnoreCase("R2")) {
+				actual = driver.findElement(By.xpath("//h1[contains(text(),'Order History')]")).getText();
+			}
+			expected = "Order History";
+			if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+				expected = expected.toUpperCase();
+			}
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 6 - Navigation To OrderHistory is Successful");
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "orderhistory", "Success", "visiblepart");
 			}
 			else {
-				actual = driver.findElement(By.xpath("//h1[@class='page-title text-center']")).getText();
-			}			
-		}
-		else if(realm.equalsIgnoreCase("R2")) {
-			actual = driver.findElement(By.xpath("//h2[contains(text(),'Shop')]")).getText();
-		}
-		expected = "Shop";		
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 8 - Navigation To Shop is Successful");
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "shop", "Success", "fullpage");
-		}
-		else {
-			System.out.println(brand + "- Step 8 - Navigation To Shop is Unsuccessful");
-			output_row.add("FAIL");
-			output_row.add("Navigation To Shop is Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "shop", "Failure", "fullpage");
-		}
-		jse.executeScript("window.scrollTo(0, 0)", 0);
-		Thread.sleep(2000);
-		output.add(output_row);
-				
-		//Step 9
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Add Product to KC");	
-		cxt_obj.addProductToKC(driver, brand, campaign);
-		if(realm.equals("R4")) {			
+				System.out.println(brand + "- Step 6 - Navigation To OrderHistory is Unsuccessful");
+				output_row.add("FAIL");
+				output_row.add("Navigation To OrderHistory is Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "orderhistory", "Failure", "visiblepart");
+			}
+			output.add(output_row);
+					
+			//Step 7
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Navigation to My Profile Page");
+			cxt_obj.ShiftTabsCXT(driver, brand, campaign, "MyProfile");		
 			
-			if(driver.findElements(By.xpath("//span[@class='sucess-msg']")).size() != 0) {
-				String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
-				actual = successmsg.replace(" ", "");
+			if (realm.equals("R4")) {
+				actual = driver.findElement(By.xpath("//h1[@class='text-center']")).getText();
 			}
-			else if(driver.findElements(By.xpath("//p[@class='error']")).size() != 0){
-				String errormsg = driver.findElement(By.xpath("//p[@class='error']")).getText().trim();
-				actual = errormsg;
+			else if(realm.equalsIgnoreCase("R2")) {
+				actual = driver.findElement(By.xpath("//h1[contains(text(),'My Profile')]")).getText();
 			}
+			expected = "My Profile";
+			if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+				expected = expected.toUpperCase();
+			}
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 7 - Navigation To MyProfile is Successful");
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "myprofile", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 7 - Navigation To MyProfile is Unsuccessful");	
+				output_row.add("FAIL");
+				output_row.add("Navigation To MyProfile is Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "myprofile", "Failure", "visiblepart");
+			}
+			output.add(output_row);
+			
+			//Step 8
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Navigation to Shop Page");
+			cxt_obj.ShiftTabsCXT(driver, brand, campaign, "Shop");	
+			
+			if (realm.equals("R4")) {
+				if((brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("Mally"))) {
+					actual = cxt_obj.getPageTitle(driver);
+				}
+				else {
+					actual = driver.findElement(By.xpath("//h1[@class='page-title text-center']")).getText();
+				}			
+			}
+			else if(realm.equalsIgnoreCase("R2")) {
+				actual = driver.findElement(By.xpath("//h2[contains(text(),'Shop')]")).getText();
+			}
+			expected = "Shop";		
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 8 - Navigation To Shop is Successful");
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "shop", "Success", "fullpage");
+			}
+			else {
+				System.out.println(brand + "- Step 8 - Navigation To Shop is Unsuccessful");
+				output_row.add("FAIL");
+				output_row.add("Navigation To Shop is Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "shop", "Failure", "fullpage");
+			}
+			jse.executeScript("window.scrollTo(0, 0)", 0);
+			Thread.sleep(2000);
+			output.add(output_row);
+					
+			//Step 9
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Add Product to KC");	
+			cxt_obj.addProductToKC(driver, brand, campaign);
+			if(realm.equals("R4")) {					
+				if(driver.findElements(By.xpath("//p[@class='error']")).size() != 0){
+					String errormsg = driver.findElement(By.xpath("//p[@class='error']")).getText().trim();
+					actual = errormsg;
+				}
+				else if(driver.findElements(By.xpath("//span[@class='sucess-msg']")).size() != 0) {
+					String successmsg = driver.findElement(By.xpath("//span[@class='sucess-msg']")).getText().trim();
+					actual = successmsg.replace(" ", "");
+				}
+					
+				expected = "Thankyouforloving" + brand;
+				if(brand.equals("Mally")) {
+					expected = expected+"Beauty";
+				}
 				
-			expected = "Thankyouforloving" + brand;
-			if(brand.equals("Mally")) {
-				expected = expected+"Beauty";
+				System.out.println(actual);
+				System.out.println(expected);
+			}
+			else {
+				if(driver.findElements(By.xpath("//div[@class='message error']")).size() != 0){
+					String errormsg = driver.findElement(By.xpath("//div[@class='message error']")).getText().trim();
+					actual = errormsg;
+				}
+				else if(driver.findElements(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).size() != 0) {
+					String successmsg = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText().trim();
+					actual = successmsg;
+				}			
+				
+				expected = "Success! Your kit has been updated.";
+			}
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 9 - Adding Product to KC Successful");
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "addtokc", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 9 - Adding Product to KC Unsuccessful");		
+				output_row.add("FAIL");
+				output_row.add(actual);
+				cxt_obj.takeScreenshot(driver, brand, "addtokc", "Failure", "visiblepart");
+			}
+			output.add(output_row);
+					
+			//Step 10
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Remove Product from KC");
+			int number_before = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
+			Thread.sleep(2000);
+			cxt_obj.removeProductFromKC(driver, brand);
+			if(realm.equals("R4")) {			
+				
+				if(driver.findElements(By.xpath("//p[@class='error']")).size() != 0){
+					String errormsg = driver.findElement(By.xpath("//p[@class='error']")).getText().trim();
+					actual = errormsg;
+				}
+				else {
+					int number_after = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
+					if(number_before == (number_after + 1)) {
+						actual = "PASS";
+					}
+				}			
+				expected = "PASS";
+				
+				System.out.println("Remove from KC");
+				System.out.println(actual);
+				System.out.println(expected);
+			}
+			else {
+				if(driver.findElements(By.xpath("//div[@class='message error']")).size() != 0){
+					String errormsg = driver.findElement(By.xpath("//div[@class='message error']")).getText().trim();
+					actual = errormsg;
+				}
+				else if(driver.findElements(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).size() != 0) {
+					String successmsg = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText().trim();
+					actual = successmsg;
+				}	
+				
+				expected = "Success! Your kit has been updated.";
+			}
+			if(actual.equals(expected)) {
+				System.out.println(brand + "- Step 10 - Removing Product from KC Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "removefromkc", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 10 - Removing Product from KC Unsuccessful");		
+				output_row.add("FAIL");
+				output_row.add(actual);
+				cxt_obj.takeScreenshot(driver, brand, "removefromkc", "Failure", "visiblepart");
+			}
+			output.add(output_row);
+			
+			//Step 11
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Add Product to Cart");
+			cxt_obj.removeAllProductsfromCart(driver, brand, campaign);
+			Thread.sleep(2000);
+			String addtocartresult = cxt_obj.addProductToCart(driver, brand, campaign);
+			if(addtocartresult.equals("PASS")) {
+				System.out.println(brand + "- Step 11 - Adding product to Cart Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "addtocart", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 11 - Adding product to Cart Unsuccessful");		
+				output_row.add("FAIL");
+				output_row.add("Adding product to Cart Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "addtocart", "Failure", "visiblepart");
+			}
+			output.add(output_row);
+			
+			//Step 12
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Remove Product from Cart");
+			String rmcartresult = cxt_obj.removeProductfromCart(driver, brand, campaign);
+			if(rmcartresult.equals("PASS")) {
+				System.out.println(brand + "- Step 12 - Removing product from Cart Successful");	
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "removefromcart", "Success", "visiblepart");
+			}
+			else {
+				System.out.println(brand + "- Step 12 - Removing product from Cart Unsuccessful");		
+				output_row.add("FAIL");
+				output_row.add("Removing product from Cart Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "removefromcart", "Failure", "visiblepart");
+			}
+			output.add(output_row);						
+					
+			//Step 13
+			output_row = new ArrayList<String>();
+			output_row.add(env);
+			output_row.add(brand);
+			output_row.add(campaign);
+			output_row.add("Logout");
+			cxt_obj.LogoutCXT(driver, brand, campaign);
+			if((brand.equalsIgnoreCase("ITCosmetics")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("CrepeErase"))){
+				actual = driver.getCurrentUrl();
+				expected = "login";
+			}
+			else {
+				actual = cxt_obj.getPageTitle(driver);
+				expected = "Login";
 			}
 			
-			System.out.println(actual);
-			System.out.println(expected);
-		}
-		else {
-			actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
-			expected = "Success! Your kit has been updated.";
-		}
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 9 - Adding Product to KC Successful");
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "addtokc", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 9 - Adding Product to KC Unsuccessful");		
-			output_row.add("FAIL");
-			output_row.add(actual);
-			cxt_obj.takeScreenshot(driver, brand, "addtokc", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-				
-		//Step 10
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Remove Product from KC");
-		int number_before = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
-		Thread.sleep(2000);
-		cxt_obj.removeProductFromKC(driver, brand);
-		if(realm.equals("R4")) {			
-			
-			int number_after = cxt_obj.getNumberofProductsinKC(driver, realm, brand);
-			if(number_before == (number_after + 1)) {
-				actual = expected = "PASS";
+			if(actual.contains(expected)) {
+				System.out.println(brand + "- Step 13 - Logout Successful");
+				output_row.add("PASS");
+				cxt_obj.takeScreenshot(driver, brand, "logout", "Success", "visiblepart");
 			}
-			System.out.println("Remove from KC");
-			System.out.println(actual);
-			System.out.println(expected);
+			else {
+				System.out.println(brand + "- Step 13 - Logout Unsuccessful");	
+				output_row.add("FAIL");
+				output_row.add("Logout Unsuccessful");
+				cxt_obj.takeScreenshot(driver, brand, "logout", "Failure", "visiblepart");
+			}
+			output.add(output_row);
 		}
-		else {
-			actual = driver.findElement(By.xpath("//span[@class='hide-for-small-only sucess-msg']")).getText();
-			expected = "Success! Your kit has been updated.";
-		}
-		if(actual.equals(expected)) {
-			System.out.println(brand + "- Step 10 - Removing Product from KC Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "removefromkc", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 10 - Removing Product from KC Unsuccessful");		
-			output_row.add("FAIL");
-			output_row.add(actual);
-			cxt_obj.takeScreenshot(driver, brand, "removefromkc", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-		
-		//Step 11
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Add Product to Cart");
-		cxt_obj.removeAllProductsfromCart(driver, brand, campaign);
-		Thread.sleep(2000);
-		String addtocartresult = cxt_obj.addProductToCart(driver, brand, campaign);
-		if(addtocartresult.equals("PASS")) {
-			System.out.println(brand + "- Step 11 - Adding product to Cart Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "addtocart", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 11 - Adding product to Cart Unsuccessful");		
-			output_row.add("FAIL");
-			output_row.add("Adding product to Cart Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "addtocart", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-		
-		//Step 12
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Remove Product from Cart");
-		String rmcartresult = cxt_obj.removeProductfromCart(driver, brand, campaign);
-		if(rmcartresult.equals("PASS")) {
-			System.out.println(brand + "- Step 12 - Removing product from Cart Successful");	
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "removefromcart", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 12 - Removing product from Cart Unsuccessful");		
-			output_row.add("FAIL");
-			output_row.add("Removing product from Cart Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "removefromcart", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-						
-				
-		//Step 13
-		output_row = new ArrayList<String>();
-		output_row.add(env);
-		output_row.add(brand);
-		output_row.add(campaign);
-		output_row.add("Logout");
-		cxt_obj.LogoutCXT(driver, brand, campaign);
-		if((brand.equalsIgnoreCase("ITCosmetics")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("CrepeErase"))){
-			actual = driver.getCurrentUrl();
-			expected = "login";
-		}
-		else {
-			actual = cxt_obj.getPageTitle(driver);
-			expected = "Login";
-		}
-		
-		if(actual.contains(expected)) {
-			System.out.println(brand + "- Step 13 - Logout Successful");
-			output_row.add("PASS");
-			cxt_obj.takeScreenshot(driver, brand, "logout", "Success", "visiblepart");
-		}
-		else {
-			System.out.println(brand + "- Step 13 - Logout Unsuccessful");	
-			output_row.add("FAIL");
-			output_row.add("Logout Unsuccessful");
-			cxt_obj.takeScreenshot(driver, brand, "logout", "Failure", "visiblepart");
-		}
-		output.add(output_row);
-		driver.close();
+		driver.quit();
 	}		
 	
 	@AfterSuite

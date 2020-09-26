@@ -79,7 +79,7 @@ public class ConsoleUtilities {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.addRecipients(Message.RecipientType.CC, 
-	                InternetAddress.parse("aaqil@searchnscore.com,manibharathi@searchnscore.com,yzewdie@guthy-renker.com"));
+	                InternetAddress.parse("aaqil@searchnscore.com,manibharathi@searchnscore.com"));
 //			message.addRecipients(Message.RecipientType.CC, 
 //	                InternetAddress.parse("manibharathi@searchnscore.com"));
 			message.setSubject(subject);

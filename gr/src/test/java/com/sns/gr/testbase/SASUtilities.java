@@ -429,7 +429,7 @@ public class SASUtilities {
 			} 			
 			Thread.sleep(1000);
 			WebElement duo_elmt = comm_obj.find_webelement(driver, duo_loc.get(0).get("ELEMENTLOCATOR").toString(), duo_loc.get(0).get("ELEMENTVALUE").toString());
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			duo_elmt.click();
 			Thread.sleep(2000);
 		}	

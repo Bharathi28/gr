@@ -535,12 +535,13 @@ public class BuyflowUtilities {
 		String email = alpha + "-" + num + "@mailnesia.com";
 		
 		fill_form_field(driver, realm, "Email", email.toLowerCase());
-		if((brand.equalsIgnoreCase("CrepeErase"))||(brand.equalsIgnoreCase("MeaningfulBeauty"))){
+		if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
 			driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 		}
 		fill_form_field(driver, realm, "PhoneNumber", "8887878787");					
 		fill_form_field(driver, realm, "FirstName", firstName());
 		fill_form_field(driver, realm, "LastName", lastName());
+//		fill_form_field(driver, realm, "AddressLine1", "15149 Georgia Ave");
 		fill_form_field(driver, realm, "AddressLine1", "123 QATest st");
 
 		if(campaign.equalsIgnoreCase("ca")) {
@@ -549,10 +550,12 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "Zip", "E3B7K6");
 		}
 		else {
+//			fill_form_field(driver, realm, "City", "Paramount");
 			fill_form_field(driver, realm, "City", "El Segundo");
 			fill_form_field(driver, realm, "State", "CA");					
 			
 			if(supply.equalsIgnoreCase("30")) {		
+//				fill_form_field(driver, realm, "Zip", "90723");	
 				fill_form_field(driver, realm, "Zip", "90245");	
 			}
 			else if(supply.equalsIgnoreCase("90")) {
@@ -586,7 +589,7 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "ShippingState", "AL");
 			fill_form_field(driver, realm, "ShippingZip", "35801");
 		}		
-		
+				
 		if((supply.equalsIgnoreCase("90")) && (brand.equalsIgnoreCase("Volaire"))){	
 			fill_form_field(driver, realm, "CardNumber", "4111111111111111");
 		}
@@ -596,7 +599,7 @@ public class BuyflowUtilities {
 		fill_form_field(driver, realm, "Month", "12");
 		fill_form_field(driver, realm, "Year", "2020");	
 		
-		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
 			fill_form_field(driver, realm, "CVV", "349");	
 		}
 		jse.executeScript("window.scrollBy(0,200)", 0);
@@ -608,6 +611,7 @@ public class BuyflowUtilities {
 	
 	public String paypalPayment(WebDriver driver, WebDriverWait wait, JavascriptExecutor jse, String winHandleBefore, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
 		comm_obj.waitUntilElementAppears(driver, "//div[@id='loginSection']//div//div[2]//a");
+		Thread.sleep(4000);
 		driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			
 		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_emaildiv']//div//input");

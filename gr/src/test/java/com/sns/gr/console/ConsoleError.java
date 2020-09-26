@@ -48,7 +48,7 @@ public class ConsoleError {
 	StringBuilder strfull = new StringBuilder();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "";
+	String sendReportTo = "yzewdie@guthy-renker.com";
 	@BeforeSuite
 	public void getEmailId() {
 		//System.out.println("Enter Email id : ");
@@ -116,6 +116,6 @@ public class ConsoleError {
 		}	
 	@Test
 	public void sendmail() {
-		co_obj.sendEmail("Console Errors for the brands in PROD", "banuchitra@searchnscore.com", strfull);
+		co_obj.sendEmail("Console Errors for the brands in PROD", sendReportTo, strfull);
 	}
 }

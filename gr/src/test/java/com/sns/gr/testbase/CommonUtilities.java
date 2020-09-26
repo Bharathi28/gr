@@ -266,6 +266,7 @@ public class CommonUtilities {
 			header_list.add("Campaign");
 			header_list.add("Testcase");
 			header_list.add("Result");
+			header_list.add("Remarks");
 		}
 		
 		XSSFRow firstRow = resultSheet.createRow(0);

@@ -146,6 +146,7 @@ public class CartLanguageParallel {
 									
 				System.out.println(offer.get("DESCRIPTION").toString());
 					
+				Thread.sleep(3000);
 				String cart_lang = lang_obj.get_cart_language(driver, brand);						
 				if(cart_lang.equalsIgnoreCase("No Cart Language")) {
 					cart_lang_price = " ";
@@ -192,6 +193,7 @@ public class CartLanguageParallel {
 					bf_obj.complete_order(driver, brand, "VISA");
 					bf_obj.upsell_confirmation(driver, brand, campaign, "Yes");
 					
+					Thread.sleep(4000);
 					ppid = lang_obj.get_ppid(driver, brand, campaign, offer);		
 					cart_lang = lang_obj.get_cart_language(driver, brand);												
 					lang_price_arr = lang_obj.parse_cart_language(cart_lang);

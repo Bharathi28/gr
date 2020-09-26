@@ -149,7 +149,8 @@ public class CXTUtilities {
 		System.out.println("Brand Maxlimit : " + maxlimit);
 		System.out.println("No.of products in KC : " + kcproductcount);
 		boolean addtokc = false;
-		if((kcproductcount >= minlimit) && (kcproductcount < maxlimit)) {
+//		if((kcproductcount >= minlimit) && (kcproductcount < maxlimit)) {
+		if(kcproductcount < maxlimit) {
 			addtokc = true;
 		}
 		else {
@@ -201,8 +202,11 @@ public class CXTUtilities {
 		String prodName = randProd.get("DESCRIPTION").toString();
 		System.out.println("Chosen Product : " + prodPPID + " " + prodName);
 		select_cxt_offer(driver, randProd, realm);
+		Thread.sleep(3000);
 		if(realm.equals("R4")) {
+			// No Radio buttons for SeaCalmSkin
 			if(!(brand.equalsIgnoreCase("SeaCalmSkin"))) {
+				// If there are two radio inputs, choose "Buy Now"
 				if(checkAddToKitOption(brand, campaign, prodPPID)) {
 					driver.findElement(By.xpath("//li[contains(@class,'one-time ')]//label//span[@class='pdp-radio pixels_pdp-radio']//input")).click();
 				}
@@ -389,10 +393,14 @@ public class CXTUtilities {
 				}			
 			}
 			else {
-				System.out.println("Product could not be added since Kit Customizer has maximum number of products.");
-				System.out.println("Hence removing 1 product from KC and proceeding with Addition to KC");
-				removeProductFromKC(driver, brand);
-				temp = 1;
+				// Check against a random number - 3 to find if KC has maximum or minimum number of products
+				// Remove product only if there is maximum count in KC
+//				if(getNumberofProductsinKC(driver, realm, brand) > 3) {
+					System.out.println("Product could not be added since Kit Customizer has maximum number of products.");
+					System.out.println("Hence removing 1 product from KC and proceeding with Addition to KC");
+					removeProductFromKC(driver, brand);
+					temp = 1;
+//				}			
 			}
 		}
 	}
@@ -404,20 +412,28 @@ public class CXTUtilities {
 		
 		if(realm.equals("R4")) {
 			driver.findElement(By.xpath("//button[@id='add-to-cart']/..//button[2]")).click();
-			String display = "none";
-			while(display.equals("none")) {
-				// Wait until success text appears
-				display = driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']")).getAttribute("style");
-				if(display.contains("block")) {
-					display = "block";
+			String display = "true";
+			while(display.equals("true")) {
+				// Wait until success popup appears
+				display = driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']")).getAttribute("aria-hidden");
+				if(display.contains("false")) {
+					display = "false";
 				}
 				else {
-					display = "none";
+					// Still hidden
+					display = "true";
+					
+					// Also check if there is any error
+					if(driver.findElements(By.xpath("//p[@class='error']")).size() != 0){
+						break;
+					}
 				}
 			}		
-			Thread.sleep(1000);
-			driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='OK ']")).click();
-			Thread.sleep(1000);
+			if(display.equals("false")) {
+				Thread.sleep(1000);
+				driver.findElement(By.xpath("//div[@id='itemAddedToKitPopup']//div[@class='confirm-now-popup']//div//button[text()='OK ']")).click();
+				Thread.sleep(1000);
+			}			
 		}
 		else {
 			driver.findElement(By.xpath("//button[@class='addBtn cxt-button secondary-button-small']")).click();
@@ -588,7 +604,7 @@ public class CXTUtilities {
 			
 			String errormsg = "";
 			if(realm.equals("R2")) {
-				if(driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText().contains("We're sorry")) {
+				if(driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText().contains("We")) {
 					rescheduleresult = "FAIL - " + driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText();;
 					errormsg = driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']//div[@class='info']")).getText();
 					Thread.sleep(1000);
@@ -596,7 +612,15 @@ public class CXTUtilities {
 				}
 			}		
 			else {
-				
+				if(driver.findElements(By.xpath("//div[@id='shipKitNowErrorPopup']")).size() != 0) {
+					if(driver.findElement(By.xpath("//div[@id='shipKitNowErrorPopup']")).getAttribute("aria-hidden").equalsIgnoreCase("false")) {
+						System.out.println("matched");
+						rescheduleresult = "FAIL - " + driver.findElement(By.xpath("//div[@class='ship-now-error-popup']//div[@class='info']")).getText();;
+						errormsg = driver.findElement(By.xpath("//div[@class='ship-now-error-popup']//div[@class='info']")).getText();
+						Thread.sleep(1000);
+						driver.findElement(By.xpath("//div[@class='ship-now-error-popup']//div[3]//button")).click();
+					}
+				}
 			}
 			
 			if(errormsg.equalsIgnoreCase("")) {

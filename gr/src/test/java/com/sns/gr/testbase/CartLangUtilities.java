@@ -172,54 +172,47 @@ public class CartLangUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String cart_lang = "";		
 		if(realm.equalsIgnoreCase("R4")) {
-
-			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
-				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
+			if(driver.findElements(By.xpath("//div[@class='continuity-summary']")).size() != 0) {
+				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']")).getText();
 			}
-			int size = driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size();
-			if(size == 1) {
-				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText();
-			}
-			else if(size == 2) {
-				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText() + driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[2]")).getText();
-			}
-
-			
-			/*if(brand.equalsIgnoreCase("MeaningfulBeauty")) {
-				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
-					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText().contains("$")) {
-						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
-					}
-				}
-				else {
-					cart_lang = "No Cart Language";
-				}
-
-			}*/
 			else {
-				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
-					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText().contains("$")) {
-						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
-					}
-				}
-				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
-					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText().contains("$")) {
-						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
-					}
-				}
-				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).size() != 0) {
-					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).getText().contains("$")) {
-						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).getText();
-					}
-				}
-				else {
-					cart_lang = "No Cart Language";
-				}
+				cart_lang = "No Cart Language";
 			}
-			
-			
+
+//			if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
+//				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
+//			}
+//			int size = driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size();
+//			if(size == 1) {
+//				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText();
+//			}
+//			else if(size == 2) {
+//				cart_lang = driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[1]")).getText() + driver.findElement(By.xpath("(//div[@class='continuity-summary']//p//strong)[2]")).getText();
+//			}
+//			else {
+//				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p")).size() != 0) {
+//					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText().contains("$")) {
+//						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p")).getText();
+//					}
+//				}
+//				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong")).size() != 0) {
+//					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText().contains("$")) {
+//						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong")).getText();
+//					}
+//				}
+//				if(driver.findElements(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).size() != 0) {
+//					if(driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).getText().contains("$")) {
+//						cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']//p//strong[2]")).getText();
+//					}
+//				}
+//				else {
+//					cart_lang = "No Cart Language";
+//				}
+//			}
 		}
 		else {
+//			cart_lang = driver.findElement(By.xpath("//div[@class='shortDescription']")).getText();
+			
 			if(brand.equalsIgnoreCase("PrincipalSecret")) {
 				if(driver.findElements(By.xpath("//div[@class='shortDescription']//p[8]//strong")).size() != 0) {
 					cart_lang = driver.findElement(By.xpath("//div[@class='shortDescription']//p[8]//strong")).getText();
@@ -270,11 +263,11 @@ public class CartLangUtilities {
 	}
 	
 	public String[] parse_cart_language(String language) {
-//		System.out.println("1 " + language);
+		System.out.println("1 " + language);
 		language = language.replaceAll("[^0-9.$]+", "");
-//		System.out.println("2 " + language);
+		System.out.println("2 " + language);
 		language = language.substring(language.indexOf("$"));
-//		System.out.println("3 " + language);
+		System.out.println("3 " + language);
 		while(language.endsWith(".")) {
 			language = language.substring(0, language.length() - 1);
 		}		

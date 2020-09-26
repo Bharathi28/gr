@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -52,13 +53,18 @@ public class CheckEmailMailnesia {
 
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
-
+		
+		Calendar now = Calendar.getInstance();		
+		String monthStr = Integer.toString(now.get(Calendar.MONTH) + 1); // Note: zero based!
+		String dayStr = Integer.toString(now.get(Calendar.DAY_OF_MONTH));  
+		String yearStr = Integer.toString(now.get(Calendar.YEAR));
+		
+		String filename = "BuyflowResults_" + monthStr + dayStr + yearStr;
+		System.out.println(filename);
 		for (String brand : brands) {
 			File input_file = new File(System.getProperty("user.dir")
-					+ "\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_9182020.xlsx");// BuyflowResults_572020BuyflowResults_8212020
-			// File input_file = new
-			// File("F:\\Automation\\Buyflow\\DailyOrders\\Run
-			// Output\\BuyflowResults_10232019.xlsx");
+					+ "\\Input_Output\\BuyflowValidation\\Run Output\\" + filename + ".xlsx");
+
 			FileInputStream inputstream = new FileInputStream(input_file);
 			Workbook testData = new XSSFWorkbook(inputstream);
 			Sheet dataSheet = testData.getSheet(brand);
