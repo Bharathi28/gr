@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.sns.gr.testbase.DBLibrary;
+import com.sns.gr.testbase.DBUtilities;
 
 public class PricingUtilities {
 	
@@ -117,48 +118,84 @@ public class PricingUtilities {
 		return shop_price;
 	}
 	
+//	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {
+//		String realm = DBUtilities.get_realm(brand);	
+//		List<Map<String, Object>> locator = null;
+//		if(pricing.contains("Checkout")){
+//			locator = get_pricing_locator(realm, null, null, pricing, null);		
+//		}
+//		else if((pricing.contains("Confirmation")) || (pricing.contains("Paypal"))){
+//			if(realm.equalsIgnoreCase("R4")) {
+//				locator = get_pricing_locator(realm, null, null, pricing, null);
+//			}
+//			else if(realm.equalsIgnoreCase("R2")) {
+//				locator = get_pricing_locator(realm, brand, null, pricing, null);
+//			}
+//		}
+//		String text = "";
+//		for(Map<String,Object> loc : locator) {
+//			String elementvalue = loc.get("ELEMENTVALUE").toString();
+//			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("crepeerase"))){
+//				elementvalue = "(" + elementvalue + ")[2]";
+//			}
+//			if((pricing.contains("Checkout")) && (brand.equalsIgnoreCase("spotfade"))){
+//				elementvalue = "(" + elementvalue + ")[2]";
+//			}
+//			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("Core")) && (brand.equalsIgnoreCase("AllKind"))){
+//				elementvalue = "(" + elementvalue + ")[2]";
+//			}
+//			if((pricing.contains("Checkout Shipping")) && ((campaign.equalsIgnoreCase("Core")) && (brand.equalsIgnoreCase("MeaningfulBeauty")))){
+//				elementvalue = "(" + elementvalue + ")[2]";
+//			}
+//			if((pricing.contains("Checkout")) && (brand.contains("BodyFirm"))){
+//				if(pricing.contains("Shipping")) {
+//					elementvalue = "(" + elementvalue + ")[3]";
+//				}
+//				else {
+//					elementvalue = "(" + elementvalue + ")[2]";
+//				}
+//			}					
+////			System.out.println("pricing: " + elementvalue);
+//			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
+//				text = driver.findElement(By.xpath(elementvalue)).getText();
+// 				break;
+//			}
+//		}
+//		return text;
+//	}
+	
 	public String fetch_pricing (WebDriver driver, String env, String brand, String campaign, String pricing) throws ClassNotFoundException, SQLException {
 		String realm = DBUtilities.get_realm(brand);	
 		List<Map<String, Object>> locator = null;
-		if(pricing.contains("Checkout")){
-			locator = get_pricing_locator(realm, null, null, pricing, null);		
-		}
-		else if((pricing.contains("Confirmation")) || (pricing.contains("Paypal"))){
-			if(realm.equalsIgnoreCase("R4")) {
-				locator = get_pricing_locator(realm, null, null, pricing, null);
+		
+		locator = get_pricing_locator(realm, brand, campaign, pricing, null);
+		
+		if(locator.size() == 0) {
+			if(pricing.contains("Checkout")){
+				locator = get_pricing_locator(realm, null, null, pricing, null);		
 			}
-			else if(realm.equalsIgnoreCase("R2")) {
-				locator = get_pricing_locator(realm, brand, null, pricing, null);
+			else if((pricing.contains("Confirmation")) || (pricing.contains("Paypal"))){
+				if(realm.equalsIgnoreCase("R4")) {
+					locator = get_pricing_locator(realm, null, null, pricing, null);
+				}
+				else if(realm.equalsIgnoreCase("R2")) {
+					locator = get_pricing_locator(realm, brand, null, pricing, null);
+				}
 			}
 		}
+				
 		String text = "";
 		for(Map<String,Object> loc : locator) {
 			String elementvalue = loc.get("ELEMENTVALUE").toString();
-			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("crepeerase"))){
-				elementvalue = "(" + elementvalue + ")[2]";
-			}
-			if((pricing.contains("Checkout")) && (brand.equalsIgnoreCase("spotfade"))){
-				elementvalue = "(" + elementvalue + ")[2]";
-			}
-			if((pricing.contains("Checkout")) && (campaign.equalsIgnoreCase("Core")) && (brand.equalsIgnoreCase("AllKind"))){
-				elementvalue = "(" + elementvalue + ")[2]";
-			}
-			if((pricing.contains("Checkout Shipping")) && ((campaign.equalsIgnoreCase("Core")) && (brand.equalsIgnoreCase("MeaningfulBeauty")))){
-				elementvalue = "(" + elementvalue + ")[2]";
-			}
-			if((pricing.contains("Checkout")) && (brand.contains("BodyFirm"))){
-				if(pricing.contains("Shipping")) {
-					elementvalue = "(" + elementvalue + ")[3]";
-				}
-				else {
-					elementvalue = "(" + elementvalue + ")[2]";
-				}
-			}					
-//			System.out.println("pricing: " + elementvalue);
+											
+			System.out.println("pricing: " + elementvalue);
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				text = driver.findElement(By.xpath(elementvalue)).getText();
  				break;
 			}
+		}
+		if(text.contains("$")) {
+			text = text.replace("$", "");
 		}
 		return text;
 	}

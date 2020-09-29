@@ -219,7 +219,7 @@ public class PixelUtilities {
 	    // Home Page
 		if((!((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19")))) && (!((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b"))))){
 			defineNewHar(proxy, brand + "HomePage");		 
-		    driver.get(url);	   
+		    driver.get(url);	
 		    
 		    if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
 		    	driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();

@@ -86,8 +86,7 @@ public class GetCharts {
 		} else {
 
 			brandlist = Arrays.asList("Sub-D", "MeaningfulBeauty", "CrepeErase", "Mally", "Westmorebeauty",
-					"Smileactives", "Theraworxprotectfoam", "Specificbeauty", "Seacalmskin", "Trydermaflash",
-					"Volaire");
+					"Smileactives", "Specificbeauty", "Seacalmskin", "Trydermaflash", "Volaire");
 		}
 
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/Drivers/chromedriver.exe");
@@ -128,7 +127,7 @@ public class GetCharts {
 				}
 				else {
 					while(driver.findElements(Sub).size() == 0){
-						je.executeScript("window.scrollTo(0, 0)", 0);
+						je.executeScript("window.scrollTo(0, 200)", 0);
 					}
 				}
 				driver.findElement(Sub).click();
