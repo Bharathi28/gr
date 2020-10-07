@@ -534,6 +534,7 @@ public class BuyflowUtilities {
 		String num = RandomStringUtils.randomNumeric(4);
 		String email = alpha + "-" + num + "@mailnesia.com";
 		
+		Thread.sleep(3000);
 		fill_form_field(driver, realm, "Email", email.toLowerCase());
 		if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
 			driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");

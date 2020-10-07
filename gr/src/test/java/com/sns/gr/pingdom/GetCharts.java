@@ -85,8 +85,8 @@ public class GetCharts {
 
 		} else {
 
-			brandlist = Arrays.asList("Sub-D", "MeaningfulBeauty", "CrepeErase", "Mally", "Westmorebeauty",
-					"Smileactives", "Specificbeauty", "Seacalmskin", "Trydermaflash", "Volaire");
+			brandlist = Arrays.asList("Sub-D", "MeaningfulBeauty", "CrepeErase", "Mally", "WestmoreBeauty",
+					"Smileactives", "SpecificBeauty", "Seacalmskin", "Trydermaflash", "Volaire");
 		}
 
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/Drivers/chromedriver.exe");

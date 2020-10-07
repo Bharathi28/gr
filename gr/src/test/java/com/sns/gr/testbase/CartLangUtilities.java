@@ -172,8 +172,8 @@ public class CartLangUtilities {
 		String realm = DBUtilities.get_realm(brand);
 		String cart_lang = "";		
 		if(realm.equalsIgnoreCase("R4")) {
-			if(driver.findElements(By.xpath("//div[@class='continuity-summary']")).size() != 0) {
-				cart_lang = driver.findElement(By.xpath("//div[@class='continuity-summary']")).getText();
+			if(driver.findElements(By.xpath("//div[contains(@class,'continuity-summary')]")).size() != 0) {
+				cart_lang = driver.findElement(By.xpath("//div[contains(@class,'continuity-summary')]")).getText();
 			}
 			else {
 				cart_lang = "No Cart Language";

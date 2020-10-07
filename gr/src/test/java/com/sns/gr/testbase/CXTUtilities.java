@@ -567,8 +567,8 @@ public class CXTUtilities {
 		WebElement reschedulebuttonelmt = comm_obj.find_webelement(driver, reschedulebuttonloc.get(0).get("ELEMENTLOCATOR").toString(), reschedulebuttonloc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(1000);
 		reschedulebuttonelmt.click();
-		Thread.sleep(1000);
-		
+//		Thread.sleep(3000);
+		comm_obj.waitUntilElementAppears(driver, datepickerloc.get(0).get("ELEMENTVALUE").toString());
 		WebElement datepickerelmt = comm_obj.find_webelement(driver, datepickerloc.get(0).get("ELEMENTLOCATOR").toString(), datepickerloc.get(0).get("ELEMENTVALUE").toString());
 		datepickerelmt.click();
 		Thread.sleep(1000);

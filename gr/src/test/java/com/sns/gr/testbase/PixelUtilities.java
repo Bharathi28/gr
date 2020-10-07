@@ -318,9 +318,9 @@ public class PixelUtilities {
 //        	bf_obj.move_to_checkout(driver, "SpotFade", "Core", "Kit");
 //	    }
         else {
-        	if((!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) ||  (!((brand.equalsIgnoreCase("AllKind"))&&campaign.equalsIgnoreCase("core")))){
+//        	if((!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) ||  (!((brand.equalsIgnoreCase("AllKind"))&&campaign.equalsIgnoreCase("core")))){
             	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
-            } 
+//            } 
         }               
         
 //        String harbrand = brand;
