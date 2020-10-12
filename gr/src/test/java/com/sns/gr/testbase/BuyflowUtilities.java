@@ -513,14 +513,30 @@ public class BuyflowUtilities {
 			   Thread.sleep(2000);
 			}						
 			
-			if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
-				driver.close();
-//				driver.switchTo().window(winHandleBefore);
-				Thread.sleep(2000);
-				email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
+			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else {
-				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
+					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
+						driver.close();
+//						driver.switchTo().window(winHandleBefore);
+						Thread.sleep(2000);
+						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
+					}
+					else if(driver.findElements(By.xpath("//div[@class='message']")).size() != 0) {
+//						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
+						driver.close();
+						Thread.sleep(2000);
+						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
+					}
+					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+					}
+					if(!(email.equalsIgnoreCase(""))) {
+						break;
+					}
+				}	
 			}			
 		}
 		else {
@@ -611,7 +627,7 @@ public class BuyflowUtilities {
 	}
 	
 	public String paypalPayment(WebDriver driver, WebDriverWait wait, JavascriptExecutor jse, String winHandleBefore, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
-		comm_obj.waitUntilElementAppears(driver, "//div[@id='loginSection']//div//div[2]//a");
+//		comm_obj.waitUntilElementAppears(driver, "//div[@id='loginSection']//div//div[2]//a");
 		Thread.sleep(4000);
 		driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 			

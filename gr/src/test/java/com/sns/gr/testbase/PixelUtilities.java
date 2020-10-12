@@ -82,7 +82,7 @@ public class PixelUtilities {
 //		else {
 //			query = "select * from r2offers where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and status='Active' order by RAND() limit " + runs;
 //		}		
-		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SpotFade")) || (brand.equalsIgnoreCase("AllKind")) || (brand.equalsIgnoreCase("Theraworx")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
+		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
 		else if(brand.equalsIgnoreCase("BodyFirm")) {
@@ -218,7 +218,7 @@ public class PixelUtilities {
 	    ///////////////////////////////////////////////////////////		    
 	    // Home Page
 		if((!((brand.equalsIgnoreCase("Mally")) && (campaign.equalsIgnoreCase("mywbfeb19")))) && (!((brand.equalsIgnoreCase("CrepeErase")) && (campaign.equalsIgnoreCase("order30fsh2b"))))){
-			defineNewHar(proxy, brand + "HomePage");		 
+			defineNewHar(proxy, brand + "HomePage");	
 		    driver.get(url);	
 		    
 		    if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
@@ -244,7 +244,7 @@ public class PixelUtilities {
 		    if(driver.findElements(By.xpath("//div[@id='holiday-popup-content']")).size() != 0) {
 				driver.navigate().refresh();
 			}
-		    Thread.sleep(10000);
+		    Thread.sleep(30000);
 		    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_homepage_" + pattern + "_" + flow +".har");
 		}	    
 	    
@@ -279,7 +279,7 @@ public class PixelUtilities {
 	    	 bf_obj.click_cta(driver, env, brand, origcampaign, "Ordernow");
 	    }
 	        
-	    Thread.sleep(10000);
+	    Thread.sleep(30000);
 //	    wait.until(pageLoadCondition);
 	    getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_saspage_" + pattern + "_" + flow +".har");
 	    ////////////////////////////////////////////////////////////  
@@ -304,7 +304,6 @@ public class PixelUtilities {
 //	    }
 //        else {
         if(!(brand.equalsIgnoreCase("BodyFirm"))) {
-        	System.out.println(brand + campaign);
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Kit", 0);
         }
         Thread.sleep(2000);
@@ -319,7 +318,7 @@ public class PixelUtilities {
 //	    }
         else {
 //        	if((!((brand.equalsIgnoreCase("crepeerase"))&&campaign.equalsIgnoreCase("core"))) ||  (!((brand.equalsIgnoreCase("AllKind"))&&campaign.equalsIgnoreCase("core")))){
-            	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
+        	bf_obj.move_to_checkout(driver, brand, campaign, "Kit");
 //            } 
         }               
         
