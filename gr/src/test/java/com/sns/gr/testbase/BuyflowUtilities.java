@@ -644,7 +644,8 @@ public class BuyflowUtilities {
 		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
 		
 		comm_obj.waitUntilElementAppears(driver, "//h2[@data-testid='paywith-title']");
-		jse.executeScript("window.scrollBy(0,500)", 0);
+		jse.executeScript("window.scrollBy(0,700)", 0);
+		Thread.sleep(2000);
 		comm_obj.waitUntilElementAppears(driver, "//button[@id='payment-submit-btn']");
 
 		driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
