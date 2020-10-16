@@ -368,7 +368,7 @@ public class BuyflowUtilities {
 		return offercode;
 	}
 	
-	public String fetch_confoffercode(WebDriver driver, String brand) throws ClassNotFoundException, SQLException {
+	public String fetch_confoffercode(WebDriver driver, String brand) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		String offercode = "";
@@ -378,6 +378,7 @@ public class BuyflowUtilities {
 				offercode = (String) jse.executeScript("return app.omniMap.MainOfferCode");
 			}
 			else {
+				Thread.sleep(2000);
 				List<WebElement> offercode_elmt = null;
 				if(driver.findElements(By.className("offerCode")).size() != 0) {
 					offercode_elmt = driver.findElements(By.className("offerCode"));
@@ -488,6 +489,8 @@ public class BuyflowUtilities {
 		}
 		else {
 			WebElement element = comm_obj.find_webelement(driver, elementlocator, elementvalue);
+//			Thread.sleep(2000);
+//			element.click();
 			element.sendKeys(value);
 		}
 	}
