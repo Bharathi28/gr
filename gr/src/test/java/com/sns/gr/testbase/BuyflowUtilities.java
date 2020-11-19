@@ -529,21 +529,26 @@ public class BuyflowUtilities {
 			else {
 				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
-						driver.close();
-//						driver.switchTo().window(winHandleBefore);
+//						driver.close();
+						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[@class='message']")).size() != 0) {
 //						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
-						driver.close();
+//						driver.close();
+						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+						driver.findElement(By.xpath("//button[text()='Log In']")).click();
+						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					if(!(email.equalsIgnoreCase(""))) {
@@ -629,7 +634,8 @@ public class BuyflowUtilities {
 		fill_form_field(driver, realm, "Month", "12");
 		fill_form_field(driver, realm, "Year", "2020");	
 		
-		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
+//		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
+		if(realm.equalsIgnoreCase("R4")) {
 			fill_form_field(driver, realm, "CVV", "349");	
 		}
 		jse.executeScript("window.scrollBy(0,200)", 0);
