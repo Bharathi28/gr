@@ -372,6 +372,7 @@ public class BuyflowUtilities {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		String offercode = "";
+		Thread.sleep(4000);
 		if(realm.equalsIgnoreCase("R2")) {
 			// Also supplies to SB
 			if(brand.equalsIgnoreCase("Sub-D")){
@@ -434,17 +435,22 @@ public class BuyflowUtilities {
 		WebDriverWait wait = new WebDriverWait(driver,50);
 		String realm = DBUtilities.get_realm(brand);
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
-		WebElement comp_order_element;
+		WebElement comp_order_element = null;
 		if(realm.equalsIgnoreCase("R2")) {
 			if(cc.toLowerCase().contains("paypal")) {
+//			if(driver.findElements(By.xpath("//button[@class='cta-submit btn-primary']")).size() != 0) {
 				comp_order_element = driver.findElement(By.xpath("//button[@class='cta-submit btn-primary']"));
 			}
 			else {
-				comp_order_element = driver.findElement(By.id("contYourOrder"));
+//				if(driver.findElements(By.id("contYourOrder")).size() != 0) {
+					comp_order_element = driver.findElement(By.id("contYourOrder"));
+//				}
+				
 			}
 		}
 		else {
 			if(cc.toLowerCase().contains("paypal")) {
+//			if(driver.findElements(By.id("submitButton")).size() != 0) {	
 				comp_order_element = driver.findElement(By.id("submitButton"));
 			}
 			else {
@@ -457,6 +463,8 @@ public class BuyflowUtilities {
 		}
 		wait.until(ExpectedConditions.visibilityOf(comp_order_element));
 		wait.until(ExpectedConditions.elementToBeClickable(comp_order_element));
+		Thread.sleep(5000);
+//		comp_order_element.click();
 		jse.executeScript("arguments[0].click();", comp_order_element);	
 	}
 	
@@ -529,14 +537,14 @@ public class BuyflowUtilities {
 			else {
 				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
-//						driver.close();
+						driver.close();
 						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[@class='message']")).size() != 0) {
 //						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
-//						driver.close();
+						driver.close();
 						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);

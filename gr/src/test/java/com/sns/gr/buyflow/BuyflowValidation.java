@@ -127,7 +127,10 @@ public class BuyflowValidation {
 		}
 						
 		String email = bf_obj.fill_out_form(driver, brand, campaign, cc, shipbill, "30");
-		System.out.println("Email : " + email);							
+		System.out.println("Email : " + email);		
+		if(!(email.contains("testbuyer"))) {
+			cc = "Visa";
+		}
 
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.scrollBy(0,-200)", 0);

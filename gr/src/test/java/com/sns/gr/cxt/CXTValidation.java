@@ -41,8 +41,7 @@ public class CXTValidation {
 	DBUtilities db_obj = new DBUtilities();
 	CXTUtilities cxt_obj = new CXTUtilities();
 	MailUtilities mailObj = new MailUtilities();
-	Scanner in = new Scanner(System.in);
-	
+	Scanner in = new Scanner(System.in);	
 	
 	List<List<String>> output = new ArrayList<List<String>>();
 	String sendReportTo = "";
