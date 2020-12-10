@@ -127,6 +127,9 @@ public class SASUtilities {
 	    	case "shopkit":
 	    		select_shopkit(driver, offerdata, brand, campaign);
 	    		break;
+	    	case "size":
+				select_size(driver, offerdata, brand, campaign);
+				break;
 	    	case "onetime":
 				select_onetime(driver, offerdata, brand, campaign);
 				break;
@@ -144,6 +147,12 @@ public class SASUtilities {
 		if((category.equalsIgnoreCase("Product")) || (category.equalsIgnoreCase("ShopKit")) || (category.equalsIgnoreCase("SubscribeandSave"))) {
 			if((brand.contains("BodyFirm")) || (brand.equalsIgnoreCase("AllKind")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("PrincipalSecret")) || (brand.equalsIgnoreCase("SpecificBeauty")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("Smileactives")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("SeaCalmSkin"))){
 				if(driver.findElements(By.xpath("//button[@id='add-to-cart']")).size() != 0) {
+					Thread.sleep(3000);
+					driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+				}
+			}
+			else if(brand.equalsIgnoreCase("JLoBeauty")) {
+				if(driver.findElements(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).size() == 0) {
 					Thread.sleep(3000);
 					driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
 				}
@@ -653,6 +662,11 @@ public class SASUtilities {
 			Thread.sleep(2000);
 		}
 		prod_elmt.click();	
+		
+		if(brand.equalsIgnoreCase("JLoBeauty")) {
+			Thread.sleep(4000);
+			driver.findElement(By.xpath("//button[@id='add-cart-modal']")).click();
+		}
 		Thread.sleep(1000);
 	}
 	
@@ -691,11 +705,35 @@ public class SASUtilities {
 		Thread.sleep(1000);
 	}
 	
+	public void select_size(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
+		
+		String productname = offerdata.get("DESCRIPTION").toString();
+		String size = offerdata.get("SIZEINOUNCE").toString();		
+				
+		List<Map<String, Object>> size_loc = comm_obj.get_element_locator(brand, campaign, "Product-Size", size + " " + productname);
+		
+		driver.findElement(By.xpath("(//span[@class='selected-value'])[2]")).click();
+		Thread.sleep(1000);
+		
+		WebElement size_elmt = comm_obj.find_webelement(driver, size_loc.get(0).get("ELEMENTLOCATOR").toString(), size_loc.get(0).get("ELEMENTVALUE").toString());
+		size_elmt.click();
+		Thread.sleep(1000);
+	}	
+	
 	public void select_onetime(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		
 		String PPID = offerdata.get("PPID").toString();
 		String category = offerdata.get("CATEGORY").toString();
+		
+		if(brand.equalsIgnoreCase("JLoBeauty")) {
+			if(PPID.equalsIgnoreCase("JL2A0060")) {
+				PPID = "JL1A0030";
+			}
+			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036"))) {
+				PPID = "JL1A0034";
+			}
+		}
 				
 		if((brand.equalsIgnoreCase("AllKind")) && (category.equalsIgnoreCase("Kit"))) {
 			jse.executeScript("window.scrollBy(0,300)", 0);
@@ -721,7 +759,16 @@ public class SASUtilities {
 	public void select_subscribe(WebDriver driver, Map<String, Object> offerdata, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String PPID = offerdata.get("PPID").toString();
 		String category = offerdata.get("CATEGORY").toString();
-		System.out.println(brand + campaign + category);
+		
+		if(brand.equalsIgnoreCase("JLoBeauty")) {
+			if(PPID.equalsIgnoreCase("JL2A0060")) {
+				PPID = "JL1A0030";
+			}
+			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036"))) {
+				PPID = "JL1A0034";
+			}
+		}
+		
 		if((brand.equalsIgnoreCase("AllKind")) && (category.equalsIgnoreCase("Kit"))) {
 			Thread.sleep(1000);			
 			driver.findElement(By.xpath("//input[@id='dwopt_EL2A0008_entryKit-auto-renew']")).click();

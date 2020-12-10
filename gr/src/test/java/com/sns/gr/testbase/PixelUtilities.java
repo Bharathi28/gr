@@ -85,6 +85,9 @@ public class PixelUtilities {
 		if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade")) || (brand.equalsIgnoreCase("SeaCalmSkin")) || (brand.equalsIgnoreCase("FixMDSkin")) || (brand.equalsIgnoreCase("Smileactives")) || ((brand.equalsIgnoreCase("SeaCalmSkin")) && (campaign.equalsIgnoreCase("specialoffer"))) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("Dr.Denese")) || (brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("Mally")) || (brand.equalsIgnoreCase("WestmoreBeauty"))) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and status='Active'";
 		}
+		else if(brand.equalsIgnoreCase("JLoBeauty")) {
+			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='Product' and status='Active'";
+		}
 		else if(brand.equalsIgnoreCase("BodyFirm")) {
 			query = "select * from r4offers where brand='" + brand + "' and campaign='" + campaign + "' and category='ShopKit' and status='Active'";
 		}
@@ -275,6 +278,10 @@ public class PixelUtilities {
 //	    else if((brand.equalsIgnoreCase("BodyFirm-CrepeErase")) || (brand.equalsIgnoreCase("BodyFirm-SpotFade"))) {
 //	    	 bf_obj.click_cta(driver, env, offerdata.get("BRAND").toString(), origcampaign, "Kit");
 //	    }
+	    else if((brand.equalsIgnoreCase("JLoBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
+	    	bf_obj.click_cta(driver, env, brand, origcampaign, "Shop");
+	    	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Product", 0);
+	    }
 	    else {
 	    	 bf_obj.click_cta(driver, env, brand, origcampaign, "Ordernow");
 	    }
@@ -303,12 +310,15 @@ public class PixelUtilities {
 //	    	 sas_obj.select_offer(driver, env, offerdata.get("BRAND").toString(), offerdata.get("CAMPAIGN").toString(), offerdata, "Kit", 0);
 //	    }
 //        else {
-        if(!(brand.equalsIgnoreCase("BodyFirm"))) {
+        if((!(brand.equalsIgnoreCase("BodyFirm"))) && (!(brand.equalsIgnoreCase("JLoBeauty")))){
         	sas_obj.select_offer(driver, env, brand, campaign, offerdata, "Kit", 0);
         }
         Thread.sleep(2000);
         if(brand.equalsIgnoreCase("BodyFirm")) {
         	bf_obj.move_to_checkout(driver, brand, campaign, "ShopKit");
+        }
+        else if(brand.equalsIgnoreCase("JLoBeauty")) {
+        	bf_obj.move_to_checkout(driver, brand, campaign, "Product");
         }
 //        else if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
 //        	bf_obj.move_to_checkout(driver, "CrepeErase", "Core", "Kit");
@@ -417,6 +427,12 @@ public class PixelUtilities {
         // Save Order Screenshots        
 		Screenshot confpage = new AShot().takeScreenshot(driver);			
         ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
+        
+        // Customer Service page
+//        defineNewHar(proxy, brand + "CustomerServicePage");
+//        driver.findElement(By.xpath("(//a[text()='Customer Service'])[1]")).click();
+//        getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_customerservicepage_" + pattern + "_" + flow +".har");
+        
         
         driver.close();
         return output_row;

@@ -578,7 +578,7 @@ public class BuyflowUtilities {
 		
 		Thread.sleep(3000);
 		fill_form_field(driver, realm, "Email", email.toLowerCase());
-		if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
+		if((brand.equalsIgnoreCase("CrepeErase")) || (brand.equalsIgnoreCase("MeaningfulBeauty")) || (brand.equalsIgnoreCase("JLoBeauty")) || (brand.equalsIgnoreCase("AllKind"))){
 			driver.findElement(By.xpath("(//input[contains(@class,'input-text password')])[1]")).sendKeys("Grcweb123!");
 		}
 		fill_form_field(driver, realm, "PhoneNumber", "8887878787");					
@@ -644,7 +644,9 @@ public class BuyflowUtilities {
 		
 //		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
 		if(realm.equalsIgnoreCase("R4")) {
-			fill_form_field(driver, realm, "CVV", "349");	
+			if(!(brand.equalsIgnoreCase("JLoBeauty"))){
+				fill_form_field(driver, realm, "CVV", "349");
+			}				
 		}
 		jse.executeScript("window.scrollBy(0,200)", 0);
 		Thread.sleep(2000);
