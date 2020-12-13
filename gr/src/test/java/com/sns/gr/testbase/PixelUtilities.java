@@ -168,7 +168,17 @@ public class PixelUtilities {
 		}
 		if(runs > i) {			
 			buyflowOutput = generateHARFiles(capabilities, proxy, env, brand, campaign, flow, url,"Default", offerdata.get(i));
+			
+			List<String> newpixels_output = new ArrayList<String>();
+			if(buyflowOutput.size() == 8) {
+				if(buyflowOutput.get(7).contains("PageSource")) {
+					String pagesource = buyflowOutput.get(7);
+					newpixels_output.add(pagesource);
+					buyflowOutput.remove(7);
+				}				
+			}
 			overallOutput.add(buyflowOutput);
+			overallOutput.add(newpixels_output);
 		}
 		return overallOutput;
 	}		
@@ -428,7 +438,21 @@ public class PixelUtilities {
 		Screenshot confpage = new AShot().takeScreenshot(driver);			
         ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
         
-        // Customer Service page
+        
+        Thread.sleep(2000);
+        
+        // Search Console pixel
+//        System.out.println(pixel);
+//        if(pixel.toLowerCase().contains("searchconsole")) {
+        	// Move to Homepage
+            driver.get(url);
+            Thread.sleep(2000);
+        	String pagesource = driver.getPageSource();
+        	System.out.println(pagesource);
+        	output_row.add("PageSource " + pagesource);
+//        }
+        
+         // Customer Service page
 //        defineNewHar(proxy, brand + "CustomerServicePage");
 //        driver.findElement(By.xpath("(//a[text()='Customer Service'])[1]")).click();
 //        getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_customerservicepage_" + pattern + "_" + flow +".har");

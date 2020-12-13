@@ -730,7 +730,7 @@ public class SASUtilities {
 			if(PPID.equalsIgnoreCase("JL2A0060")) {
 				PPID = "JL1A0030";
 			}
-			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036"))) {
+			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0037")) || (PPID.equalsIgnoreCase("JL1A0035"))) {
 				PPID = "JL1A0034";
 			}
 		}
@@ -764,7 +764,7 @@ public class SASUtilities {
 			if(PPID.equalsIgnoreCase("JL2A0060")) {
 				PPID = "JL1A0030";
 			}
-			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0036"))) {
+			else if((PPID.equalsIgnoreCase("JL1A0036")) || (PPID.equalsIgnoreCase("JL1A0037")) || (PPID.equalsIgnoreCase("JL1A0035"))) {
 				PPID = "JL1A0034";
 			}
 		}

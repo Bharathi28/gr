@@ -180,6 +180,15 @@ public class PixelParallel {
 			noOfTestRuns++;
 		}
 		List<List<String>> buyflowOutput = pixel_obj.generateTestRuns(capabilities, proxy, env, brand, campaign, flow, pixelslist, noOfTestRuns, url);	
+		System.out.println(buyflowOutput);
+		List<String> noharpixels_output = new ArrayList<String>();
+		System.out.println(buyflowOutput.get(buyflowOutput.size()-1));
+		System.out.println(env);
+		if(!(buyflowOutput.get(buyflowOutput.size()-1).contains(env))) {
+			noharpixels_output = buyflowOutput.get(buyflowOutput.size()-1);
+			buyflowOutput.remove(buyflowOutput.size()-1);
+		}		
+		System.out.println(noharpixels_output);
 		buyflowOverallOutput.addAll(buyflowOutput);
 			
 		WebDriver driver = new ChromeDriver();
@@ -238,8 +247,10 @@ public class PixelParallel {
 				System.out.println();
 				System.out.println(event);
 									
-				int compatible = db_obj.checkBrandPixelCompatibility(tempbrand, event);					
-				if(compatible == 1) {
+				int compatible = db_obj.checkBrandPixelCompatibility(tempbrand, event);	
+				
+				
+				if(compatible == 1) {					
 					String origcampaign = campaign;
 					String tempcampaign = comm_obj.campaign_repeat(brand, campaign, "pages");
 					if(!(tempcampaign.equals("n/a"))){
@@ -248,70 +259,95 @@ public class PixelParallel {
 					List<String> pages = db_obj.getFiringPages(brand, campaign, flow, pixel, event);
 					campaign = origcampaign;
 					String pattern = db_obj.getSearchPattern(tempbrand, event);
-					String pixelbrandid = db_obj.getPixelBrandId(tempbrand, event);
-						
+					String pixelbrandid = db_obj.getPixelBrandId(tempbrand, event);					
+											
 					String[] pixelIdArr = pixelbrandid.split(",");						
 						
 					List<HashMap> pagemapList = new ArrayList<HashMap>();
 					for(String page : pages) {													
 						HashMap<String, List<List<String>>> pageMap = new LinkedHashMap<String, List<List<String>>>();	
 				        System.out.println(page);
-						driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
-						
-						WebElement searchElmt = driver.findElement(By.id("search"));
-						wait.until(ExpectedConditions.visibilityOf(searchElmt));
-//						Thread.sleep(2000);
-				        driver.findElement(By.id("search")).clear();
-				        driver.findElement(By.id("search")).sendKeys(pattern);
-				        Thread.sleep(2000);
-				            
-				        int noOfRows = driver.findElements(By.xpath("//tr[contains(@class, 'revealed network-item')]")).size();
-				            
+				        
 				        List<List<String>> outputList = new ArrayList<List<String>>();
-				        for(int i=1; i<=noOfRows; i++) {			            	
-					            	
-					        String dataurl = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='name-column'])[" + i + "]")).getAttribute("title").toLowerCase();
-					        String statuscode = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='status-column'])[" + i + "]")).getAttribute("title").toLowerCase();
+				        if(pixel.toLowerCase().equalsIgnoreCase("searchconsole")) {
+							System.out.println("In searchconsole");
+							for(String data : noharpixels_output) {				
+								System.out.println(data);
+								if(data.contains("PageSource")) {
+									List<String> outputData = new ArrayList<String>();
+									if(data.contains(pattern)) {									
+										outputData.add("PASS");
+										outputData.add(pattern);									
+										System.out.println("PASS" + " " + pattern);
+									}
+									else {
+										outputData.add("FAIL");
+										outputData.add(pattern);
+										System.out.println("FAIL" + " " + pattern);
+									}
+									outputList.add(outputData);
+									break;
+								}
+							}
+						}
+				        else {
+				        	driver.findElement(By.name("har")).sendKeys(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + campaign + "_" + page + "_" + urlpattern + "_" + flow + ".har");
+							
+							WebElement searchElmt = driver.findElement(By.id("search"));
+							wait.until(ExpectedConditions.visibilityOf(searchElmt));
+//							Thread.sleep(2000);
+					        driver.findElement(By.id("search")).clear();
+					        driver.findElement(By.id("search")).sendKeys(pattern);
+					        Thread.sleep(2000);
 					            
-					        for(String id : pixelIdArr) {
-					        	if(!(id.equalsIgnoreCase(" "))) {
-					            	if(pattern.equalsIgnoreCase("-")) {
-					            		if(dataurl.contains(id.toLowerCase())) {
-					            			List<String> outputData = new ArrayList<String>();
-											outputData.add(statuscode);
-											outputData.add(dataurl);
-											outputList.add(outputData);
-											System.out.println(i + " " + statuscode + " " + dataurl);
-					            		}
-					            	}
-					            	else {
-					            		if((dataurl.contains(pattern.toLowerCase())) && (dataurl.contains(id.toLowerCase()))) {
+					        int noOfRows = driver.findElements(By.xpath("//tr[contains(@class, 'revealed network-item')]")).size();
+					            
+					        
+					        for(int i=1; i<=noOfRows; i++) {			            	
+						            	
+						        String dataurl = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='name-column'])[" + i + "]")).getAttribute("title").toLowerCase();
+						        String statuscode = driver.findElement(By.xpath("(//tr[contains(@class, 'revealed network-item')]//td[@class='status-column'])[" + i + "]")).getAttribute("title").toLowerCase();
+						            
+						        for(String id : pixelIdArr) {
+						        	if(!(id.equalsIgnoreCase(" "))) {
+						            	if(pattern.equalsIgnoreCase("-")) {
+						            		if(dataurl.contains(id.toLowerCase())) {
+						            			List<String> outputData = new ArrayList<String>();
+												outputData.add(statuscode);
+												outputData.add(dataurl);
+												outputList.add(outputData);
+												System.out.println(i + " " + statuscode + " " + dataurl);
+						            		}
+						            	}
+						            	else {
+						            		if((dataurl.contains(pattern.toLowerCase())) && (dataurl.contains(id.toLowerCase()))) {
+												List<String> outputData = new ArrayList<String>();
+												outputData.add(statuscode);
+												outputData.add(dataurl);
+												outputList.add(outputData);
+												System.out.println(i + " " + statuscode + " " + dataurl);
+						            		}					            			
+										}
+									}
+									else {
+										if(dataurl.contains(pattern.toLowerCase())) {
 											List<String> outputData = new ArrayList<String>();
 											outputData.add(statuscode);
 											outputData.add(dataurl);
 											outputList.add(outputData);
 											System.out.println(i + " " + statuscode + " " + dataurl);
-					            		}					            			
-									}
-								}
-								else {
-									if(dataurl.contains(pattern.toLowerCase())) {
-										List<String> outputData = new ArrayList<String>();
-										outputData.add(statuscode);
-										outputData.add(dataurl);
-										outputList.add(outputData);
-										System.out.println(i + " " + statuscode + " " + dataurl);
-									}
-								}		
-					        }										            		
-					    } // end of rows
-				        if(outputList.size() == 0) {
-				            List<String> outputData = new ArrayList<String>();
-							outputData.add(" ");
-							outputData.add(" ");
-							outputList.add(outputData);
-				        }		            				            
-				        pageMap.put(page, outputList);
+										}
+									}		
+						        }										            		
+						    } // end of rows
+					        if(outputList.size() == 0) {
+					            List<String> outputData = new ArrayList<String>();
+								outputData.add(" ");
+								outputData.add(" ");
+								outputList.add(outputData);
+					        }				        
+				        }				        
+						pageMap.put(page, outputList);
 				        pagemapList.add(pageMap);
 				    } // end of pages						
 					eventMap.put(event, pagemapList);
@@ -516,7 +552,7 @@ public class PixelParallel {
 			        				pixelTotalSize = pixelTotalSize + eventTotalSize;
 			        			}
 			        		}
-//			        		System.out.println(((row_num-1)-(pixelTotalSize-1)) + "," + (row_num-1) + ",2,2");
+			        		System.out.println(((row_num-1)-(pixelTotalSize-1)) + "," + (row_num-1) + ",2,2");
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 3, resultSheet);
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 2, resultSheet);
 			        		mergeAndSetBorder(((row_num-1)-(pixelTotalSize-1)), row_num, 1, resultSheet);			
