@@ -275,7 +275,7 @@ public class PixelParallel {
 								System.out.println(data);
 								if(data.contains("PageSource")) {
 									List<String> outputData = new ArrayList<String>();
-									if(data.contains(pattern)) {									
+									if(data.toLowerCase().contains(pattern.toLowerCase())) {									
 										outputData.add("PASS");
 										outputData.add(pattern);									
 										System.out.println("PASS" + " " + pattern);
