@@ -130,10 +130,10 @@ public class PixelParallel {
 		url = db_obj.getUrl(brand, campaign, env);
 		System.out.println(url);		
 		
-		if(!((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg")))) {
-			url = db_obj.getUrl(brand, campaign, "stg");
-			url = url.replace("stg", env.toLowerCase());
-		}
+//		if(!((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg")))) {
+//			url = db_obj.getUrl(brand, campaign, "stg");
+//			url = url.replace("stg", env.toLowerCase());
+//		}
 		
 		int noOfTestRuns = 0;
 		List<String> pixelslist = new ArrayList<String>();

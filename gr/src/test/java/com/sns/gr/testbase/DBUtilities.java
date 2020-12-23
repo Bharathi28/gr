@@ -59,6 +59,10 @@ public class DBUtilities {
 		if(env.toLowerCase().contains("dev")) {
 			url = branddata.get(0).get("STGURL").toString();
 			url = url.replace(".stg.", "."+ env.toLowerCase() +".");
+			
+			if(brand.equalsIgnoreCase("JLoBeauty")) {
+				url = url.replace("Jlostg123", "Jlodev05");
+			}
 		}
 		else {
 			url = branddata.get(0).get(env.toUpperCase() + "URL").toString();
