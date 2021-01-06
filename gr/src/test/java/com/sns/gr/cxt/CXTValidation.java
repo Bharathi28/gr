@@ -48,8 +48,10 @@ public class CXTValidation {
 	
 	@BeforeSuite
 	public void getEmailId() {
+		
 //		System.out.println("Enter Email id : ");
 //		sendReportTo = in.next();
+		sendReportTo = System.getProperty("email");
 	}
 	
 	@DataProvider(name="cxtInput", parallel=true)
