@@ -122,7 +122,7 @@ public class CXTValidation {
 			output_row.add(brand);
 			output_row.add(campaign);
 			output_row.add("Navigate away - To Google");
-			driver.get("http://www.google.com/");
+			driver.get("https://www.google.com/");
 			actual = cxt_obj.getPageTitle(driver);
 			expected = "Google";
 			if(actual.equals(expected)) {
