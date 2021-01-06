@@ -44,12 +44,12 @@ public class CXTValidation {
 	Scanner in = new Scanner(System.in);	
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "";
+	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
 	
 	@BeforeSuite
 	public void getEmailId() {
-		System.out.println("Enter Email id : ");
-		sendReportTo = in.next();
+//		System.out.println("Enter Email id : ");
+//		sendReportTo = in.next();
 	}
 	
 	@DataProvider(name="cxtInput", parallel=true)
