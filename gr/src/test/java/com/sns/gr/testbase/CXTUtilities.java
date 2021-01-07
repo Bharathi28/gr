@@ -66,7 +66,7 @@ public class CXTUtilities {
 	}
 	
 	public void openMyNextKit(WebDriver driver, String realm, String brand) throws ClassNotFoundException, SQLException, InterruptedException {
-		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "OpenKC", "");		
+		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "OpenKC", null);		
 		WebElement openkc = comm_obj.find_webelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		String drawerstatus = "";
 		if(realm.equals("R4")) {
@@ -91,7 +91,7 @@ public class CXTUtilities {
 	public int getNumberofProductsinKC(WebDriver driver, String realm, String brand) throws ClassNotFoundException, SQLException, InterruptedException {
 		openMyNextKit(driver, realm, brand);
 		
-		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
+		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", null);		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		System.out.println("No.of Products in KC : " + kcproducts.size());
 		
@@ -103,7 +103,7 @@ public class CXTUtilities {
 		HashMap<String, Integer> products = new HashMap<String, Integer>();
 		openMyNextKit(driver, realm, brand);
 		
-		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
+		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", null);		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		System.out.println("No.of Products in KC : " + kcproducts.size());
 		
@@ -214,7 +214,7 @@ public class CXTUtilities {
 		}			
 		Thread.sleep(2000);
 		
-		List<Map<String, Object>> buynowloc = get_cxt_locator(realm, "BuyNow", "");		
+		List<Map<String, Object>> buynowloc = get_cxt_locator(realm, "BuyNow", null);		
 		WebElement buynowelmt = comm_obj.find_webelement(driver, buynowloc.get(0).get("ELEMENTLOCATOR").toString(), buynowloc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(4000);
 		buynowelmt.click();
@@ -299,11 +299,11 @@ public class CXTUtilities {
 		Thread.sleep(1000);
 		String realm = db_obj.get_realm(brand);
 		
-		List<Map<String, Object>> mccountloc = get_cxt_locator(realm, "Minicartcount", "");		
+		List<Map<String, Object>> mccountloc = get_cxt_locator(realm, "Minicartcount", null);		
 		WebElement mccountelmt = comm_obj.find_webelement(driver, mccountloc.get(0).get("ELEMENTLOCATOR").toString(), mccountloc.get(0).get("ELEMENTVALUE").toString());
 		String prodcount = mccountelmt.getAttribute("class");
 		if(!(prodcount.contains("mini-cart-empty"))) {
-			List<Map<String, Object>> mcloc = get_cxt_locator(realm, "Minicart", "");		
+			List<Map<String, Object>> mcloc = get_cxt_locator(realm, "Minicart", null);		
 			WebElement mcelmt = comm_obj.find_webelement(driver, mcloc.get(0).get("ELEMENTLOCATOR").toString(), mcloc.get(0).get("ELEMENTVALUE").toString());
 			if(realm.equals("R4")) {
 				mcelmt.click();
@@ -529,7 +529,7 @@ public class CXTUtilities {
 		String realm = db_obj.get_realm(brand);
 		openMyNextKit(driver, realm, brand);
 		
-		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", "");		
+		List<Map<String, Object>> kcloc = get_cxt_locator(realm, "KCLocator", null);		
 		List<WebElement> kcproducts= comm_obj.find_mulwebelement(driver, kcloc.get(0).get("ELEMENTLOCATOR").toString(), kcloc.get(0).get("ELEMENTVALUE").toString());		
 		int index =  kcproducts.size();
 		
@@ -560,9 +560,9 @@ public class CXTUtilities {
 		
 		String realm = db_obj.get_realm(brand);
 		
-		List<Map<String, Object>> reschedulebuttonloc = get_cxt_locator(realm, "RescheduleButton", "");
-		List<Map<String, Object>> datepickerloc = get_cxt_locator(realm, "OpenDatePicker", "");
-		List<Map<String, Object>> confirmloc = get_cxt_locator(realm, "ConfirmReschedule", "");
+		List<Map<String, Object>> reschedulebuttonloc = get_cxt_locator(realm, "RescheduleButton", null);
+		List<Map<String, Object>> datepickerloc = get_cxt_locator(realm, "OpenDatePicker", null);
+		List<Map<String, Object>> confirmloc = get_cxt_locator(realm, "ConfirmReschedule", null);
 		
 		WebElement reschedulebuttonelmt = comm_obj.find_webelement(driver, reschedulebuttonloc.get(0).get("ELEMENTLOCATOR").toString(), reschedulebuttonloc.get(0).get("ELEMENTVALUE").toString());
 		Thread.sleep(1000);
@@ -624,7 +624,7 @@ public class CXTUtilities {
 			}
 			
 			if(errormsg.equalsIgnoreCase("")) {
-				List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", "");		
+				List<Map<String, Object>> actualdateloc = get_cxt_locator(realm, "RescheduledDate", null);		
 				WebElement actualdateelmt = comm_obj.find_webelement(driver, actualdateloc.get(0).get("ELEMENTLOCATOR").toString(), actualdateloc.get(0).get("ELEMENTVALUE").toString());
 				Thread.sleep(1000);
 				String actualdate = actualdateelmt.getText();
@@ -785,7 +785,7 @@ public class CXTUtilities {
 	
 	public void accessLoggedInProfile(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
-		List<Map<String, Object>> profileloc = get_cxt_locator(realm, "LoggedinProfile", "");
+		List<Map<String, Object>> profileloc = get_cxt_locator(realm, "LoggedinProfile", null);
 		WebElement profileelmt = comm_obj.find_webelement(driver, profileloc.get(0).get("ELEMENTLOCATOR").toString(), profileloc.get(0).get("ELEMENTVALUE").toString());
 		Actions act = new Actions(driver);
 		act.moveToElement(profileelmt).perform();
@@ -794,12 +794,9 @@ public class CXTUtilities {
 	
 	public void moveToMyNextKit(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
-		System.out.println(realm);
 		List<Map<String, Object>> mynextkitloc = get_cxt_locator(realm, "Menu", "MyNextKit");		
-		System.out.println(mynextkitloc);
 		accessLoggedInProfile(driver, brand, campaign);
 		WebElement mynextkitelmt = comm_obj.find_webelement(driver, mynextkitloc.get(0).get("ELEMENTLOCATOR").toString(), mynextkitloc.get(0).get("ELEMENTVALUE").toString());
-		System.out.println(mynextkitelmt.isDisplayed());
 		mynextkitelmt.click();			
 		Thread.sleep(2000);
 	}
@@ -821,7 +818,7 @@ public class CXTUtilities {
 	
 	public void LogoutCXT(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
-		List<Map<String, Object>> logoutloc = get_cxt_locator(realm, "Logout", "");		
+		List<Map<String, Object>> logoutloc = get_cxt_locator(realm, "Logout", null);		
 		accessLoggedInProfile(driver, brand, campaign);
 		WebElement logoutelmt = comm_obj.find_webelement(driver, logoutloc.get(0).get("ELEMENTLOCATOR").toString(), logoutloc.get(0).get("ELEMENTVALUE").toString());
 		logoutelmt.click();			
