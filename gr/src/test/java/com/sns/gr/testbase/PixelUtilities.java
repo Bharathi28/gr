@@ -449,7 +449,7 @@ public class PixelUtilities {
             driver.get(url);
             Thread.sleep(2000);
         	String pagesource = driver.getPageSource();
-        	System.out.println(pagesource);
+//        	System.out.println(pagesource);
         	output_row.add("PageSource " + pagesource);
 //        }
         

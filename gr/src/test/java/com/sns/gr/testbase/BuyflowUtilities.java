@@ -508,7 +508,7 @@ public class BuyflowUtilities {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		String realm = DBUtilities.get_realm(brand);
 		String email = "";
-		
+		Thread.sleep(2000);
 		if(cc.equalsIgnoreCase("paypal")) {
 			if(realm.equalsIgnoreCase("R4")) {
 				driver.findElement(By.xpath("//div[@id='paypalSection']//div//div")).click();
@@ -525,24 +525,31 @@ public class BuyflowUtilities {
 			}						
 			
 			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+				System.out.println("first if");
 				Thread.sleep(4000);
 				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 				Thread.sleep(2000);
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+				System.out.println("first else if");
+				Thread.sleep(4000);
 				driver.findElement(By.xpath("//button[text()='Log In']")).click();
+				Thread.sleep(2000);
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else {
 				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
+					System.out.println("else while");
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
+						System.out.println("1 - if in while");
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
-					else if(driver.findElements(By.xpath("//div[@class='message']")).size() != 0) {
+					else if(driver.findElements(By.xpath("//div[contains[text(),'Things don't appear to be working at the moment']]")).size() != 0) {
+						System.out.println("2 - else if in while");
 //						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
@@ -550,20 +557,35 @@ public class BuyflowUtilities {
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+						System.out.println("3 - else if in while");
 						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+						System.out.println("4 - else if in while");
 						driver.findElement(By.xpath("//button[text()='Log In']")).click();
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					if(!(email.equalsIgnoreCase(""))) {
+						System.out.println("while - email empty");
 						break;
 					}
-				}	
-			}			
+				}
+				if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+					System.out.println("5 - else if in while");
+					driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+					Thread.sleep(2000);
+					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+				}
+				else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+					System.out.println("6 - else if in while");
+					driver.findElement(By.xpath("//button[text()='Log In']")).click();
+					Thread.sleep(2000);
+					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+				}
+			}							
 		}
 		else {
 			email = ccPayment(driver, jse, realm, brand, campaign, cc, shipbill, supply);
@@ -640,7 +662,7 @@ public class BuyflowUtilities {
 			fill_form_field(driver, realm, "CardNumber", getCCNumber(cc));
 		}		
 		fill_form_field(driver, realm, "Month", "12");
-		fill_form_field(driver, realm, "Year", "2020");	
+		fill_form_field(driver, realm, "Year", "2024");	
 		
 //		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
 		if(realm.equalsIgnoreCase("R4")) {
