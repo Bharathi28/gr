@@ -794,9 +794,12 @@ public class CXTUtilities {
 	
 	public void moveToMyNextKit(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException, InterruptedException {
 		String realm = db_obj.get_realm(brand);
+		System.out.println(realm);
 		List<Map<String, Object>> mynextkitloc = get_cxt_locator(realm, "Menu", "MyNextKit");		
+		System.out.println(mynextkitloc);
 		accessLoggedInProfile(driver, brand, campaign);
 		WebElement mynextkitelmt = comm_obj.find_webelement(driver, mynextkitloc.get(0).get("ELEMENTLOCATOR").toString(), mynextkitloc.get(0).get("ELEMENTVALUE").toString());
+		System.out.println(mynextkitelmt.isDisplayed());
 		mynextkitelmt.click();			
 		Thread.sleep(2000);
 	}
