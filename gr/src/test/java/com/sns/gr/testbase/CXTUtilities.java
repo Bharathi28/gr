@@ -52,14 +52,21 @@ public class CXTUtilities {
 			ss = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(ShootingStrategies.scaling(1.25f), 1000)).takeScreenshot(driver);
 		}
 		
+		File newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\CXTValidation", "Run_Output");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\CXTValidation", "Screenshots");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots", brand);
+		newDirectory.mkdir();
+		
 		String filename = "";
-		if(result.equalsIgnoreCase("Success")) {
+		if(result.equalsIgnoreCase("Success")) {					
 			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots\\" + brand + "\\" + step + "_" + dateStr +".png";
 			ImageIO.write(ss.getImage(),"PNG",new File(filename));
 		}
 		else {
 			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Run_Output\\" + brand + "_" + step + "_" + dateStr +".png";
-			ImageIO.write(ss.getImage(),"PNG",new File(filename));
+			ImageIO.write(ss.getImage(),"PNG",new File(filename));			
 			filename = System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Screenshots\\" + brand + "\\" + step + "_" + dateStr +".png";
 			ImageIO.write(ss.getImage(),"PNG",new File(filename));
 		}		

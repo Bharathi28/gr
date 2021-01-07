@@ -537,6 +537,8 @@ public class CXTValidation {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
+		File newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\CXTValidation", "Run_Output");
+		newDirectory.mkdir();
 		String file = comm_obj.populateOutputExcel(output, "CXTValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CXTValidation\\Run_Output\\");
 		
 		List<String> attachmentList = new ArrayList<String>();
