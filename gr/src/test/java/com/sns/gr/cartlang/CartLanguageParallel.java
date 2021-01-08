@@ -1,5 +1,6 @@
 package com.sns.gr.cartlang;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,6 +48,10 @@ public class CartLanguageParallel {
 	@Test(dataProvider="cartLangInput")
 	public void CompleteValidation(String env, String brand, String campaign, String categories, String browser) throws ClassNotFoundException, SQLException, InterruptedException, IOException {
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
+		
+		// Create Required Directories
+		File newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation", "Run Output");
+		newDirectory.mkdir();
 				
 		String[] categoryArr = categories.split(",");			
 		for(String category : categoryArr) {				
@@ -239,7 +244,7 @@ public class CartLanguageParallel {
 	
 	@AfterSuite
 	public void populateExcel() throws IOException {
-		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\Kit\\");
+		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\Run Output\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
 		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);

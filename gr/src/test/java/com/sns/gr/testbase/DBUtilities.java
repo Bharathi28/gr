@@ -196,7 +196,7 @@ public class DBUtilities {
 		String ppupresent = null;
 		
 		if(category.equalsIgnoreCase("Kit")) {
-			if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
+			if((map.get("UPSELLPAGE") != null) && (map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes"))) {
 				ppupresent = "Yes";
 			}
 			else {
@@ -204,7 +204,7 @@ public class DBUtilities {
 			}
 		}
 		else if(category.equalsIgnoreCase("ShopKit")) {
-			if(map.get("SHOPKITUPSELL").toString().equalsIgnoreCase("Yes")) {
+			if((map.get("SHOPKITUPSELL") != null) && (map.get("SHOPKITUPSELL").toString().equalsIgnoreCase("Yes"))) {
 				ppupresent = "Yes";
 			}
 			else {
@@ -246,25 +246,25 @@ public class DBUtilities {
 		Map<String, Object> map = camplist.get(0);
 		
 		List<String> campaignPageList = new ArrayList<String>();
-		if(map.get("HOMEPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("HOMEPAGE") != null) && (map.get("HOMEPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("homepage");
 		}
-		if(map.get("SASPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("SASPAGE") != null) && (map.get("SASPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("saspage");
 		}
-		if(map.get("DUOPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("DUOPAGE") != null) && (map.get("DUOPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("duopage");
 		}
-		if(map.get("CHECKOUTPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("CHECKOUTPAGE") != null) && (map.get("CHECKOUTPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("checkoutpage");
 		}
-		if(map.get("PAYPALREVIEWPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("PAYPALREVIEWPAGE") != null) && (map.get("PAYPALREVIEWPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("paypalreviewpage");
 		}
-		if(map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("UPSELLPAGE") != null) && (map.get("UPSELLPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("upsellpage");
 		}
-		if(map.get("CONFIRMATIONPAGE").toString().equalsIgnoreCase("Yes")) {
+		if((map.get("CONFIRMATIONPAGE") != null) && (map.get("CONFIRMATIONPAGE").toString().equalsIgnoreCase("Yes"))) {
 			campaignPageList.add("confirmationpage");
 		}		
 		return campaignPageList;
@@ -342,8 +342,15 @@ public class DBUtilities {
 	public String getPixelBrandId(String brand, String event) throws ClassNotFoundException, SQLException {
 		String joinquery = "select * from brand_pixel where brand='" + brand + "' and event='" + event + "'";
 		List<Map<String, Object>> joinlist = DBLibrary.dbAction("fetch",joinquery);
-		String id = joinlist.get(0).get("PIXELBRANDID").toString();
-		return id;
+		
+		String id = " ";
+		if((joinlist.get(0).get("PIXELBRANDID") != null) && (!(joinlist.get(0).get("PIXELBRANDID").toString().equalsIgnoreCase("\\N")))){
+			id = joinlist.get(0).get("PIXELBRANDID").toString();
+		}		
+		return id;		
+		
+//		String id = joinlist.get(0).get("PIXELBRANDID").toString();
+//		return id;
 	}
 	
 	public String getdescription(String brand, String campaign, String ppid, String realm) throws ClassNotFoundException, SQLException {

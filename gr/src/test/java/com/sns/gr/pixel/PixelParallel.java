@@ -87,6 +87,20 @@ public class PixelParallel {
 		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
 //		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
 //		System.setProperty("webdriver.chrome.verboseLogging", "true");
+		
+		// Create Required Directories
+		File newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Harfiles");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles", brand);
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Pixel_Output");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Pixel Orders");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Screenshots");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots", brand);
+		newDirectory.mkdir();
 				
 		// start the proxy
 	    BrowserMobProxy proxy = new BrowserMobProxyServer();
@@ -247,8 +261,7 @@ public class PixelParallel {
 				System.out.println();
 				System.out.println(event);
 									
-				int compatible = db_obj.checkBrandPixelCompatibility(tempbrand, event);	
-				
+				int compatible = db_obj.checkBrandPixelCompatibility(tempbrand, event);					
 				
 				if(compatible == 1) {					
 					String origcampaign = campaign;
