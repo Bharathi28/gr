@@ -153,13 +153,13 @@ public class BuyflowValidation {
 		if((cc.equalsIgnoreCase("Paypal")) && (realm.equalsIgnoreCase("R2"))) {
 			checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Subtotal");
 			checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Shipping");
-			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Salestax");
+			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review SalesTax");
 			checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Paypal Review Total");
 		}
 		else {
 			checkout_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Subtotal");
 			checkout_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Shipping");
-			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Salestax");
+			checkout_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout SalesTax");
 			checkout_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Checkout Total");
 		}			
 		String checkout_pricing = checkout_subtotal + " ; " + checkout_shipping + " ; " + checkout_salestax + " ; " + checkout_total;
@@ -207,7 +207,7 @@ public class BuyflowValidation {
 			
 		String conf_subtotal = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Subtotal");
 		String conf_shipping = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Shipping");
-		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Salestax");
+		String conf_salestax = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation SalesTax");
 		String conf_total = pr_obj.fetch_pricing (driver, env, brand, campaign, "Confirmation Total");
 			
 		String conf_pricing = conf_subtotal + " ; " + conf_shipping + " ; " + conf_salestax + " ; " + conf_total;	
