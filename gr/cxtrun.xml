@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
-<suite name="CXTSuite" data-provider-thread-count="5">
+<suite name="CXTSuite" data-provider-thread-count="3">
     <test name="CXTTest">	
 		<classes>
 	  		<class name="com.sns.gr.cxt.CXTValidation" />
