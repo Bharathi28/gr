@@ -47,7 +47,7 @@ public class ConsoleUtilities {
 		properties.put("mail.smtp.port", "587");
 		
 		final String username = "automation@searchnscore.com";
-		final String password = "SNSgr@123";
+		final String password = "snsgr@123";
 		String from = "automation@searchnscore.com";
 				
 		StringBuffer sb = new StringBuffer();
