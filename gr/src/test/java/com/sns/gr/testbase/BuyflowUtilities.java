@@ -548,7 +548,7 @@ public class BuyflowUtilities {
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
-					else if(driver.findElements(By.xpath("//div[contains[text(),'Things don't appear to be working at the moment']]")).size() != 0) {
+					else if(driver.findElements(By.xpath("//div[contains(text(),'Things don\'t appear to be working at the moment')]")).size() != 0) {
 						System.out.println("2 - else if in while");
 //						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
 						driver.close();
@@ -598,7 +598,7 @@ public class BuyflowUtilities {
 	public String ccPayment(WebDriver driver, JavascriptExecutor jse, String realm, String brand, String campaign, String cc, String shipbill, String supply) throws ClassNotFoundException, SQLException, InterruptedException {
 		String alpha = RandomStringUtils.randomAlphabetic(9);
 		String num = RandomStringUtils.randomNumeric(4);
-		String email = alpha + "-" + num + "@mailnesia.com";
+		String email = alpha + "-" + num + "@yopmail.com";
 		
 		Thread.sleep(3000);
 		fill_form_field(driver, realm, "Email", email.toLowerCase());
@@ -668,9 +668,9 @@ public class BuyflowUtilities {
 		
 //		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
 		if(realm.equalsIgnoreCase("R4")) {
-			if(!(brand.equalsIgnoreCase("JLoBeauty"))){
+//			if(!(brand.equalsIgnoreCase("JLoBeauty"))){
 				fill_form_field(driver, realm, "CVV", "349");
-			}				
+//			}				
 		}
 		jse.executeScript("window.scrollBy(0,200)", 0);
 		Thread.sleep(2000);
