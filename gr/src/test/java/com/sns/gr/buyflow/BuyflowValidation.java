@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -43,18 +44,41 @@ public class BuyflowValidation {
 	Scanner in = new Scanner(System.in);
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "";
+	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
+	String testSet = "Core";
 	
 	@BeforeSuite
 	public void getEmailId() {
-		System.out.println("Enter Email id : ");
-		sendReportTo = in.next();
+//		System.out.println("Enter Email id : ");
+//		sendReportTo = in.next();
+		sendReportTo = System.getProperty("email");
+		testSet = System.getProperty("testset");
 	}
 	
 	@DataProvider(name="buyflowInput", parallel=true)
 	public Object[][] testData() {
+		
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		System.out.println(day);
+		
 		Object[][] arrayObject = null;
-		arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
+		
+		if(day == 7) {
+			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Saturday");
+		}
+		else if(day == 1) {
+			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Sunday");
+		}
+		else {
+			if(testSet.equalsIgnoreCase("Core")) {
+				arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Core");
+			}
+			else if(testSet.equalsIgnoreCase("Top 3")){
+				arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Top 3");
+			}
+		}		
+//		arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
 		return arrayObject;
 	}
 	
