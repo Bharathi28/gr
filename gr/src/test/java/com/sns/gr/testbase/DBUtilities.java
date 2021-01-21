@@ -160,7 +160,7 @@ public class DBUtilities {
 			supply = "supplysize";
 		}
 		
-		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='kit' and " + supply + "='30' and status='Active'";	
+		String query = "select * from " + tableName + " where brand='" + brand + "' and campaign='" + campaign + "' and category='Kit' and " + supply + "='30' and status='Active'";	
 		List<Map<String, Object>> data = DBLibrary.dbAction("fetch", query);
 		return data;
 	}
