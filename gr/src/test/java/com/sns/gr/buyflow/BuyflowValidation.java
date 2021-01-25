@@ -46,6 +46,7 @@ public class BuyflowValidation {
 	List<List<String>> output = new ArrayList<List<String>>();
 	
 	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
+	String testSet = "Core";
 
 	
 	@BeforeSuite
@@ -53,8 +54,10 @@ public class BuyflowValidation {
 //		System.out.println("Enter Email id : ");
 //		sendReportTo = in.next();
 //		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
+//		System.setProperty("testset", "Core");
 		
 		sendReportTo = System.getProperty("email");
+		testSet = System.getProperty("testset");
 		
 	}
 	
@@ -74,7 +77,12 @@ public class BuyflowValidation {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Sunday");
 		}
 		else {
-			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
+			if(testSet.equalsIgnoreCase("Core")) {
+				arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Core");
+			}
+			else if(testSet.equalsIgnoreCase("Top 3")){
+				arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Top 3");
+			}
 		}
 		return arrayObject;
 	}
