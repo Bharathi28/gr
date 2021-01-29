@@ -693,15 +693,17 @@ public class BuyflowUtilities {
 			
 		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_passworddiv']//div//input");
 		driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
+				
+		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();	
 		
-		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();			
+		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
+//				
 		
-		comm_obj.waitUntilElementAppears(driver, "//h2[@data-testid='paywith-title']");
-		jse.executeScript("window.scrollBy(0,700)", 0);
+//		comm_obj.waitUntilElementAppears(driver, "//h2[@data-testid='paywith-title']");
+		jse.executeScript("window.scrollBy(0,500)", 0);
 		Thread.sleep(2000);
-		comm_obj.waitUntilElementAppears(driver, "//button[@id='payment-submit-btn']");
-
-		driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();	
+		comm_obj.waitUntilElementAppears(driver, "//input[@id='confirmButtonTop']");
+		driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
 					
 		wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 		driver.switchTo().window(winHandleBefore);
