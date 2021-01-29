@@ -69,12 +69,15 @@ public class PixelParallel {
 	static List<String> attachmentList = new ArrayList<String>();
 
 	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
+	String testSet = "FBPixels";
 	
 	@BeforeSuite
 	public void getEmailId() {
-		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
+//		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
+//		System.setProperty("testset", "AllPixels");
 		
 		sendReportTo = System.getProperty("email");
+		testSet = System.getProperty("testset");
 	}
 	
 	@DataProvider(name="pixelInput", parallel=true)
