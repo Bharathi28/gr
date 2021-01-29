@@ -543,6 +543,7 @@ public class CXTValidation {
 		
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
+		attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
 		mailObj.sendEmail("CXT Validation Results", sendReportTo, attachmentList);
 	}
 }

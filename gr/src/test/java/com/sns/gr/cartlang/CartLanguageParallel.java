@@ -247,6 +247,7 @@ public class CartLanguageParallel {
 		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\Run Output\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
+		attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
 		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);
 	}
 }

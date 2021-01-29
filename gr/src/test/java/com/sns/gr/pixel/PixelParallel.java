@@ -599,6 +599,7 @@ public class PixelParallel {
 	    workbook.close();
 	    outputStream.close();
 	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
+	    attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	

@@ -266,6 +266,7 @@ public class BuyflowValidation {
 		
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
+		attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
 		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);
 	}
 }
