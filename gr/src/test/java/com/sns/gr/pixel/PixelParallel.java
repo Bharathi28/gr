@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -67,17 +68,31 @@ public class PixelParallel {
 	List<List<String>> buyflowOverallOutput = new ArrayList<List<String>>();
 	static List<String> attachmentList = new ArrayList<String>();
 
-	String sendReportTo = "";
+	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
 	
 	@BeforeSuite
 	public void getEmailId() {
-		System.out.println("Enter Email id : ");
-		sendReportTo = in.next();
+		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
+		
+		sendReportTo = System.getProperty("email");
 	}
 	
 	@DataProvider(name="pixelInput", parallel=true)
 	public Object[][] testData() {
-		Object[][] arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "Run Data");
+		
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		System.out.println(day);
+		
+		Object[][] arrayObject = null;
+		
+		if(day == 6) {
+			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
+		}
+		else if((day == 3) || (day == 5)) {
+			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "FBPixels");
+		}
+		
 		return arrayObject;
 	}
 	
@@ -241,7 +256,7 @@ public class PixelParallel {
 			   	urlpattern = "HarmonyConversionTracking";
 			}
 			else if(pixel.toLowerCase().contains("linkshare")) {
-			    urlpattern = "Linkshare";
+			    urlpattern = "LinkShare";
 			}
 			else if(pixel.toLowerCase().contains("starmobile")) {
 				urlpattern = "StarMobile";
