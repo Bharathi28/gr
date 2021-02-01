@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -600,7 +603,16 @@ public class PixelParallel {
 	    workbook.close();
 	    outputStream.close();
 	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
-	    attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+	    
+	    Path testoutput_path = Paths.get(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		Path target_path = Paths.get(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		if (Files.exists(testoutput_path)) {
+			attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		}
+		else if (Files.exists(target_path)){
+			attachmentList.add(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		}		
+	    
 	    System.out.println("pixel_output.xlsx written successfully");
 	}
 	

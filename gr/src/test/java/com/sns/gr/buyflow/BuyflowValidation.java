@@ -2,6 +2,9 @@ package com.sns.gr.buyflow;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,18 +50,15 @@ public class BuyflowValidation {
 	
 	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
 	String testSet = "Core";
-
 	
 	@BeforeSuite
 	public void getEmailId() {
-//		System.out.println("Enter Email id : ");
-//		sendReportTo = in.next();
+
 //		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
-//		System.setProperty("testset", "Core");
-		
+//		System.setProperty("testset", "Top 3");
+//		
 		sendReportTo = System.getProperty("email");
-		testSet = System.getProperty("testset");
-		
+		testSet = System.getProperty("testset");		
 	}
 	
 	@DataProvider(name="buyflowInput", parallel=true)
@@ -84,6 +84,8 @@ public class BuyflowValidation {
 				arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "Top 3");
 			}
 		}
+		
+//		arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/BuyflowValidation/run_input.xlsx", "rundata");
 		return arrayObject;
 	}
 	
@@ -266,7 +268,16 @@ public class BuyflowValidation {
 		
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
-		attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		
+		Path testoutput_path = Paths.get(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		Path target_path = Paths.get(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		if (Files.exists(testoutput_path)) {
+			attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		}
+		else if (Files.exists(target_path)){
+			attachmentList.add(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		}	
+		
 		mailObj.sendEmail("Buyflow Results", sendReportTo, attachmentList);
 	}
 }

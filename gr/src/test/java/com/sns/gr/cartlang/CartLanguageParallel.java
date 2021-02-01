@@ -2,6 +2,9 @@ package com.sns.gr.cartlang;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -247,7 +250,16 @@ public class CartLanguageParallel {
 		String file = comm_obj.populateOutputExcel(output, "CartLangPricingValidationResults", System.getProperty("user.dir") + "\\Input_Output\\CartLanguagePriceValidation\\Run Output\\");
 		List<String> attachmentList = new ArrayList<String>();
 		attachmentList.add(file);
-		attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		
+		Path testoutput_path = Paths.get(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		Path target_path = Paths.get(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		if (Files.exists(testoutput_path)) {
+			attachmentList.add(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
+		}
+		else if (Files.exists(target_path)){
+			attachmentList.add(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
+		}		
+		
 		mailObj.sendEmail("Cart Language Price Validation Results", sendReportTo, attachmentList);
 	}
 }
