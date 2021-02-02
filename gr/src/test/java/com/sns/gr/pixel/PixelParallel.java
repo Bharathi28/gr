@@ -90,10 +90,10 @@ public class PixelParallel {
 		
 		Object[][] arrayObject = null;
 		
-		if(day == 5) {
+		if((day == 5) || (day == 6)) {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
 		}
-		else if((day == 2) || (day == 4)) {
+		else {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "FBPixels");
 		}
 		
