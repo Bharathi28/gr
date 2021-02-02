@@ -90,10 +90,10 @@ public class PixelParallel {
 		
 		Object[][] arrayObject = null;
 		
-		if(day == 6) {
+		if(day == 5) {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
 		}
-		else if((day == 3) || (day == 5)) {
+		else if((day == 2) || (day == 4)) {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "FBPixels");
 		}
 		
@@ -162,11 +162,6 @@ public class PixelParallel {
 		String url = "";
 		url = db_obj.getUrl(brand, campaign, env);
 		System.out.println(url);		
-		
-//		if(!((env.equalsIgnoreCase("qa")) || (env.equalsIgnoreCase("prod")) || (env.equalsIgnoreCase("stg")))) {
-//			url = db_obj.getUrl(brand, campaign, "stg");
-//			url = url.replace("stg", env.toLowerCase());
-//		}
 		
 		int noOfTestRuns = 0;
 		List<String> pixelslist = new ArrayList<String>();
