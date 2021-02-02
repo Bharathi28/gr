@@ -548,7 +548,7 @@ public class BuyflowUtilities {
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
-					else if(driver.findElements(By.xpath("//div[contains(text(),'Things don\'t appear to be working at the moment')]")).size() != 0) {
+					else if(driver.findElements(By.xpath("//div[contains(text(),\"Things don't appear to be working at the moment\")]")).size() != 0) {
 						System.out.println("2 - else if in while");
 //						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
 						driver.close();
