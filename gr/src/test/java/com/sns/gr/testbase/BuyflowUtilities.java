@@ -696,6 +696,7 @@ public class BuyflowUtilities {
 				
 		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();	
 		
+		Thread.sleep(3000);
 		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
 //				
 		
