@@ -60,10 +60,8 @@ public class BuyflowUtilities {
 	}
 	
 	public void click_logo(WebDriver driver, String brand, String campaign) throws ClassNotFoundException, SQLException {
-		System.out.println("Clicking Logo");
 		List<Map<String, Object>> logo_locators = comm_obj.get_element_locator(brand, campaign, "Logo", null);
 		for(Map<String,Object> logo : logo_locators) {
-			System.out.println(logo.get("ELEMENTVALUE").toString());
 			String elementvalue = logo.get("ELEMENTVALUE").toString();
 			if(driver.findElements(By.xpath(elementvalue)).size() != 0) {
 				driver.findElement(By.xpath(elementvalue)).click();
@@ -140,7 +138,6 @@ public class BuyflowUtilities {
 	}
 	
 	public void combo_navigation_to_sas(WebDriver driver, String env, String combobrand, String combocampaign, String brand, String campaign, String nav, String category) throws ClassNotFoundException, SQLException, InterruptedException {
-//		System.out.println(brand+campaign+nav+category);
 		Thread.sleep(4000);
 		List<Map<String, Object>> brand_logo = comm_obj.get_element_locator(combobrand, combocampaign, "BrandLogo", brand);
 		driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
@@ -164,10 +161,7 @@ public class BuyflowUtilities {
 	}
 	
 	public void move_to_sas(WebDriver driver, String env, String brand, String campaign, String offercode, String category) throws ClassNotFoundException, SQLException, InterruptedException {
-		System.out.println("Moving to SAS Page...");
-//		String isProduct = db_obj.isProduct(brand, offercode);
-//		String isShopKit = db_obj.isShopKit(brand, offercode);
-		
+	
 		if(brand.equalsIgnoreCase("BodyFirm-CrepeErase")) {
 			driver.findElement(By.xpath("(//button[@class='menu-icon'])[1]")).click();
 			Thread.sleep(1000);
@@ -205,7 +199,7 @@ public class BuyflowUtilities {
 	
 	public void move_to_checkout(WebDriver driver, String brand, String campaign, String category) throws InterruptedException, ClassNotFoundException, SQLException {
 		System.out.println("Moving to Checkout Page...");	
-//		System.out.println(brand + campaign + category);	
+
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 				
 		Thread.sleep(2000);
@@ -525,14 +519,12 @@ public class BuyflowUtilities {
 			}						
 			
 			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-				System.out.println("first if");
 				Thread.sleep(4000);
 				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 				Thread.sleep(2000);
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-				System.out.println("first else if");
 				Thread.sleep(4000);
 				driver.findElement(By.xpath("//button[text()='Log In']")).click();
 				Thread.sleep(2000);
@@ -540,48 +532,39 @@ public class BuyflowUtilities {
 			}
 			else {
 				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
-					System.out.println("else while");
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
-						System.out.println("1 - if in while");
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[contains(text(),\"Things don't appear to be working at the moment\")]")).size() != 0) {
-						System.out.println("2 - else if in while");
-//						getText().equalsIgnoreCase("Things don't appear to be working at the moment. Please try again later.")) {
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
 					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-						System.out.println("3 - else if in while");
 						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-						System.out.println("4 - else if in while");
 						driver.findElement(By.xpath("//button[text()='Log In']")).click();
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
 					if(!(email.equalsIgnoreCase(""))) {
-						System.out.println("while - email empty");
 						break;
 					}
 				}
 				if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-					System.out.println("5 - else if in while");
 					Thread.sleep(2000);
 					driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
 					Thread.sleep(2000);
 					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 				}
 				else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-					System.out.println("6 - else if in while");
 					Thread.sleep(2000);
 					driver.findElement(By.xpath("//button[text()='Log In']")).click();
 					Thread.sleep(2000);
@@ -666,11 +649,8 @@ public class BuyflowUtilities {
 		fill_form_field(driver, realm, "Month", "12");
 		fill_form_field(driver, realm, "Year", "2024");	
 		
-//		if((brand.equalsIgnoreCase("Volaire")) || (brand.equalsIgnoreCase("WestmoreBeauty")) || (brand.equalsIgnoreCase("CrepeErase"))) {
 		if(realm.equalsIgnoreCase("R4")) {
-//			if(!(brand.equalsIgnoreCase("JLoBeauty"))){
-				fill_form_field(driver, realm, "CVV", "349");
-//			}				
+			fill_form_field(driver, realm, "CVV", "349");			
 		}
 		jse.executeScript("window.scrollBy(0,200)", 0);
 		Thread.sleep(2000);
@@ -680,32 +660,28 @@ public class BuyflowUtilities {
 	}
 	
 	public String paypalPayment(WebDriver driver, WebDriverWait wait, JavascriptExecutor jse, String winHandleBefore, String realm) throws ClassNotFoundException, SQLException, InterruptedException {
-//		comm_obj.waitUntilElementAppears(driver, "//div[@id='loginSection']//div//div[2]//a");
-		Thread.sleep(4000);
-		
-			
-		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_emaildiv']//div//input");
+
+		// Email Field
+		Thread.sleep(5000);
 		driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
 		
 		if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
 		}
 			
-		comm_obj.waitUntilElementAppears(driver, "//div[@id='login_passworddiv']//div//input");
+		// Password Field
+		Thread.sleep(4000);
 		driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
 				
+		// Login button
 		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();	
 		
-		Thread.sleep(3000);
-		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
-//				
-		
-//		comm_obj.waitUntilElementAppears(driver, "//h2[@data-testid='paywith-title']");
+		Thread.sleep(5000);
+		// Agree and Continue
 		jse.executeScript("window.scrollBy(0,500)", 0);
 		Thread.sleep(2000);
-		comm_obj.waitUntilElementAppears(driver, "//input[@id='confirmButtonTop']");
-		driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
-					
+		driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();
+		
 		wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 		driver.switchTo().window(winHandleBefore);
 		Thread.sleep(2000);
