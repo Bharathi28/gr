@@ -72,6 +72,13 @@ public class PixelParallel {
 	static List<String> attachmentList = new ArrayList<String>();
 
 	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
+	
+	static Calendar now = Calendar.getInstance();		
+	static String monthStr = Integer.toString(now.get(Calendar.MONTH) + 1); // Note: zero based!
+	static String dayStr = Integer.toString(now.get(Calendar.DAY_OF_MONTH));  
+	static String yearStr = Integer.toString(now.get(Calendar.YEAR));
+	
+	static String Output_foldername = monthStr + dayStr + yearStr;
 
 	
 	@BeforeSuite
@@ -90,12 +97,12 @@ public class PixelParallel {
 		
 		Object[][] arrayObject = null;
 		
-		if((day == 5) || (day == 6)) {
-			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
-		}
-		else {
+//		if((day == 5) || (day == 6)) {
+//			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
+//		}
+//		else {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "FBPixels");
-		}
+//		}
 		
 		return arrayObject;
 	}
@@ -105,7 +112,7 @@ public class PixelParallel {
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Drivers/chromedriver.exe");
 		System.setProperty("webdriver.firefox.driver", System.getProperty("user.dir")+"/Drivers/geckodriver.exe");
 //		System.setProperty("webdriver.chrome.logfile", "C:\\chromedriver78.log");
-//		System.setProperty("webdriver.chrome.verboseLogging", "true");
+//		System.setProperty("webdriver.chrome.verboseLogging", "true");		
 		
 		// Create Required Directories
 		File newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Harfiles");
@@ -113,6 +120,8 @@ public class PixelParallel {
 		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles", brand);
 		newDirectory.mkdir();
 		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Pixel_Output");
+		newDirectory.mkdir();
+		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output", Output_foldername);
 		newDirectory.mkdir();
 		newDirectory = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation", "Pixel Orders");
 		newDirectory.mkdir();
@@ -417,7 +426,7 @@ public class PixelParallel {
 	    if (workbook.getNumberOfSheets() != 0) {
 	    	String sheetExists = comm_obj.checkSheetExists(workbook, sheetName);
 	    	if(sheetExists.equalsIgnoreCase("true")) {
-	    		resultSheet = workbook.getSheet(sheetName);
+	    		resultSheet = workbook.createSheet(sheetName + "_" + workbook.getNumberOfSheets());
 	    	}
 	    	else {
 	    		resultSheet = workbook.createSheet(sheetName);
@@ -593,11 +602,11 @@ public class PixelParallel {
 			resultSheet.autoSizeColumn(columnIndex, true);
 		}			
 		
-		FileOutputStream outputStream = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx"));
+		FileOutputStream outputStream = new FileOutputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + Output_foldername + "\\" + brand + "_" + flow +".xlsx"));
 	    workbook.write(outputStream);
 	    workbook.close();
 	    outputStream.close();
-	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + brand + "_" + flow +".xlsx");
+	    attachmentList.add(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + Output_foldername + "\\" + brand + "_" + flow +".xlsx");
 	    
 	    Path testoutput_path = Paths.get(System.getProperty("user.dir") + "\\test-output\\emailable-report.html");
 		Path target_path = Paths.get(System.getProperty("user.dir") + "\\target\\surefire-reports\\emailable-report.html");
