@@ -51,8 +51,8 @@ public class CheckEmail {
 		driver.manage().window().maximize();
 				
 		for(String brand : brands) {
-			File input_file = new File(System.getProperty("user.dir")+"\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_572020");
-//			File input_file = new File("F:\\Automation\\Buyflow\\DailyOrders\\Run Output\\BuyflowResults_10232019.xlsx");
+//			File input_file = new File(System.getProperty("user.dir")+"\\Input_Output\\BuyflowValidation\\Run Output\\BuyflowResults_572020");
+			File input_file = new File("E:\\Automation\\Buyflow\\02112021\\Daily Orders - 02112021.xlsx");
 			FileInputStream inputstream = new FileInputStream(input_file);
 			Workbook testData = new XSSFWorkbook(inputstream);
 			Sheet dataSheet = testData.getSheet(brand);
@@ -67,10 +67,15 @@ public class CheckEmail {
 				String env = row.getCell(0).getStringCellValue();
 				String campaign = row.getCell(2).getStringCellValue();
 //				String email = row.getCell(3).getStringCellValue();
-				String email = row.getCell(2).getStringCellValue();
-				String offercode = row.getCell(4).getStringCellValue();				
+				String email = row.getCell(4).getStringCellValue();
+				String offercode = row.getCell(5).getStringCellValue();		
+				
+				if(email.contains("testbuyer")) {
+					continue;
+				}
 				
 				WebElement emailBox = driver.findElement(By.xpath("//input[@id='login']"));
+				emailBox.clear();
 				emailBox.sendKeys(email);
 				
 				WebElement checkInbox = driver.findElement(By.xpath("//input[@value='Check Inbox']"));

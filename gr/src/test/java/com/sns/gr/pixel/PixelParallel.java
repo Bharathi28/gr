@@ -97,12 +97,12 @@ public class PixelParallel {
 		
 		Object[][] arrayObject = null;
 		
-//		if((day == 5) || (day == 6)) {
-//			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
-//		}
-//		else {
+		if((day == 5) || (day == 6)) {
+			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "AllPixels");
+		}
+		else {
 			arrayObject = comm_obj.getExcelData(System.getProperty("user.dir")+"/Input_Output/PixelValidation/pixel_testdata.xlsx", "FBPixels");
-//		}
+		}
 		
 		return arrayObject;
 	}
@@ -408,7 +408,7 @@ public class PixelParallel {
 	}
 	
 	public static void writeToSheet(HashMap map, String fileName, String sheetName, String flow) throws IOException {	
-		File file = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx");
+		File file = new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + Output_foldername + "\\" + fileName + "_" + flow +".xlsx");
 		XSSFWorkbook workbook = null;
 		// Check file existence 
 	    if (file.exists() == false) {
@@ -416,7 +416,7 @@ public class PixelParallel {
 	        workbook = new XSSFWorkbook();
 	    } 
 	    else {
-	        FileInputStream inputStream = new FileInputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + fileName + "_" + flow + ".xlsx"));
+	        FileInputStream inputStream = new FileInputStream(new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Pixel_Output\\" + Output_foldername + "\\" + fileName + "_" + flow +".xlsx"));
 	        workbook = new XSSFWorkbook(inputStream);
 	    }
 	    
