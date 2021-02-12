@@ -69,7 +69,7 @@ public class ConsoleError {
 	}
 	@DataProvider(name="ConsoleErrorInput", parallel=false)
 	public Object[][] testData() {
-		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"SmileActives"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
+		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"Smileactives"},{"JLoBeauty"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
 		//Object[][] arrayObject = {{"SeaCalmSkin"},{"MeaningfulBeauty"},{"SheerCover"}};
 		return arrayObject;
@@ -89,11 +89,12 @@ public class ConsoleError {
 			Thread.sleep(3000);
 			StringBuilder str = new StringBuilder("");
 			str = co_obj.analyzeLog(driver,brand,"Homepage",str);
-			String campaign = co_obj.getcampaigndetails(driver, brand);
-			String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
-			if(!(origcampaign.equals("n/a"))){
-				campaign = origcampaign;
-			}
+//			String campaign = co_obj.getcampaigndetails(driver, brand);
+//			String origcampaign = comm_obj.campaign_repeat(brand, campaign, "offers");
+//			if(!(origcampaign.equals("n/a"))){
+//				campaign = origcampaign;
+//			}
+			String campaign = "Core";
 			System.out.println(campaign+" campaign is loading for the brand "+brand);
 			bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
