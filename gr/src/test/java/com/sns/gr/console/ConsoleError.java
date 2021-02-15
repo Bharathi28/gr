@@ -72,6 +72,7 @@ public class ConsoleError {
 		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"Smileactives"},{"JLoBeauty"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
 		//Object[][] arrayObject = {{"SeaCalmSkin"},{"MeaningfulBeauty"},{"SheerCover"}};
+//		Object[][] arrayObject = {{"MeaningfulBeauty"}};
 		return arrayObject;
 	}
 	
@@ -94,7 +95,13 @@ public class ConsoleError {
 //			if(!(origcampaign.equals("n/a"))){
 //				campaign = origcampaign;
 //			}
-			String campaign = "Core";
+			String campaign = "";
+			if(brand.equalsIgnoreCase("Smileactives")) {
+				campaign = "core2";
+			}
+			else {
+				campaign = "Core";
+			}
 			System.out.println(campaign+" campaign is loading for the brand "+brand);
 			bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);

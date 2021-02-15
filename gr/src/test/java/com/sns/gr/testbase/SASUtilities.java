@@ -304,7 +304,7 @@ public class SASUtilities {
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("Core"))) {
 			jse.executeScript("window.scrollBy(0,300)", 0);
-			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
+			driver.findElement(By.xpath("//button[@class='button checkout']")).click();
 		}
 		else if((brand.equalsIgnoreCase("MeaningfulBeauty")) && (campaign.equalsIgnoreCase("20offdeluxe"))) {
 			driver.findElement(By.xpath("//button[@class='button checkout-special-offer']")).click();
@@ -383,8 +383,9 @@ public class SASUtilities {
 		Thread.sleep(2000);
 
 		if(brand.equalsIgnoreCase("WestmoreBeauty")){
-			if(campaign.equalsIgnoreCase("hybrid")) {
+			if(campaign.equalsIgnoreCase("Core")) {
 				jse.executeScript("window.scrollBy(0,500)", 0);
+				driver.findElement(By.xpath("//button[@class='button checkout']")).click();
 				Thread.sleep(2000);
 			}
 			if(campaign.equalsIgnoreCase("pnlfcp")) {
