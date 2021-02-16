@@ -10,6 +10,8 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -48,7 +50,7 @@ public class ConsoleError {
 	StringBuilder strfull = new StringBuilder();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "yzewdie@guthy-renker.com";
+//	String sendReportTo = "yzewdie@guthy-renker.com";
 	@BeforeSuite
 	public void getEmailId() {
 		//System.out.println("Enter Email id : ");
@@ -72,14 +74,24 @@ public class ConsoleError {
 		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"Smileactives"},{"JLoBeauty"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
 		//Object[][] arrayObject = {{"SeaCalmSkin"},{"MeaningfulBeauty"},{"SheerCover"}};
-//		Object[][] arrayObject = {{"MeaningfulBeauty"}};
+//		Object[][] arrayObject = {{"JLoBeauty"}};
 		return arrayObject;
 	}
 	
 	@Test(dataProvider="ConsoleErrorInput")
 	public void console(String brand) throws ClassNotFoundException, SQLException, MalformedURLException, InterruptedException {
+				
 			String url = "";
-			url = db_obj.getUrl(brand, "Core", "PROD");
+			
+			String campaign = "";
+			if(brand.equalsIgnoreCase("Smileactives")) {
+				campaign = "core2";
+			}
+			else {
+				campaign = "Core";
+			}
+			
+			url = db_obj.getUrl(brand, campaign, "PROD");
 			System.out.println(url);					
 			BaseTest base_obj = new BaseTest();			
 			WebDriver driver = base_obj.setUp("Chrome", "Local");
@@ -95,21 +107,36 @@ public class ConsoleError {
 //			if(!(origcampaign.equals("n/a"))){
 //				campaign = origcampaign;
 //			}
-			String campaign = "";
-			if(brand.equalsIgnoreCase("Smileactives")) {
-				campaign = "core2";
+			
+			System.out.println(campaign+" campaign is loading for the brand "+brand);
+			
+			if(brand.equalsIgnoreCase("JLoBeauty")) {
+				bf_obj.click_cta(driver, "Prod", brand, campaign, "Shop");
 			}
 			else {
-				campaign = "Core";
+				bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
 			}
-			System.out.println(campaign+" campaign is loading for the brand "+brand);
-			bf_obj.click_cta(driver, "Prod", brand, campaign, "Ordernow");
+			
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			System.out.println("SASpage Console Error Details:");
 			Thread.sleep(3000);
 			str = co_obj.analyzeLog(driver,brand,"SASpage",str);
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			co_obj.selectoffercodekit(driver,brand,campaign);
+			
+			if(brand.equalsIgnoreCase("JLoBeauty")) {
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("window.scrollBy(0,500)", 0);
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("(//a[@class='button-text sd-cta'])[2]")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//button[@id='add-to-cart']")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//a[@class='button mini-cart-link-checkout small-12']")).click();
+			}
+			else {
+				co_obj.selectoffercodekit(driver,brand,campaign);
+			}
+			
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			System.out.println("Checkoutpage Console Error Details:");		
 			str = co_obj.analyzeLog(driver,brand,"Checkoutpage",str);
@@ -124,6 +151,6 @@ public class ConsoleError {
 		}	
 	@Test
 	public void sendmail() {
-		co_obj.sendEmail("Console Errors for the brands in PROD", sendReportTo, strfull);
+//		co_obj.sendEmail("Console Errors for the brands in PROD", sendReportTo, strfull);
 	}
 }

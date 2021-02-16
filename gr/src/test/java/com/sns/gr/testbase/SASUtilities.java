@@ -385,7 +385,8 @@ public class SASUtilities {
 		if(brand.equalsIgnoreCase("WestmoreBeauty")){
 			if(campaign.equalsIgnoreCase("Core")) {
 				jse.executeScript("window.scrollBy(0,500)", 0);
-				driver.findElement(By.xpath("//button[@class='button checkout']")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//a[@class='cta']")).click();
 				Thread.sleep(2000);
 			}
 			if(campaign.equalsIgnoreCase("pnlfcp")) {
