@@ -517,20 +517,8 @@ public class BuyflowUtilities {
 			   driver.manage().window().maximize();
 			   Thread.sleep(2000);
 			}						
-			
-//			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-//				Thread.sleep(4000);
-//				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-//				Thread.sleep(2000);
-//				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//			}
-//			else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-//				Thread.sleep(4000);
-//				driver.findElement(By.xpath("//button[text()='Log In']")).click();
-//				Thread.sleep(2000);
-//				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//			}
-			
+
+			Thread.sleep(10000);
 			driver.switchTo().frame(0);
 	
 			if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
@@ -538,10 +526,7 @@ public class BuyflowUtilities {
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else {
-				Thread.sleep(10000);
-//				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
 				while(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() == 0) {	
-					System.out.println(driver.findElement(By.xpath("//div[@id='passwordSection']//input[@id='email']")).isDisplayed());
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
@@ -554,16 +539,6 @@ public class BuyflowUtilities {
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
-//					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-//						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-//						Thread.sleep(2000);
-//						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//					}
-//					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-//						driver.findElement(By.xpath("//button[text()='Log In']")).click();
-//						Thread.sleep(2000);
-//						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//					}
 					else if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
@@ -576,18 +551,6 @@ public class BuyflowUtilities {
 					Thread.sleep(2000);
 					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 				}
-//				if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-//					Thread.sleep(2000);
-//					driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-//					Thread.sleep(2000);
-//					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//				}
-//				else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-//					Thread.sleep(2000);
-//					driver.findElement(By.xpath("//button[text()='Log In']")).click();
-//					Thread.sleep(2000);
-//					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-//				}
 			}							
 		}
 		else {
@@ -681,7 +644,7 @@ public class BuyflowUtilities {
 
 		// Email Field
 		Thread.sleep(5000);
-		driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer2@guthy-renker.com");
+		driver.findElement(By.xpath("//div[@id='login_emaildiv']//div//input")).sendKeys("testbuyer1@guthy-renker.com");
 		
 		if(driver.findElements(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).size() != 0) {
 			driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-click-next']")).click();
@@ -692,19 +655,21 @@ public class BuyflowUtilities {
 		driver.findElement(By.xpath("//div[@id='login_passworddiv']//div//input")).sendKeys("123456789");
 				
 		// Login button
-		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();	
-		
+		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();							
 		Thread.sleep(5000);
+		
 		// Agree and Continue
 		jse.executeScript("window.scrollBy(0,500)", 0);
-		Thread.sleep(2000);
-		driver.findElement(By.xpath("//button[@id='payment-submit-btn']")).click();
-		
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//input[@id='confirmButtonTop']")).click();
+						
 		wait.until(ExpectedConditions.numberOfWindowsToBe(1));
 		driver.switchTo().window(winHandleBefore);
 		Thread.sleep(2000);
 		fill_form_field(driver, realm, "Agree", "");
-		return "testbuyer2@guthy-renker.com";
+		return "testbuyer1@guthy-renker.com";
 	}
 	
 	public String getCCNumber(String cc) {
