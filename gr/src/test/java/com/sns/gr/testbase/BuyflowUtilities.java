@@ -518,20 +518,30 @@ public class BuyflowUtilities {
 			   Thread.sleep(2000);
 			}						
 			
-			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+//			if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+//				Thread.sleep(4000);
+//				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+//				Thread.sleep(2000);
+//				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//			}
+//			else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+//				Thread.sleep(4000);
+//				driver.findElement(By.xpath("//button[text()='Log In']")).click();
+//				Thread.sleep(2000);
+//				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//			}
+			
+			driver.switchTo().frame(0);
+	
+			if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
 				Thread.sleep(4000);
-				driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-				Thread.sleep(2000);
-				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-			}
-			else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-				Thread.sleep(4000);
-				driver.findElement(By.xpath("//button[text()='Log In']")).click();
-				Thread.sleep(2000);
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else {
-				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
+				Thread.sleep(10000);
+//				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
+				while(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() == 0) {	
+					System.out.println(driver.findElement(By.xpath("//div[@id='passwordSection']//input[@id='email']")).isDisplayed());
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
 						driver.close();
 						driver.switchTo().window(winHandleBefore);
@@ -544,13 +554,17 @@ public class BuyflowUtilities {
 						Thread.sleep(2000);
 						email = ccPayment(driver, jse, realm, brand, campaign, "Visa", shipbill, supply);
 					}
-					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
-						Thread.sleep(2000);
-						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-					}
-					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-						driver.findElement(By.xpath("//button[text()='Log In']")).click();
+//					else if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+//						driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+//						Thread.sleep(2000);
+//						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//					}
+//					else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+//						driver.findElement(By.xpath("//button[text()='Log In']")).click();
+//						Thread.sleep(2000);
+//						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//					}
+					else if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
 						Thread.sleep(2000);
 						email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 					}
@@ -558,18 +572,22 @@ public class BuyflowUtilities {
 						break;
 					}
 				}
-				if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
-					Thread.sleep(2000);
-					driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+				if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
 					Thread.sleep(2000);
 					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 				}
-				else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
-					Thread.sleep(2000);
-					driver.findElement(By.xpath("//button[text()='Log In']")).click();
-					Thread.sleep(2000);
-					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
-				}
+//				if(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() != 0) {
+//					Thread.sleep(2000);
+//					driver.findElement(By.xpath("//div[@id='loginSection']//div//div[2]//a")).click();
+//					Thread.sleep(2000);
+//					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//				}
+//				else if(driver.findElements(By.xpath("//button[text()='Log In']")).size() != 0) {
+//					Thread.sleep(2000);
+//					driver.findElement(By.xpath("//button[text()='Log In']")).click();
+//					Thread.sleep(2000);
+//					email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
+//				}
 			}							
 		}
 		else {
