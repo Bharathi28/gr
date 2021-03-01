@@ -534,12 +534,14 @@ public class BuyflowUtilities {
 //			Thread.sleep(10000);
 //			driver.switchTo().frame(0);
 	
-			if(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() != 0) {
-				Thread.sleep(4000);
+			if(driver.findElements(By.xpath("//a[text()='Log In']")).size() != 0) {
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//a[text()='Log In']")).click();
+				Thread.sleep(2000);
 				email = paypalPayment(driver, wait, jse, winHandleBefore, realm);
 			}
 			else {
-				while(driver.findElements(By.xpath("//div[@id='loginSection']//div//div[2]//a")).size() == 0) {
+				while(driver.findElements(By.xpath("//a[text()='Log In']")).size() == 0) {
 //				while(driver.findElements(By.xpath("//div[@id='login_emaildiv']//div//input")).size() == 0) {	
 					if(driver.findElements(By.xpath("//section[@id='genericError']//div//div[2]")).size() != 0) {
 						driver.close();
