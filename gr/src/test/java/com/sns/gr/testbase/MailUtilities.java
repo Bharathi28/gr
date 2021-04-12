@@ -30,7 +30,7 @@ public class MailUtilities {
 		properties.put("mail.smtp.port", "587");
 		
 		final String username = "automation@searchnscore.com";
-		final String password = "snsgr@123";
+		final String password = "snsgr123@";
 		String from = "automation@searchnscore.com";
 		
 		StringBuffer sb = new StringBuffer();
