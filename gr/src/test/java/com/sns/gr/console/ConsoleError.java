@@ -71,10 +71,10 @@ public class ConsoleError {
 	}
 	@DataProvider(name="ConsoleErrorInput", parallel=false)
 	public Object[][] testData() {
-//		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"Dr.Denese"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"Smileactives"},{"JLoBeauty"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
+		Object[][] arrayObject = {{"CrepeErase"},{"Mally"},{"SpecificBeauty"},{"Sub-D"},{"WestmoreBeauty"},{"MeaningfulBeauty"},{"Smileactives"},{"JLoBeauty"},{"ReclaimBotanical"},{"Sheercover"},{"PrincipalSecret"},{"TryDermaFlash"}};
 		//Object[][] arrayObject = {{"TryDermaFlash"},{"SpecificBeauty"},{"sub-d"},{"ReclaimBotanical"},{"PrincipalSecret"},{"SheerCover"}};
 		//Object[][] arrayObject = {{"SeaCalmSkin"},{"MeaningfulBeauty"},{"SheerCover"}};
-		Object[][] arrayObject = {{"JLoBeauty"}};
+//		Object[][] arrayObject = {{"JLoBeauty"}};
 		return arrayObject;
 	}
 	
