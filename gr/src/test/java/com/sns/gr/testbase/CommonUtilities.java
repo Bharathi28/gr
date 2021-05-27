@@ -260,7 +260,7 @@ public class CommonUtilities {
 			header_list.add("Result");
 			header_list.add("Remarks");
 		}	
-		else if(header.toLowerCase().contains("cxt")) {
+		else if(header.toLowerCase().contains("cxt")){
 			header_list.add("Environment");
 			header_list.add("Brand");
 			header_list.add("Campaign");
