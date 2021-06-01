@@ -437,27 +437,9 @@ public class PixelUtilities {
 		
         // Save Order Screenshots        
 		Screenshot confpage = new AShot().takeScreenshot(driver);			
-        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	
+        ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Screenshots\\" + brand + "\\" + offerdata.get("PPID").toString() +".png"));	      
         
-        
-        Thread.sleep(2000);
-        
-        // Search Console pixel
-//        System.out.println(pixel);
-//        if(pixel.toLowerCase().contains("searchconsole")) {
-        	// Move to Homepage
-            driver.get(url);
-            Thread.sleep(2000);
-        	String pagesource = driver.getPageSource();
-//        	System.out.println(pagesource);
-        	output_row.add("PageSource " + pagesource);
-//        }
-        
-         // Customer Service page
-//        defineNewHar(proxy, brand + "CustomerServicePage");
-//        driver.findElement(By.xpath("(//a[text()='Customer Service'])[1]")).click();
-//        getHarData(proxy, System.getProperty("user.dir") + "\\Input_Output\\PixelValidation\\Harfiles\\" + brand + "\\" + brand + "_" + origcampaign + "_customerservicepage_" + pattern + "_" + flow +".har");
-        
+        Thread.sleep(2000);    
         
         driver.close();
         return output_row;
