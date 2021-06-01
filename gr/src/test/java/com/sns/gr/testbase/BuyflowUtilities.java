@@ -699,7 +699,7 @@ public class BuyflowUtilities {
 		Thread.sleep(5000);
 		
 		// Agree and Continue
-		jse.executeScript("window.scrollBy(0,500)", 0);
+		jse.executeScript("window.scrollBy(0,600)", 0);
 		Thread.sleep(3000);
 //		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
 //		Thread.sleep(3000);
