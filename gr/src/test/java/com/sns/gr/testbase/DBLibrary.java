@@ -20,21 +20,21 @@ private static Connection connection = null;
 			return connection;
 		}
 		else {
-//			String dbUrl = "jdbc:mysql://localhost:3306/grdatabase";
-//			String username = "root";
-//			String password = "rootpwd";
-//				
-//			Class.forName("com.mysql.jdbc.Driver");
-//			connection = DriverManager.getConnection(dbUrl,username,password);
-//			
-//			return connection;
+			String dbUrl = "jdbc:mysql://localhost:3306/grdatabase";
+			String username = "root";
+			String password = "rootpwd";
+				
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(dbUrl,username,password);
 			
-			String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-		    String connectionURL = "jdbc:derby:grdatabase;";
-		    Class.forName(driver);
-            connection = DriverManager.getConnection(connectionURL);
-
-            return connection;
+			return connection;
+			
+//			String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+//		    String connectionURL = "jdbc:derby:grdatabase;";
+//		    Class.forName(driver);
+//            connection = DriverManager.getConnection(connectionURL);
+//
+//            return connection;
 			
 			// db parameters
 //            String url = "jdbc:sqlite:grdatabase.db";
