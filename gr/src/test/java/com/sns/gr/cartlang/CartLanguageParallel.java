@@ -40,7 +40,7 @@ public class CartLanguageParallel {
 	MailUtilities mailObj = new MailUtilities();
 	
 	List<List<String>> output = new ArrayList<List<String>>();
-	String sendReportTo = "manibharathi@searchnscore.com , aaqil@searchnscore.com";
+	String sendReportTo = "banuchitra@searchnscore.com , manibharathi@searchnscore.com , aaqil@searchnscore.com";
 	
 	@DataProvider(name="cartLangInput", parallel=true)
 	public Object[][] testData() {
