@@ -57,8 +57,8 @@ public class BuyflowValidation {
 //		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
 //		System.setProperty("testset", "Top 3");
 //		
-		//sendReportTo = System.getProperty("email");
-		//testSet = System.getProperty("testset");		
+		sendReportTo = System.getProperty("email");
+		testSet = System.getProperty("testset");		
 	}
 	
 	@DataProvider(name="buyflowInput", parallel=true)
@@ -260,7 +260,7 @@ public class BuyflowValidation {
 		output_row.add(browser);	
 		output.add(output_row);
 		
-		driver.close();
+		driver.quit();
 	}
 	
 	@AfterSuite
