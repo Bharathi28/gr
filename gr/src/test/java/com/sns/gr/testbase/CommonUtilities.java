@@ -10,10 +10,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -166,6 +170,7 @@ public class CommonUtilities {
 		for(List<String> row : output) {
 			String brand = row.get(1);
 			String campaign = row.get(2);
+			String status = row.get(7);
 			
 			// Check if the workbook is empty or not
 		    if (workbook.getNumberOfSheets() != 0) {
@@ -189,6 +194,13 @@ public class CommonUtilities {
 			for(int j=0; j<row.size(); j++) {
 				Cell cell = newRow.createCell(j);
 				cell.setCellValue(row.get(j));
+				if(fileName.equalsIgnoreCase("BuyflowResults")&(status.equalsIgnoreCase("FAIL"))) { 
+					XSSFCellStyle cellstyle = workbook.createCellStyle();
+		    		cellstyle.setFillForegroundColor(IndexedColors.RED.getIndex());
+		    		cellstyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+					cell.setCellStyle(cellstyle);
+				}
+					
 			}
 			
 			int col_count = output.get(0).size();
@@ -216,6 +228,7 @@ public class CommonUtilities {
 			header_list.add("e-mail");
 			header_list.add("Expected PPID");
 			header_list.add("Actual PPID");
+			header_list.add("Status");
 			header_list.add("Confirmation Number");
 			header_list.add("Checkout Pricing");		
 			header_list.add("Confirmation Pricing");

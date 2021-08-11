@@ -48,7 +48,7 @@ public class BuyflowValidation {
 	
 	List<List<String>> output = new ArrayList<List<String>>();
 	
-	String sendReportTo = "aaqil@searchnscore.com,manibharathi@searchnscore.com";
+	String sendReportTo = "manibharathi@searchnscore.com";
 	String testSet = "Core";
 	
 	@BeforeSuite
@@ -57,8 +57,8 @@ public class BuyflowValidation {
 //		System.setProperty("email", "aaqil@searchnscore.com,manibharathi@searchnscore.com");
 //		System.setProperty("testset", "Top 3");
 //		
-		sendReportTo = System.getProperty("email");
-		testSet = System.getProperty("testset");		
+		//sendReportTo = System.getProperty("email");
+		//testSet = System.getProperty("testset");		
 	}
 	
 	@DataProvider(name="buyflowInput", parallel=true)
@@ -223,7 +223,7 @@ public class BuyflowValidation {
 			
 		System.out.println("Expected Offercode : " + ppid);
 		System.out.println("Actual Offercode : " + conf_offercode);
-			
+		String status = (ppid.equalsIgnoreCase(conf_offercode))?"PASS":"FAIL";		
 		Thread.sleep(2000);
 		Screenshot confpage = new AShot().takeScreenshot(driver);
 		ImageIO.write(confpage.getImage(),"PNG",new File(System.getProperty("user.dir") + "\\Input_Output\\BuyflowValidation\\Screenshots\\" + brand + "\\" + campaign + "_" + ppid +".png"));
@@ -251,6 +251,7 @@ public class BuyflowValidation {
 		output_row.add(email);
 		output_row.add(ppid);
 		output_row.add(conf_offercode);
+		output_row.add(status);
 		output_row.add(conf_num);
 		output_row.add(checkout_pricing);
 		output_row.add(conf_pricing);	
