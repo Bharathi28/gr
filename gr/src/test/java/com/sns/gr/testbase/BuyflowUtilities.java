@@ -695,11 +695,15 @@ public class BuyflowUtilities {
 				
 		// Login button
 		Thread.sleep(2000);
+		if(driver.findElements(By.xpath("//*[@id='acceptAllButton']")).size()!=0) {
+			driver.findElement(By.xpath("//*[@id='acceptAllButton']")).click();
+		}
+
 		driver.findElement(By.xpath("//button[@class='button actionContinue scTrack:unifiedlogin-login-submit']")).click();							
 		Thread.sleep(5000);
 		
 		// Agree and Continue
-		jse.executeScript("window.scrollBy(0,600)", 0);
+		jse.executeScript("window.scrollBy(0,800)", 0);
 		Thread.sleep(3000);
 //		driver.findElement(By.xpath("//button[@class='btn full confirmButton continueButton']")).click();
 //		Thread.sleep(3000);
